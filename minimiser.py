@@ -36,7 +36,7 @@ class minimiser:
 
 	def checkDatabase(self):
 
-		strucNum = 0
+		self.strucNum = 0
 		stride = self.natoms + 2
 
 		with open("pool.dat","r") as pool:
