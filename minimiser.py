@@ -37,7 +37,7 @@ class minimiser:
 	def checkDatabase(self):
 
 		self.strucNum = 0
-		stride = self.natoms + 2
+		self.stride = self.natoms + 2
 
 		with open("pool.dat","r") as pool:
 			poolList = pool.readlines()
@@ -51,6 +51,7 @@ class minimiser:
 	def minimiseXYZ(self):
 
 		strucNum = self.strucNum
+		stride = self.stride
 
 		xyzNum = ((strucNum-1)/stride) + 1
 		
