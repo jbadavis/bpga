@@ -18,23 +18,23 @@ class minimiser:
 		self.natoms = natoms
 		self.mpitasks = 24
 
-		# self.checkDatabase()
+		self.checkDatabase()
 
 		self.initialXYZ()
 
+	# def checkDatabase(self):
+
+	# 	lock = os.path.exists("Lock.dat")
+
+	# 	if lock == False:
+	# 		f = open("Lock.dat","w")
+
+	# 	while os.path.exists("Lock.dat"):
+	# 		pass 
+	# 	else:
+			# print "closed"
+
 	def checkDatabase(self):
-
-		lock = os.path.exists("Lock.dat")
-
-		if lock == False:
-			f = open("Lock.dat","w")
-
-		while os.path.exists("Lock.dat"):
-			pass 
-		else:
-			print "closed"
-
-	def initialXYZ(self):
 
 		strucNum = 0
 		stride = self.natoms + 2
@@ -42,9 +42,15 @@ class minimiser:
 		with open("pool.dat","r") as pool:
 			poolList = pool.readlines()
 			for line in poolList:
-				strucNum += 1
+				self.strucNum += 1
 				if "Not Minimised" in line:
-					break
+					self.minimiseXYZ()
+				else:
+					print "****FINISHED!!!*****"
+
+	def minimiseXYZ(self):
+
+		strucNum = self.strucNum
 
 		xyzNum = ((strucNum-1)/stride) + 1
 		
