@@ -38,17 +38,22 @@ class minimiser:
 		self.stride = self.natoms + 2
 
 		with open("pool.dat","r") as pool:
-			self.poolList = pool.readlines()
-			for line in self.poolList:
+			# self.poolList = pool.readlines()
+			for line in pool:
 				strucNum += 1
 				if "Not Minimised" in line:
+					# Check for lock.
 					self.minimiseXYZ(strucNum)
-				# else:
-				# 	print "****FINISHED!!!*****"
+				
+		#   crossover / mutate.
+		#	minimise.
+		#   check against pool.
+		# 	Update pool.
 
 	def minimiseXYZ(self,strucNum):
 
 		stride = self.stride
+		self.poolList = pool.readlines()
 
 		xyzNum = ((strucNum-1)/stride) + 1
 		
