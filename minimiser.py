@@ -20,8 +20,6 @@ class minimiser:
 
 		self.checkDatabase()
 
-		self.initialXYZ()
-
 	# def checkDatabase(self):
 
 	# 	lock = os.path.exists("Lock.dat")
@@ -36,21 +34,20 @@ class minimiser:
 
 	def checkDatabase(self):
 
-		self.strucNum = 0
+		strucNum = 0
 		self.stride = self.natoms + 2
 
 		with open("pool.dat","r") as pool:
 			self.poolList = pool.readlines()
 			for line in self.poolList:
-				self.strucNum += 1
+				strucNum += 1
 				if "Not Minimised" in line:
-					self.minimiseXYZ()
-				else:
-					print "****FINISHED!!!*****"
+					self.minimiseXYZ(strucNum)
+				# else:
+				# 	print "****FINISHED!!!*****"
 
-	def minimiseXYZ(self):
+	def minimiseXYZ(self,strucNum):
 
-		strucNum = self.strucNum
 		stride = self.stride
 
 		xyzNum = ((strucNum-1)/stride) + 1
