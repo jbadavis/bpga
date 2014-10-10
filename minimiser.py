@@ -37,25 +37,19 @@ class minimiser:
 		strucNum = 0
 		self.stride = self.natoms + 2
 
-		with open("pool.dat","r") as pool:
-			# self.poolList = pool.readlines()
-			for line in pool:
-				strucNum += 1
-				if "Not Minimised" in line:
-					# Check for lock.
-					self.minimiseXYZ(strucNum)
-				
-		#   crossover / mutate.
-		#	minimise.
-		#   check against pool.
-		# 	Update pool.
+		self.readPool()
+
+		for line in self.poolList:
+			strucNum += 1
+			if "Not Minimised" in line:
+				print self.poolList
+				print strucNum
+				self.minimiseXYZ(strucNum)
+			self.readPool()
 
 	def minimiseXYZ(self,strucNum):
 
 		stride = self.stride
-
-		with open("pool.dat","r") as pool:
-			self.poolList = pool.readlines()
 
 		xyzNum = ((strucNum-1)/stride) + 1
 		
@@ -65,20 +59,27 @@ class minimiser:
 			for line in xyz:
 				xyzFile.write(line)
 
+		# Write Running to pool.dat
 		self.poolList[strucNum-1] = "Running\n"
-
-		with open("pool.dat","w") as pool:
-			for line in self.poolList:
-				pool.write(line)
+		self.writePool()
 
 		vaspIN = DFTin.vasp_input(xyzNum)
 		run = DFTsub.submit()
 		run.archer(xyzNum,self.mpitasks)
 		vaspOUT = DFTout.vasp_output(xyzNum,self.natoms)
 
+		# Write final energy to pool.dat
 		energy = vaspOUT.final_energy
-
 		self.poolList[strucNum-1] = "Finished Energy = " + str(energy) + "\n"
+
+		self.writePool()
+
+	def readPool(self):
+
+		with open("pool.dat","r") as pool:
+			self.poolList = pool.readlines()
+
+	def writePool(self):
 
 		with open("pool.dat","w") as pool:
 			for line in self.poolList:
