@@ -40,8 +40,8 @@ class minimiser:
 		self.stride = self.natoms + 2
 
 		with open("pool.dat","r") as pool:
-			poolList = pool.readlines()
-			for line in poolList:
+			self.poolList = pool.readlines()
+			for line in self.poolList:
 				self.strucNum += 1
 				if "Not Minimised" in line:
 					self.minimiseXYZ()
@@ -55,16 +55,16 @@ class minimiser:
 
 		xyzNum = ((strucNum-1)/stride) + 1
 		
-		xyz = poolList[strucNum-2:strucNum+stride-2]
+		xyz = self.poolList[strucNum-2:strucNum+stride-2]
 		
 		with open(str(xyzNum)+".xyz","w") as xyzFile:
 			for line in xyz:
 				xyzFile.write(line)
 
-		poolList[strucNum-1] = "Running\n"
+		self.poolList[strucNum-1] = "Running\n"
 
 		with open("pool.dat","w") as pool:
-			for line in poolList:
+			for line in self.poolList:
 				pool.write(line)
 
 		vaspIN = DFTin.vasp_input(xyzNum)
@@ -74,9 +74,9 @@ class minimiser:
 
 		energy = vaspOUT.final_energy
 
-		poolList[strucNum-1] = "Finished Energy = " + str(energy) + "\n"
+		self.poolList[strucNum-1] = "Finished Energy = " + str(energy) + "\n"
 
 		with open("pool.dat","w") as pool:
-			for line in poolList:
+			for line in self.poolList:
 				pool.write(line)
 
