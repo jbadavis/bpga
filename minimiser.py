@@ -65,3 +65,7 @@ class minimiser:
 		run.archer(xyzNum,self.mpitasks)
 		vaspOUT = DFTout.vasp_output(xyzNum,self.natoms)
 
+		energy = vaspOUT.final_energy
+
+		poolList[strucNum-1] = "Finished Energy = " + str(energy) + "\n"
+
