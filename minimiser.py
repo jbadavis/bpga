@@ -69,3 +69,7 @@ class minimiser:
 
 		poolList[strucNum-1] = "Finished Energy = " + str(energy) + "\n"
 
+		with open("pool.dat","w") as pool:
+			for line in poolList:
+				pool.write(line)
+
