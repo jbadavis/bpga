@@ -53,7 +53,9 @@ class minimiser:
 	def minimiseXYZ(self,strucNum):
 
 		stride = self.stride
-		self.poolList = pool.readlines()
+
+		with open("pool.dat","r") as pool:
+			self.poolList = pool.readlines()
 
 		xyzNum = ((strucNum-1)/stride) + 1
 		
