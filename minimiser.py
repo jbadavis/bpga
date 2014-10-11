@@ -26,7 +26,7 @@ class minimiser:
 		self.stride = self.natoms + 2
 
 		self.readPool()
-
+		
 		for line in self.poolList:
 			strucNum += 1
 			if "Not Minimised" in line:
@@ -57,10 +57,12 @@ class minimiser:
 
 		# Write Running to pool.dat
 		self.poolList[strucNum-1] = "Running\n"
+		self.readPool()
 		self.writePool()
 
 		self.unlockDB
 
+		# Run DFT calc
 		vaspIN = DFTin.vasp_input(xyzNum)
 		run = DFTsub.submit()
 		run.archer(xyzNum,self.mpitasks)
@@ -73,6 +75,7 @@ class minimiser:
 		energy = vaspOUT.final_energy
 		self.poolList[strucNum-1] = "Finished Energy = " + str(energy) + "\n"
 
+		self.readPool()
 		self.writePool()
 
 		self.unlockDB
@@ -103,12 +106,3 @@ class minimiser:
 			pass 
 		else:
 			print "closed"
-
-
-
-
-
-
-
-
-
