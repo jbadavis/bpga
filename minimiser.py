@@ -20,18 +20,6 @@ class minimiser:
 
 		self.checkDatabase()
 
-	# def checkDatabase(self):
-
-	# 	lock = os.path.exists("Lock.dat")
-
-	# 	if lock == False:
-	# 		f = open("Lock.dat","w")
-
-	# 	while os.path.exists("Lock.dat"):
-	# 		pass 
-	# 	else:
-			# print "closed"
-
 	def checkDatabase(self):
 
 		strucNum = 0
@@ -52,27 +40,42 @@ class minimiser:
 		stride = self.stride
 
 		xyzNum = ((strucNum-1)/stride) + 1
+
+		self.checkDB
+		self.lockDB
 		
 		xyz = self.poolList[strucNum-2:strucNum+stride-2]
 		
+		self.unlockDB
+
 		with open(str(xyzNum)+".xyz","w") as xyzFile:
 			for line in xyz:
 				xyzFile.write(line)
 
+		self.checkDB
+		self.lockDB
+
 		# Write Running to pool.dat
 		self.poolList[strucNum-1] = "Running\n"
 		self.writePool()
+
+		self.unlockDB
 
 		vaspIN = DFTin.vasp_input(xyzNum)
 		run = DFTsub.submit()
 		run.archer(xyzNum,self.mpitasks)
 		vaspOUT = DFTout.vasp_output(xyzNum,self.natoms)
 
+		self.checkDB
+		self.lockDB
+
 		# Write final energy to pool.dat
 		energy = vaspOUT.final_energy
 		self.poolList[strucNum-1] = "Finished Energy = " + str(energy) + "\n"
 
 		self.writePool()
+
+		self.unlockDB
 
 	def readPool(self):
 
@@ -84,4 +87,28 @@ class minimiser:
 		with open("pool.dat","w") as pool:
 			for line in self.poolList:
 				pool.write(line)
+
+	def lockDB(self):
+
+		with open("lock.db","w") as lock:
+			lock.write("locked")
+
+	def unlockDB(self):
+
+		os.system("rm lock.db")
+
+	def checkDB(self):
+
+		while os.path.exists("Lock.dat"):
+			pass 
+		else:
+			print "closed"
+
+
+
+
+
+
+
+
 
