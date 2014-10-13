@@ -25,15 +25,19 @@ class minimiser:
 		strucNum = 0
 		self.stride = self.natoms + 2
 
-		self.readPool()
-		
-		for line in self.poolList:
-			strucNum += 1
-			if "Not Minimised" in line:
-				print self.poolList
-				print strucNum
-				self.minimiseXYZ(strucNum)
+		for i in range(10):
+
 			self.readPool()
+
+			for line in self.poolList:
+				strucNum += 1
+				if "NotMinimised" in line:
+					status, strucNum = line.split
+					print self.poolList
+					print strucNum
+					self.minimiseXYZ(strucNum)
+
+				break
 
 	def minimiseXYZ(self,strucNum):
 

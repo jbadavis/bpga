@@ -46,7 +46,7 @@ class ranPool:
         with open("pool.dat","w") as pool:
             for struc in range(self.nstrucs):
                 pool.write(str(natoms) + "\n")
-                pool.write("Not Minimised" + "\n")
+                pool.write("Not Minimised" + str(struc+1) + "\n")
                 for i in range(len(eleNames)):
                     for j in range(eleNums[i]):
                         x = ran.uniform(-1,1) * r_ij
