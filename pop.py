@@ -18,7 +18,7 @@ class ranPool:
         self.nstrucs = n
         self.natoms = 0
         self.eleNums = [2,2]
-        self.eleNames = ["Pd","Ir"]
+        self.eleNames = ["Ir","Pd"]
 
         for i in self.eleNums:
             self.natoms += i

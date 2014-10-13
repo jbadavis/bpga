@@ -56,8 +56,8 @@ class minimiser:
 		self.lockDB
 
 		# Write Running to pool.dat
-		self.poolList[strucNum-1] = "Running\n"
 		self.readPool()
+		self.poolList[strucNum-1] = "Running\n"
 		self.writePool()
 
 		self.unlockDB
@@ -73,9 +73,9 @@ class minimiser:
 
 		# Write final energy to pool.dat
 		energy = vaspOUT.final_energy
-		self.poolList[strucNum-1] = "Finished Energy = " + str(energy) + "\n"
 
 		self.readPool()
+		self.poolList[strucNum-1] = "Finished Energy = " + str(energy) + "\n"
 		self.writePool()
 
 		self.unlockDB
