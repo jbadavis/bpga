@@ -22,11 +22,12 @@ class minimiser:
 
 	def checkDatabase(self):
 
-		# strucNum = 0
 		self.stride = self.natoms + 2
 
 		for i in range(10):
 
+			strucNum = 0
+			
 			self.checkDB
 			self.lockDB
 
@@ -35,11 +36,13 @@ class minimiser:
 			self.unlockDB
 
 			for line in self.poolList:		
-
+				strucNum += 1
 				if "NotMinimised" in line:
+
 					print "found line"
-					status, strucNum = line.split()
-					self.minimiseXYZ(int(strucNum))
+					# status, strucNum = line.split()
+					self.minimiseXYZ(strucNum)
+
 					break
 
 	def minimiseXYZ(self,strucNum):
@@ -70,20 +73,20 @@ class minimiser:
 		self.unlockDB
 
 		# Run DFT calc
-		vaspIN = DFTin.vasp_input(xyzNum)
-		run = DFTsub.submit()
-		run.archer(xyzNum,self.mpitasks)
-		vaspOUT = DFTout.vasp_output(xyzNum,self.natoms)
+		# vaspIN = DFTin.vasp_input(xyzNum)
+		# run = DFTsub.submit()
+		# run.archer(xyzNum,self.mpitasks)
+		# vaspOUT = DFTout.vasp_output(xyzNum,self.natoms)
 
-		self.checkDB
-		self.lockDB
+		# self.checkDB
+		# self.lockDB
 
 		# Write final energy to pool.dat
-		energy = vaspOUT.final_energy
+		# energy = vaspOUT.final_energy
 
-		self.readPool()
-		self.poolList[strucNum-1] = "Finished Energy = " + str(energy) + "\n"
-		self.writePool()
+		# self.readPool()
+		# self.poolList[strucNum-1] = "Finished Energy = " + str(energy) + "\n"
+		# self.writePool()
 
 		self.unlockDB
 
