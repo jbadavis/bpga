@@ -24,7 +24,7 @@ class minimiser:
 
 		self.stride = self.natoms + 2
 
-		for i in range(1):
+		for i in range(10):
 
 			strucNum = 0
 			
