@@ -73,20 +73,20 @@ class minimiser:
 		self.unlockDB
 
 		# Run DFT calc
-		# vaspIN = DFTin.vasp_input(xyzNum)
-		# run = DFTsub.submit()
-		# run.archer(xyzNum,self.mpitasks)
-		# vaspOUT = DFTout.vasp_output(xyzNum,self.natoms)
+		vaspIN = DFTin.vasp_input(xyzNum)
+		run = DFTsub.submit()
+		run.archer(xyzNum,self.mpitasks)
+		vaspOUT = DFTout.vasp_output(xyzNum,self.natoms)
 
-		# self.checkDB
-		# self.lockDB
+		self.checkDB
+		self.lockDB
 
 		# Write final energy to pool.dat
-		# energy = vaspOUT.final_energy
+		energy = vaspOUT.final_energy
 
-		# self.readPool()
-		# self.poolList[strucNum-1] = "Finished Energy = " + str(energy) + "\n"
-		# self.writePool()
+		self.readPool()
+		self.poolList[strucNum-1] = "Finished Energy = " + str(energy) + "\n"
+		self.writePool()
 
 		self.unlockDB
 
