@@ -22,22 +22,25 @@ class minimiser:
 
 	def checkDatabase(self):
 
-		strucNum = 0
+		# strucNum = 0
 		self.stride = self.natoms + 2
 
 		for i in range(10):
 
+			self.checkDB
+			self.lockDB
+
 			self.readPool()
 
-			for line in self.poolList:
-				strucNum += 1
-				if "NotMinimised" in line:
-					status, strucNum = line.split
-					print self.poolList
-					print strucNum
-					self.minimiseXYZ(strucNum)
+			self.unlockDB
 
-				break
+			for line in self.poolList:		
+
+				if "NotMinimised" in line:
+					print "found line"
+					status, strucNum = line.split()
+					self.minimiseXYZ(strucNum)
+					break
 
 	def minimiseXYZ(self,strucNum):
 
