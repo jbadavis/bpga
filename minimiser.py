@@ -39,7 +39,7 @@ class minimiser:
 				if "NotMinimised" in line:
 					print "found line"
 					status, strucNum = line.split()
-					self.minimiseXYZ(strucNum)
+					self.minimiseXYZ(int(strucNum))
 					break
 
 	def minimiseXYZ(self,strucNum):
