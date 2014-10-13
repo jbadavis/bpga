@@ -10,11 +10,13 @@ import os
 import DFT_input as DFTin
 import DFT_output as DFTout
 import DFT_submit as DFTsub
+import GA_Operations as GAop
 
 class minimiser:
 
-	def __init__(self,natoms):
+	def __init__(self,natoms,n):
 		
+		self.n = n
 		self.natoms = natoms
 		self.mpitasks = 24
 
@@ -24,26 +26,54 @@ class minimiser:
 
 		self.stride = self.natoms + 2
 
-		for i in range(10):
+		# for i in range(self.n):
 
-			strucNum = 0
+		# 	strucNum = 0
 			
+		# 	self.checkDB
+		# 	self.lockDB
+
+		# 	self.readPool()
+
+		# 	self.unlockDB
+
+		# 	for line in self.poolList:		
+		# 		strucNum += 1
+		# 		if "NotMinimised" in line:
+
+		# 			# print "found line"
+		# 			# status, strucNum = line.split()
+		# 			self.minimiseXYZ(strucNum)
+
+		# 			break
+
+		for i in range(1):
+
 			self.checkDB
 			self.lockDB
 
-			self.readPool()
+			self.findPair()
+
+			print self.poolPos
 
 			self.unlockDB
 
-			for line in self.poolList:		
-				strucNum += 1
-				if "NotMinimised" in line:
+	def findPair(self):
 
-					# print "found line"
-					# status, strucNum = line.split()
-					self.minimiseXYZ(strucNum)
+		'''
+		From tournamentSelect the
+		exact positions of the 
+		random clusters is found in 
+		the pool.
+		'''
 
-					break
+		select = GAop.tournamentSelect(self.n)
+		pair = select.pair
+
+		c1 = ((pair[0]-1)*self.stride)+1
+		c2 = ((pair[1]-1)*self.stride)+1
+
+		self.poolPos = [c1,c2]
 
 	def minimiseXYZ(self,strucNum):
 
@@ -150,7 +180,6 @@ class minimiser:
 		Reads pool at beginning/
 		throughout calculation.
 		'''
-
 
 		with open("pool.dat","r") as pool:
 			self.poolList = pool.readlines()

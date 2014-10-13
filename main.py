@@ -9,8 +9,10 @@ Jack Davis
 import pop
 import minimiser
 
-newPool = pop.ranPool(10)
+npool = 10
+
+newPool = pop.ranPool(npool)
 
 natoms = newPool.natoms
 
-minimise = minimiser.minimiser(natoms)
+minimise = minimiser.minimiser(natoms,npool)
