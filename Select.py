@@ -1,5 +1,5 @@
 '''
-GA Operations
+Selection
 
 Jack Davis
 
@@ -16,6 +16,12 @@ class tournamentSelect:
 
 	def select(self,n):
 
+		'''
+		Selects random 
+		pair from pool
+		for crossover
+		'''
+
 		clust1 = randrange(1,n+1)
 		clust2 = randrange(1,n+1)
 
@@ -23,3 +29,8 @@ class tournamentSelect:
 			clust2 = randrange(1,n)
 
 		self.pair = [clust1,clust2]
+
+class crossover:
+
+	def __init__(clus1,clus2):
+		pass

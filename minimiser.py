@@ -10,7 +10,9 @@ import os
 import DFT_input as DFTin
 import DFT_output as DFTout
 import DFT_submit as DFTsub
-import GA_Operations as GAop
+
+from Select import tournamentSelect as select
+from Crossover import crossover as cross 
 
 class minimiser:
 
@@ -54,7 +56,7 @@ class minimiser:
 
 			self.findPair()
 
-			print self.poolPos
+			newClus = cross(self.clus1,self.clus2,self.natoms)
 
 			self.unlockDB
 
@@ -67,11 +69,18 @@ class minimiser:
 		the pool.
 		'''
 
-		select = GAop.tournamentSelect(self.n)
-		pair = select.pair
+		# Select random pair 
+		selectPair = select(self.n)
+		pair = selectPair.pair
 
-		c1 = ((pair[0]-1)*self.stride)+1
-		c2 = ((pair[1]-1)*self.stride)+1
+		# Postions of pair in poollist
+		c1 = ((pair[0]-1)*self.stride)
+		c2 = ((pair[1]-1)*self.stride)
+
+		self.readPool()
+
+		self.clus1 = self.poolList[c1+2:c1+self.stride]
+		self.clus2 = self.poolList[c2+2:c2+self.stride]
 
 		self.poolPos = [c1,c2]
 
