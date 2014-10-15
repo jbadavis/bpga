@@ -33,24 +33,18 @@ class minimiser:
 			
 			self.checkDB
 			self.lockDB
-
 			self.readPool()
-
 			self.unlockDB
 
 			for line in self.poolList:		
 				strucNum += 1
 				if "NotMinimised" in line:
-
-					# print "found line"
-					# status, strucNum = line.split()
 					self.minimisePool(strucNum)
-
 					break
 
 		while self.checkFinished() == False:
 			pass
-
+		
 		for i in range(self.n,self.n+1):
 
 			self.checkDB
@@ -62,10 +56,7 @@ class minimiser:
 
 			self.offspring = newClus.CutSplice()
 
-			for line in  self.offspring:
-				print line
-
-			# self.minimiseOffspring(i,self.offspring)
+			self.minimiseOffspring(i,self.offspring)
 
 			self.unlockDB
 
@@ -171,7 +162,7 @@ class minimiser:
 		selectPair = select(self.n)
 		pair = selectPair.pair
 
-		# Postions of pair in poollist
+		#Postions of pair in poollist
 		c1 = ((pair[0]-1)*self.stride)
 		c2 = ((pair[1]-1)*self.stride)
 

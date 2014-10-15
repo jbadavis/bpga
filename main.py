@@ -11,7 +11,7 @@ import GA.pop as pop
 import GA.minimiser as minimiser
 
 npool = 10
-eleNums = [10,0]
+eleNums = [2,2]
 eleNames = ["Ir","Pd"]
 natoms = sum(eleNums)
 

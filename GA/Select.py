@@ -41,8 +41,6 @@ class tournamentSelect:
 
 		self.pair = [clust1,clust2]
 
-		print self.pair
-
 	def tournament(self):
 
 		# Change to accept larger tournaments
