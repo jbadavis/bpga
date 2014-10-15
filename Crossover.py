@@ -90,23 +90,72 @@ class crossover:
 
 		self.CheckComp()
 
-		cut = ran.randrange(0,self.natoms)
+		# self.eleNum = [7,9]
 
-		for clus in self.pair:
-			for i in range(len(self.eleName)):
-				start = 0
-				counter = 0
-				for j in range(int(self.eleNum[i])/2):
-					for line in clus[start:]:
-						counter += 1
-						ele,x,y,z = line.split()
-						if ele == self.eleName[i]:
-							self.offspring.append(line)
-							start = counter
-							break
+		print "Original = " + str(sum(self.eleNum))
 
-		for line in self.offspring:
-			print line
+		if self.eleNum[0] % 2 == 0 and self.eleNum[1] % 2 == 0:
+			c1_na = int(self.eleNum[0]) / 2
+			c1_nb = int(self.eleNum[1]) / 2
+			c2_na = int(self.eleNum[0]) / 2
+			c2_nb = int(self.eleNum[1]) / 2
+		elif self.eleNum[0] % 2 == 0 and self.eleNum[1] % 2 == 1:
+			c1_na = int(self.eleNum[0]) / 2
+			c1_nb = int(self.eleNum[1]) / 2
+			c2_na = int(self.eleNum[0]) / 2
+			c2_nb = int(self.eleNum[1]) / 2 + 1
+		elif self.eleNum[0] % 2 == 1 and self.eleNum[1] % 2 == 0:
+			c1_na = int(self.eleNum[0]) / 2
+			c1_nb = int(self.eleNum[1]) / 2
+			c2_na = int(self.eleNum[0]) / 2 + 1
+			c2_nb = int(self.eleNum[1]) / 2
+		elif self.eleNum[0] % 2 == 1 and self.eleNum[1] % 2 == 1:
+			c1_na = int(self.eleNum[0]) / 2
+			c1_nb = int(self.eleNum[1]) / 2
+			c2_na = int(self.eleNum[0]) / 2 + 1
+			c2_nb = int(self.eleNum[1]) / 2 + 1
+
+		newClusComp = [c1_na,c1_nb,c2_na,c2_nb]
+
+		print newClusComp
+		print "New = " + str(sum(newClusComp))
+
+		c1_nab = [c1_na,c1_nb]
+		c2_nab = [c2_na,c2_nb]
+		
+		for i in range(2):
+			for j in range(c1_nab[i]):
+				for line in self.clus1:
+					ele,x,y,z = line.split()
+					if ele == self.eleName[i]:
+						self.offspring.append(line)
+						break
+
+		for i in range(2):
+			for j in range(c2_nab[i]):
+				for line in self.clus2:
+					ele,x,y,z = line.split()
+					if ele == self.eleName[i]:
+						self.offspring.append(line)
+						break
+
+		print self.offspring
+
+		# for clus in self.pair:
+		# 	for i in range(len(self.eleName)):
+		# 		start = 0
+		# 		counter = 0
+		# 		for j in range(int(self.eleNum[i])/2):
+		# 			for line in clus[start:]:
+		# 				counter += 1
+		# 				ele,x,y,z = line.split()
+		# 				if ele == self.eleName[i]:
+		# 					self.offspring.append(line)
+		# 					start = counter
+		# 					break
+
+		# for line in self.offspring:
+		# 	print line
 						
 	def CheckComp(self):
 
@@ -126,4 +175,4 @@ class crossover:
 				ele,x,y,z = line.split()
 				if element == ele:
 					counter += 1
-			self.eleNum.append(str(counter))
+			self.eleNum.append(int(counter))
