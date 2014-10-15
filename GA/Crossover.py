@@ -90,58 +90,86 @@ class crossover:
 
 		self.CheckComp()
 
-		if self.eleNum[0] % 2 == 0 and self.eleNum[1] % 2 == 0:
-			c1_na = int(self.eleNum[0]) / 2
-			c1_nb = int(self.eleNum[1]) / 2
-			c2_na = int(self.eleNum[0]) / 2
-			c2_nb = int(self.eleNum[1]) / 2
-		elif self.eleNum[0] % 2 == 0 and self.eleNum[1] % 2 == 1:
-			c1_na = int(self.eleNum[0]) / 2
-			c1_nb = int(self.eleNum[1]) / 2
-			c2_na = int(self.eleNum[0]) / 2
-			c2_nb = int(self.eleNum[1]) / 2 + 1
-		elif self.eleNum[0] % 2 == 1 and self.eleNum[1] % 2 == 0:
-			c1_na = int(self.eleNum[0]) / 2
-			c1_nb = int(self.eleNum[1]) / 2
-			c2_na = int(self.eleNum[0]) / 2 + 1
-			c2_nb = int(self.eleNum[1]) / 2
-		elif self.eleNum[0] % 2 == 1 and self.eleNum[1] % 2 == 1:
-			c1_na = int(self.eleNum[0]) / 2
-			c1_nb = int(self.eleNum[1]) / 2
-			c2_na = int(self.eleNum[0]) / 2 + 1
-			c2_nb = int(self.eleNum[1]) / 2 + 1
+		# Monometallic
+		if len(self.eleNum) == 1:
+			if self.eleNum[0] % 2 == 0:
+				c1_na = int(self.eleNum[0]) / 2
+				c2_na = int(self.eleNum[0]) / 2
+			elif self.eleNum[0] % 2 == 1:
+				c1_na = int(self.eleNum[0]) / 2
+				c2_na = int(self.eleNum[0]) / 2 + 1
 
-		# newClusComp = [c1_na,c1_nb,c2_na,c2_nb]
-
-		# print newClusComp
-		# print "New = " + str(sum(newClusComp))
-
-		c1_nab = [c1_na,c1_nb]
-		c2_nab = [c2_na,c2_nb]
-		
-		for i in range(2):
 			start = 0 
 			counter = 0
-			for j in range(c1_nab[i]):
+			for j in range(c1_na):
 				for line in self.clus1[start:]:
 					counter += 1
 					ele,x,y,z = line.split()
-					if ele == self.eleName[i]:
+					if ele == self.eleName[0]:
 						self.offspring.append(line)
 						start = counter
 						break
 
-		for i in range(2):
 			start = 0 
 			counter = 0
-			for j in range(c2_nab[i]):
+			for j in range(c2_na):
 				for line in self.clus2[start:]:
 					counter += 1
 					ele,x,y,z = line.split()
-					if ele == self.eleName[i]:
+					if ele == self.eleName[0]:
 						self.offspring.append(line)
 						start = counter
 						break
+
+		# Bimetallic
+		elif len(self.eleNum) == 2: 
+			if self.eleNum[0] % 2 == 0 and self.eleNum[1] % 2 == 0:
+				c1_na = int(self.eleNum[0]) / 2
+				c1_nb = int(self.eleNum[1]) / 2
+				c2_na = int(self.eleNum[0]) / 2
+				c2_nb = int(self.eleNum[1]) / 2
+			elif self.eleNum[0] % 2 == 0 and self.eleNum[1] % 2 == 1:
+				c1_na = int(self.eleNum[0]) / 2
+				c1_nb = int(self.eleNum[1]) / 2
+				c2_na = int(self.eleNum[0]) / 2
+				c2_nb = int(self.eleNum[1]) / 2 + 1
+			elif self.eleNum[0] % 2 == 1 and self.eleNum[1] % 2 == 0:
+				c1_na = int(self.eleNum[0]) / 2
+				c1_nb = int(self.eleNum[1]) / 2
+				c2_na = int(self.eleNum[0]) / 2 + 1
+				c2_nb = int(self.eleNum[1]) / 2
+			elif self.eleNum[0] % 2 == 1 and self.eleNum[1] % 2 == 1:
+				c1_na = int(self.eleNum[0]) / 2
+				c1_nb = int(self.eleNum[1]) / 2
+				c2_na = int(self.eleNum[0]) / 2 + 1
+				c2_nb = int(self.eleNum[1]) / 2 + 1
+
+			c1_nab = [c1_na,c1_nb]
+			c2_nab = [c2_na,c2_nb]
+		
+			for i in range(2):
+				start = 0 
+				counter = 0
+				for j in range(c1_nab[i]):
+					for line in self.clus1[start:]:
+						counter += 1
+						ele,x,y,z = line.split()
+						if ele == self.eleName[i]:
+							self.offspring.append(line)
+							start = counter
+							break
+
+			for i in range(2):
+				start = 0 
+				counter = 0
+				for j in range(c2_nab[i]):
+					for line in self.clus2[start:]:
+						counter += 1
+						ele,x,y,z = line.split()
+						if ele == self.eleName[i]:
+							self.offspring.append(line)
+							start = counter
+							break
 
 		'''
 		Sort offspring
