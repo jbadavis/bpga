@@ -10,8 +10,10 @@ import pop
 import minimiser
 
 npool = 10
+eleNums = [2,2]
+eleNames = ["Ir","Pd"]
 
-newPool = pop.ranPool(npool)
+newPool = pop.ranPool(npool,eleNums,eleNames)
 
 natoms = newPool.natoms
 

@@ -11,15 +11,15 @@ import os
 
 class ranPool:
 
-    def __init__(self,n):
+    def __init__(self,n,eleNums,eleNames):
 
         ran.seed()
 
         self.nstrucs = n
         self.natoms = 0
-        self.eleNums = [2,2]
-        self.eleNames = ["Ir","Pd"]
-
+        self.eleNums = eleNums
+        self.eleNames = eleNames
+        
         for i in self.eleNums:
             self.natoms += i
 
