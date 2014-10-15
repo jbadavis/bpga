@@ -49,7 +49,10 @@ class minimiser:
 
 		# 			break
 
-		for i in range(1):
+		# while self.checkFinished() == False:
+		# 	pass
+
+		for i in range(self.n,self.n+1):
 
 			self.checkDB
 			self.lockDB
@@ -60,31 +63,29 @@ class minimiser:
 
 			self.offspring = newClus.CutSplice()
 
+			self.minimiseOffspring(i,self.offspring)
+
 			self.unlockDB
 
-	def findPair(self):
+	def minimiseOffspring(self,strucNum,offspring):
 
 		'''
-		From tournamentSelect the
-		exact positions of the 
-		random clusters is found in 
-		the pool.
+		Write XYZ for 
+		offspring.
 		'''
 
-		# Select random pair 
-		selectPair = select(self.n)
-		pair = selectPair.pair
+		xyzNum = strucNum + 1
 
-		# Postions of pair in poollist
-		c1 = ((pair[0]-1)*self.stride)
-		c2 = ((pair[1]-1)*self.stride)
+		with open(str(xyzNum)+".xyz","w") as xyzFile:
+			xyzFile.write(str(self.natoms) + "\n\n")
+			for line in offspring:
+				xyzFile.write(line)
 
-		self.readPool()
-
-		self.clus1 = self.poolList[c1+2:c1+self.stride]
-		self.clus2 = self.poolList[c2+2:c2+self.stride]
-
-		self.poolPos = [c1,c2]
+		# Run DFT calc
+		vaspIN = DFTin.vasp_input(xyzNum)
+		run = DFTsub.submit()
+		run.archer(xyzNum,self.mpitasks)
+		vaspOUT = DFTout.vasp_output(xyzNum,self.natoms)
 
 	def minimiseXYZ(self,strucNum):
 
@@ -155,6 +156,30 @@ class minimiser:
 
 		self.unlockDB
 
+	def findPair(self):
+
+		'''
+		From tournamentSelect the
+		exact positions of the 
+		random clusters is found in 
+		the pool.
+		'''
+
+		# Select random pair 
+		selectPair = select(self.n)
+		pair = selectPair.pair
+
+		# Postions of pair in poollist
+		c1 = ((pair[0]-1)*self.stride)
+		c2 = ((pair[1]-1)*self.stride)
+
+		self.readPool()
+
+		self.clus1 = self.poolList[c1+2:c1+self.stride]
+		self.clus2 = self.poolList[c2+2:c2+self.stride]
+
+		self.poolPos = [c1,c2]
+
 	def finalCoords(self,initialXYZ,finalXYZ,box):
 
 		'''
@@ -184,6 +209,20 @@ class minimiser:
 			finalXYZele.append(xyzLine)
 
 		return finalXYZele
+
+	def checkFinished(self):
+
+		'''
+		Checks if all initial
+		geometries relaxed.
+		'''
+
+		with open("pool.dat","r") as pool:
+			for line in pool:
+				if "Running" in line:
+					return False
+
+		return True
 
 	def readPool(self):
 
