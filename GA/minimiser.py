@@ -27,29 +27,29 @@ class minimiser:
 
 	def checkDatabase(self):
 
-		# for i in range(self.n):
+		for i in range(self.n):
 
-		# 	strucNum = 0
+			strucNum = 0
 			
-		# 	self.checkDB
-		# 	self.lockDB
+			self.checkDB
+			self.lockDB
 
-		# 	self.readPool()
+			self.readPool()
 
-		# 	self.unlockDB
+			self.unlockDB
 
-		# 	for line in self.poolList:		
-		# 		strucNum += 1
-		# 		if "NotMinimised" in line:
+			for line in self.poolList:		
+				strucNum += 1
+				if "NotMinimised" in line:
 
-		# 			# print "found line"
-		# 			# status, strucNum = line.split()
-		# 			self.minimisePool(strucNum)
+					# print "found line"
+					# status, strucNum = line.split()
+					self.minimisePool(strucNum)
 
-		# 			break
+					break
 
-		# while self.checkFinished() == False:
-		# 	pass
+		while self.checkFinished() == False:
+			pass
 
 		for i in range(self.n,self.n+1):
 
