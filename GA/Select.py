@@ -12,7 +12,18 @@ class tournamentSelect:
 
 	def __init__(self,n):
 
+		self.n = n
+		self.energies = []
+		self.getEnergies()
 		self.select(n)
+
+	def getEnergies(self):
+
+		with open("pool.dat","r") as pool:
+			for line in pool:
+				if "Finished Energy" in line:
+					energyList = line.split()
+					self.energies.append(float(energyList[3]))
 
 	def select(self,n):
 
@@ -22,10 +33,34 @@ class tournamentSelect:
 		for crossover
 		'''
 
-		clust1 = randrange(1,n+1)
-		clust2 = randrange(1,n+1)
+		clust1 = self.tournament()
+		clust2 = self.tournament()
 
 		while clust2 == clust1:
-			clust2 = randrange(1,n)
+			clus2 = self.tournament()
 
 		self.pair = [clust1,clust2]
+
+		print self.pair
+
+	def tournament(self):
+
+		# Change to accept larger tournaments
+		size = 2 # Do not change!
+		tournament = []
+
+		for i in range(size):
+			tournament.append(randrange(1,self.n+1))
+
+		while tournament[0] == tournament[1]:
+			tournament[1] = randrange(1,self.n+1)
+
+		tournEnergy = []
+
+		for i in tournament:
+			tournEnergy.append(self.energies[i-1])
+
+		lowest = tournEnergy.index(min(tournEnergy))
+
+		return tournament[lowest]
+
