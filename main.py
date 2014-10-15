@@ -6,8 +6,8 @@ Jack Davis
 10/10/14
 '''
 
-import pop
-import minimiser
+import GA.pop as pop
+import GA.minimiser as minimiser
 
 npool = 10
 eleNums = [2,2]

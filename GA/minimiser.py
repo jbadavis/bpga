@@ -21,36 +21,35 @@ class minimiser:
 		self.n = n
 		self.natoms = natoms
 		self.mpitasks = 24
+		self.stride = natoms + 2
 
 		self.checkDatabase()
 
 	def checkDatabase(self):
 
-		self.stride = self.natoms + 2
+		for i in range(self.n):
 
-		# for i in range(self.n):
-
-		# 	strucNum = 0
+			strucNum = 0
 			
-		# 	self.checkDB
-		# 	self.lockDB
+			self.checkDB
+			self.lockDB
 
-		# 	self.readPool()
+			self.readPool()
 
-		# 	self.unlockDB
+			self.unlockDB
 
-		# 	for line in self.poolList:		
-		# 		strucNum += 1
-		# 		if "NotMinimised" in line:
+			for line in self.poolList:		
+				strucNum += 1
+				if "NotMinimised" in line:
 
-		# 			# print "found line"
-		# 			# status, strucNum = line.split()
-		# 			self.minimiseXYZ(strucNum)
+					# print "found line"
+					# status, strucNum = line.split()
+					self.minimisePool(strucNum)
 
-		# 			break
+					break
 
-		# while self.checkFinished() == False:
-		# 	pass
+		while self.checkFinished() == False:
+			pass
 
 		for i in range(self.n,self.n+1):
 
@@ -87,7 +86,7 @@ class minimiser:
 		run.archer(xyzNum,self.mpitasks)
 		vaspOUT = DFTout.vasp_output(xyzNum,self.natoms)
 
-	def minimiseXYZ(self,strucNum):
+	def minimisePool(self,strucNum):
 
 		stride = self.stride
 		xyzNum = ((strucNum-1)/stride) + 1
