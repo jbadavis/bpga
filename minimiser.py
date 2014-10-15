@@ -58,6 +58,8 @@ class minimiser:
 
 			newClus = cross(self.clus1,self.clus2,self.natoms)
 
+			self.offspring = newClus.CutSplice()
+
 			self.unlockDB
 
 	def findPair(self):

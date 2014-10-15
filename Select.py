@@ -29,8 +29,3 @@ class tournamentSelect:
 			clust2 = randrange(1,n)
 
 		self.pair = [clust1,clust2]
-
-class crossover:
-
-	def __init__(clus1,clus2):
-		pass
