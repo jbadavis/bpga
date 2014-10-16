@@ -19,6 +19,12 @@ class tournamentSelect:
 
 	def getEnergies(self):
 
+		'''
+		Get final energies
+		from pool.dat after
+		convergence.
+		'''
+
 		with open("pool.dat","r") as pool:
 			for line in pool:
 				if "Finished Energy" in line:
@@ -42,6 +48,13 @@ class tournamentSelect:
 		self.pair = [clust1,clust2]
 
 	def tournament(self):
+
+		'''
+		Selects random 
+		clusters, chooses
+		the one with the 
+		lowest energy.
+		'''
 
 		# Change to accept larger tournaments
 		size = 2 # Do not change!

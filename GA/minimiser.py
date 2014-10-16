@@ -45,10 +45,12 @@ class minimiser:
 		while self.checkFinished() == False:
 			pass
 		
-		for i in range(self.n,self.n+1):
+		for i in range(self.n,self.n+1000):
 
 			self.checkDB
 			self.lockDB
+
+			calcNum = self.findLastDir() + 1
 
 			self.findPair()
 
@@ -254,3 +256,26 @@ class minimiser:
 			pass 
 		else:
 			print "closed"
+
+	def findLastDir(self):
+
+		'''
+		Finds directory
+		containing last
+		calculation.
+		'''
+
+		calcList = []
+		dirList = os.listdir(".")
+
+		for i in dirList:
+			try:
+				calcList.append(int(i))
+			except ValueError:
+				continue
+
+		calcList = sorted(calcList)
+
+		lastCalc = calcList[len(calcList)-1]
+
+		return lastCalc
