@@ -24,9 +24,9 @@ class minimiser:
 		self.mpitasks = 24
 		self.stride = natoms + 2
 
-		self.checkDatabase()
+		self.runJobs()
 
-	def checkDatabase(self):
+	def runJobs(self):
 
 		for i in range(self.n):
 
@@ -59,7 +59,7 @@ class minimiser:
 
 			self.offspring = newClus.CutSplice()
 
-			self.minimiseOffspring(i,self.offspring)
+			self.minimiseOffspring(calcNum,self.offspring)
 
 			self.unlockDB
 
@@ -70,7 +70,7 @@ class minimiser:
 		offspring.
 		'''
 
-		xyzNum = strucNum + 1
+		xyzNum = strucNum
 
 		with open(str(xyzNum)+".xyz","w") as xyzFile:
 			xyzFile.write(str(self.natoms) + "\n\n")
