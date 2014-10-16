@@ -14,7 +14,6 @@ class checkPool:
 		self.energies = []
 
 		self.getEnergies()
-		self.checkEnergy()
 
 	def getEnergies(self):
 

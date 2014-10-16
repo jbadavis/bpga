@@ -97,7 +97,9 @@ class minimiser:
 
 		energy = vaspOUT.final_energy
 
-		Accept = checkPool(energy)
+		AcceptReject = checkPool(energy)
+
+		Accept = AcceptReject.checkEnergy()
 
 		if Accept:
 			Index = Accept.Index
