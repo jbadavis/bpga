@@ -13,6 +13,7 @@ import DFT_submit as DFTsub
 
 from Select import tournamentSelect as select
 from Crossover import crossover as cross 
+from checkPool import checkPool as checkPool
 
 class minimiser:
 
@@ -81,6 +82,33 @@ class minimiser:
 		run = DFTsub.submit()
 		run.archer(xyzNum,self.mpitasks)
 		vaspOUT = DFTout.vasp_output(xyzNum,self.natoms)
+
+		'''
+		After completion take
+		final energy and coords
+		from OUTCAR and Update
+		poolList
+		'''
+
+		self.checkDB
+		self.lockDB
+
+		self.readPool()
+
+		energy = vaspOUT.final_energy
+
+		Accept = checkPool(energy)
+
+		if Accept:
+			Index = Accept.Index
+			NewCoords = vaspOUT.final_coords
+			NewCoordsEle = self.finalCoords(initialXYZ[2:],finalXYZ,vaspIN.box)
+			OldCoords = self.poolList[Index-2:Index+stride-2]
+			self.poolList[Index:Index+stride-2] = NewCoordsEle
+			self.poolList[Index-1] = "Finished Energy = " + str(energy) + "\n"
+			self.writePool()
+
+		self.unlockDB
 
 	def minimisePool(self,strucNum):
 
