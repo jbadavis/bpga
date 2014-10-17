@@ -17,12 +17,13 @@ from checkPool import checkPool as checkPool
 
 class minimiser:
 
-	def __init__(self,natoms,n):
+	def __init__(self,natoms,n,hpc):
 		
 		self.n = n
 		self.natoms = natoms
 		self.mpitasks = 24
 		self.stride = natoms + 2
+		self.hpc = hpc
 
 		self.runJobs()
 
@@ -79,8 +80,8 @@ class minimiser:
 
 		# Run DFT calc
 		vaspIN = DFTin.vasp_input(xyzNum)
-		run = DFTsub.submit()
-		run.archer(xyzNum,self.mpitasks)
+		run = DFTsub.submit(self.hpc,xyzNum.self.mpitasks)
+		# run.archer(xyzNum,self.mpitasks)
 		vaspOUT = DFTout.vasp_output(xyzNum,self.natoms)
 
 		'''
@@ -154,8 +155,8 @@ class minimiser:
 
 		# Run DFT calc
 		vaspIN = DFTin.vasp_input(xyzNum)
-		run = DFTsub.submit()
-		run.archer(xyzNum,self.mpitasks)
+		run = DFTsub.submit(self.hpc,xyzNum,self.mpitasks)
+		# run.archer(xyzNum,self.mpitasks)
 		vaspOUT = DFTout.vasp_output(xyzNum,self.natoms)
 
 		'''

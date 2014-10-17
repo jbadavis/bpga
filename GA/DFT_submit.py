@@ -17,8 +17,19 @@ class submit:
   based on loop num i
   '''
   
-  def __init__(self):
-    pass
+  def __init__(self,hpc,i,mpitasks):
+
+    self.i = i
+    self.hpc = hpc
+
+    self.start(hpc)
+
+  def start(self,hpc):
+    
+    if hpc == "bluebear":
+      self.bluebear(self.i)
+    elif hpc == "archer":
+      self.archer(self.i,self.mpitasks)
       
   def bluebear(self,i):
 
