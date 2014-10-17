@@ -107,7 +107,7 @@ class minimiser:
 			Index = Index * self.stride
 			NewCoords = vaspOUT.final_coords
 			OldCoords = self.poolList[Index:Index+self.stride]
-			NewCoordsEle = self.finalCoords(OldCoords[2:],NewCoords,vaspIN.Box)
+			NewCoordsEle = self.finalCoords(OldCoords[2:],NewCoords,vaspIN.box)
 			self.poolList[Index+2:Index+self.stride] = NewCoordsEle
 			self.poolList[Index+1] = "Finished Energy = " + str(energy) + "\n"
 			self.writePool()
