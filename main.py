@@ -31,4 +31,4 @@ minimising pool and
 then producing offspring. 
 '''
 
-minimise = minimiser.minimiser(natoms,npool,hpc,mpitask)
+minimise = minimiser.minimiser(natoms,npool,hpc,mpitasks)
