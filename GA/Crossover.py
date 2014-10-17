@@ -28,7 +28,7 @@ class crossover:
 		for i in range(len(self.pair)):
 			# self.pair[i] = self.centre(self.pair[i])
  			self.pair[i] = self.rotate(self.pair[i])
-			self.pair[i] = self.sortZ(self.pair[i]))
+			self.pair[i] = self.sortZ(self.pair[i])
 
 	def rotate(self,clus):
 
