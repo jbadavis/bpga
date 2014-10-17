@@ -43,7 +43,7 @@ class tournamentSelect:
 		clust2 = self.tournament()
 
 		while clust2 == clust1:
-			clus2 = self.tournament()
+			clust2 = self.tournament()
 
 		self.pair = [clust1,clust2]
 
@@ -74,4 +74,3 @@ class tournamentSelect:
 		lowest = tournEnergy.index(min(tournEnergy))
 
 		return tournament[lowest]
-
