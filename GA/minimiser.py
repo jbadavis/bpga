@@ -14,13 +14,16 @@ import DFT_submit as DFTsub
 from Select import tournamentSelect as select
 from Crossover import crossover as cross 
 from checkPool import checkPool as checkPool
+from CoM import CoM as CoM
 
 class minimiser:
 
-	def __init__(self,natoms,n,hpc,mpitasks):
+	def __init__(self,natoms,eleNums,eleNames,eleMasses,n,hpc,mpitasks):
 		
 		self.n = n
 		self.natoms = natoms
+		self.eleNames = eleNames
+		self.eleMasses = eleMasses
 		self.mpitasks = mpitasks
 		self.stride = natoms + 2
 		self.hpc = hpc
@@ -222,7 +225,8 @@ class minimiser:
 			eleList.append(ele)
 
 		# Take coords out of centre of box.
-		#finalXYZ = [float(i) - box/2 for i in finalXYZ]
+		finalXYZ = [float(i) - box/2 for i in finalXYZ]
+	
 		# Convert list to str for writing to pool.
 		finalXYZ = [str(i) for i in finalXYZ]
 
@@ -232,6 +236,8 @@ class minimiser:
 			+ str(finalXYZ[i+2]) + "\n"
 			xyzLine = eleList[i/3] + " " + xyz
 			finalXYZele.append(xyzLine)
+
+		finalXYZele = CoM(finalXYZele,self.eleNames,self.eleMasses)
 
 		return finalXYZele
 

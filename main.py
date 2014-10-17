@@ -13,6 +13,7 @@ import GA.minimiser as minimiser
 npool = 10
 eleNums = [2,2]
 eleNames = ["Ir","Pd"]
+eleMasses = [192.2,106.42]
 natoms = sum(eleNums)
 hpc = "bluebear"
 mpitasks = "24"
@@ -31,4 +32,4 @@ minimising pool and
 then producing offspring. 
 '''
 
-minimise = minimiser.minimiser(natoms,npool,hpc,mpitasks)
+minimise = minimiser.minimiser(natoms,eleNums,eleNames,eleMasses,npool,hpc,mpitasks)
