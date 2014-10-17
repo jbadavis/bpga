@@ -15,6 +15,7 @@ eleNums = [2,2]
 eleNames = ["Ir","Pd"]
 natoms = sum(eleNums)
 hpc = "bluebear"
+mpitasks = "24"
 
 '''
 If a pool.dat doesn't
@@ -30,4 +31,4 @@ minimising pool and
 then producing offspring. 
 '''
 
-minimise = minimiser.minimiser(natoms,npool,hpc)
+minimise = minimiser.minimiser(natoms,npool,hpc,mpitask)
