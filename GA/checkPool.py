@@ -11,6 +11,7 @@ class checkPool:
 	def __init__(self,newEnergy):
 
 		self.newEnergy = newEnergy
+
 		self.energies = []
 
 		self.getEnergies()
@@ -32,9 +33,9 @@ class checkPool:
 	def checkEnergy(self):
 
 		HighestEnergy = max(self.energies)
-		lowestIndex = self.energies.index(HighestEnergy)
+		self.lowestIndex = self.energies.index(HighestEnergy)
 
-		if HighestEnergy > self.newEnergy:
+		if self.newEnergy > HighestEnergy:
 			self.Index = self.energies.index(HighestEnergy)
 			return True
 		else:

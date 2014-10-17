@@ -59,9 +59,9 @@ class minimiser:
 
 			self.offspring = newClus.CutSplice()
 
-			self.minimiseOffspring(calcNum,self.offspring)
-
 			self.unlockDB
+
+			self.minimiseOffspring(calcNum,self.offspring)
 
 	def minimiseOffspring(self,strucNum,offspring):
 
@@ -102,12 +102,14 @@ class minimiser:
 		Accept = AcceptReject.checkEnergy()
 
 		if Accept:
-			Index = Accept.Index
+			Index = AcceptReject.lowestIndex
+			# StrucNum previously line number from file.
+			Index = Index * self.stride
 			NewCoords = vaspOUT.final_coords
-			NewCoordsEle = self.finalCoords(initialXYZ[2:],finalXYZ,vaspIN.box)
-			OldCoords = self.poolList[Index-2:Index+stride-2]
-			self.poolList[Index:Index+stride-2] = NewCoordsEle
-			self.poolList[Index-1] = "Finished Energy = " + str(energy) + "\n"
+			OldCoords = self.poolList[Index:Index+self.stride]
+			NewCoordsEle = self.finalCoords(OldCoords[2:],NewCoords,vaspIN.Box)
+			self.poolList[Index+2:Index+self.stride] = NewCoordsEle
+			self.poolList[Index+1] = "Finished Energy = " + str(energy) + "\n"
 			self.writePool()
 
 		self.unlockDB
