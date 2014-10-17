@@ -78,7 +78,6 @@ class minimiser:
 			for line in offspring:
 				xyzFile.write(line)
 
-		# Run DFT calc
 		vaspIN = DFTin.vasp_input(xyzNum)
 		run = DFTsub.submit(self.hpc,xyzNum,self.mpitasks)
 		vaspOUT = DFTout.vasp_output(xyzNum,self.natoms)
@@ -223,7 +222,7 @@ class minimiser:
 			eleList.append(ele)
 
 		# Take coords out of centre of box.
-		finalXYZ = [float(i) - box/2 for i in finalXYZ]
+		#finalXYZ = [float(i) - box/2 for i in finalXYZ]
 		# Convert list to str for writing to pool.
 		finalXYZ = [str(i) for i in finalXYZ]
 
