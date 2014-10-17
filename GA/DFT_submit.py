@@ -21,6 +21,7 @@ class submit:
 
     self.i = i
     self.hpc = hpc
+    self.mpitasks = mpitasks
 
     self.start(hpc)
 

@@ -20,14 +20,21 @@ class crossover:
 		self.natoms = natoms 
 		self.offspring = []
 
+		self.CheckComp()
 		self.prepare()
-		# self.CutSplice()
-
+		
 	def prepare(self):
 
 		for i in range(len(self.pair)):
-			self.pair[i] = self.rotate(self.pair[i])
+			self.pair[i] = self.centre(self.pair[i])
+ 			self.pair[i] = self.rotate(self.pair[i])
 			self.pair[i] = self.sortZ(self.pair[i])
+
+	def centre(self,clus):
+
+        com = np.mean(clus,axis=0)
+        clus = (self._coords-com)
+        return -com
 
 	def rotate(self,clus):
 
@@ -87,8 +94,6 @@ class crossover:
 		return sortedClus
 
 	def CutSplice(self):	
-
-		self.CheckComp()
 
 		# Monometallic
 		if len(self.eleNum) == 1:

@@ -81,7 +81,6 @@ class minimiser:
 		# Run DFT calc
 		vaspIN = DFTin.vasp_input(xyzNum)
 		run = DFTsub.submit(self.hpc,xyzNum,self.mpitasks)
-		# run.archer(xyzNum,self.mpitasks)
 		vaspOUT = DFTout.vasp_output(xyzNum,self.natoms)
 
 		'''
@@ -156,7 +155,6 @@ class minimiser:
 		# Run DFT calc
 		vaspIN = DFTin.vasp_input(xyzNum)
 		run = DFTsub.submit(self.hpc,xyzNum,self.mpitasks)
-		# run.archer(xyzNum,self.mpitasks)
 		vaspOUT = DFTout.vasp_output(xyzNum,self.natoms)
 
 		'''
