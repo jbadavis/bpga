@@ -57,7 +57,6 @@ class minimiser:
 			# self.lockDB
 
 			calcNum = self.findLastDir() + 1
-			calcNum = 1
 
 			off = minOff(calcNum,self.natoms,self.eleNames,self.eleMasses
 				,self.n,self.stride,self.hpc,self.mpitasks)
