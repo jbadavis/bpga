@@ -24,7 +24,6 @@ class minimiser:
 	def __init__(self,natoms,eleNums,eleNames,eleMasses,n,hpc,mpitasks):
 		
 		self.n = n
-		self.n = 1
 		self.natoms = natoms
 		self.eleNums = eleNums
 		self.eleNames = eleNames
