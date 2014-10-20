@@ -44,8 +44,6 @@ class checkPool:
 		poolMin = min(self.energies)
 		poolMax = max(self.energies)
 
-		print poolMin - poolMax
-
 		if poolMin - poolMax > -0.01:
 			print "Calculation Converged"
 			return True

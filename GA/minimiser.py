@@ -56,7 +56,7 @@ class minimiser:
 			# self.checkDB
 			# self.lockDB
 
-			# calcNum = self.findLastDir() + 1
+			calcNum = self.findLastDir() + 1
 
 			check = checkPool()
 			converged = check.Convergence()
