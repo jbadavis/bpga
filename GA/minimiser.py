@@ -53,9 +53,6 @@ class minimiser:
 		
 		for i in range(self.n,self.n+1):
 
-			# self.checkDB
-			# self.lockDB
-
 			calcNum = self.findLastDir() + 1
 
 			check = checkPool()
@@ -63,16 +60,6 @@ class minimiser:
 
 			off = minOff(calcNum,self.natoms,self.eleNames,self.eleMasses
 				,self.n,self.stride,self.hpc,self.mpitasks)
-
-			# self.findPair()
-
-			# newClus = cross(self.clus1,self.clus2,self.natoms)
-
-			# self.offspring = newClus.CutSplice()
-
-			# self.unlockDB
-
-			# self.minimiseOffspring(calcNum,self.offspring)
 
 	def minimiseOffspring(self,strucNum,offspring):
 
