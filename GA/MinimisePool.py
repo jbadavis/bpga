@@ -7,6 +7,7 @@ Jack Davis
 '''
 
 import os
+import random as ran
 import DFT_input as DFTin
 import DFT_output as DFTout
 import DFT_submit as DFTsub
@@ -18,9 +19,10 @@ from CoM import CoM
 
 class minPool:
 
-	def __init__(self,natoms,eleNames,eleMasses,n,stride,hpc,mpitasks):
+	def __init__(self,natoms,eleNums,eleNames,eleMasses,n,stride,hpc,mpitasks):
 		
 		self.natoms = natoms
+		self.eleNums = eleNums
 		self.eleNames = eleNames
 		self.eleMasses = eleMasses
 		self.n = n
@@ -40,10 +42,10 @@ class minPool:
 
 		self.strucNum = 0
 			
-		self.checkDB
-		self.lockDB
+		self.checkDB()
+		self.lockDB()
 		self.readPool()
-		self.unlockDB
+		self.unlockDB()
 
 		for line in self.poolList:		
 			self.strucNum += 1
@@ -60,12 +62,12 @@ class minPool:
 		and write .xyz.
 		'''
 
-		self.checkDB
-		self.lockDB
+		self.checkDB()
+		self.lockDB()
 		
 		self.initialXYZ = self.poolList[self.strucNum-2:self.strucNum+self.stride-2]
 		
-		self.unlockDB
+		self.unlockDB()
 
 		with open(str(self.xyzNum)+".xyz","w") as xyzFile:
 			for line in self.initialXYZ:
@@ -79,23 +81,24 @@ class minPool:
 		DFT calculation.
 		'''
 
-		self.checkDB
-		self.lockDB
+		self.checkDB()
+		self.lockDB()
 
 		# Write Running flag to pool.dat
 		self.readPool()
-		self.poolList[self.strucNum-1] = "Running\n"
-		self.writePool()
+		# self.poolList[self.strucNum-1] = "Running\n"
+		# self.writePool()
 
-		self.unlockDB
+		self.unlockDB()
 
 		# Run DFT calc
-		self.vaspIN = DFTin.vasp_input(self.xyzNum)
-		run = DFTsub.submit(self.hpc,self.xyzNum,self.mpitasks)
+		# self.vaspIN = DFTin.vasp_input(self.xyzNum)
+		# run = DFTsub.submit(self.hpc,self.xyzNum,self.mpitasks)
 		self.vaspOUT = DFTout.vasp_output(self.xyzNum,self.natoms)
 
 		if self.vaspOUT.error:
 			print "*- Error in VASP Calculation -*"
+			self.genRandom()
 		else:
 			self.updatePool()
 
@@ -108,8 +111,8 @@ class minPool:
 		poolList
 		'''
 
-		self.checkDB
-		self.lockDB
+		self.checkDB()
+		self.lockDB()
 
 		self.readPool()
 
@@ -122,7 +125,32 @@ class minPool:
 		self.poolList[self.strucNum-1] = "Finished Energy = " + str(energy) + "\n"
 		self.writePool()
 
-		self.unlockDB
+		self.unlockDB()
+
+	def genRandom(self):
+
+		self.checkDB()
+		self.lockDB()
+
+		self.readPool()
+
+		ranStruc = []
+		r_ij = 3.0
+
+		for i in range(len(self.eleNames)):
+			for j in range(len(self.eleNums)):
+				x = ran.uniform(-1,1) * r_ij
+				y = ran.uniform(-1,1) * r_ij
+				z = ran.uniform(-1,1) * r_ij
+				xyz = str(x) + " " + str(y) + " " + str(z) + "\n"
+				xyzline = self.eleNames[i] + " " + xyz
+				ranStruc.append(xyzline)
+
+		self.poolList[self.strucNum:self.strucNum+self.stride-2] = ranStruc
+		self.poolList[self.strucNum-1] = "NotMinimised Restart" + "\n"
+
+		self.writePool()
+		self.unlockDB()
 
 	def finalCoords(self,initialXYZ,finalXYZ,box):
 
@@ -192,5 +220,5 @@ class minPool:
 
 		while os.path.exists("Lock.dat"):
 			pass 
-		else:
-			print "closed"
+		# else:
+			# print "closed"

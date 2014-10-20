@@ -34,13 +34,13 @@ class minOff:
 
 	def runCalc(self):
 
-		self.checkDB
-		self.lockDB
+		self.checkDB()
+		self.lockDB()
 
 		self.findPair()
 		self.produceOffspring()
 
-		self.unlockDB
+		self.unlockDB()
 
 		self.runDFT()
 
@@ -91,8 +91,8 @@ class minOff:
 
 	def updatePool(self):
 
-		self.checkDB
-		self.lockDB
+		self.checkDB()
+		self.lockDB()
 
 		self.readPool()
 
@@ -112,7 +112,7 @@ class minOff:
 			self.poolList[Index+1] = "Finished Energy = " + str(energy) + "\n"
 			self.writePool()
 
-		self.unlockDB
+		self.unlockDB()
 
 	def finalCoords(self,initialXYZ,finalXYZ,box):
 
@@ -182,12 +182,6 @@ class minOff:
 
 		while os.path.exists("Lock.dat"):
 			pass 
-		else:
-			print "closed"
-
-
-
-
-
-
-
+		# else:
+		# 	print "closed"
+		

@@ -24,7 +24,9 @@ class minimiser:
 	def __init__(self,natoms,eleNums,eleNames,eleMasses,n,hpc,mpitasks):
 		
 		self.n = n
+		self.n = 1
 		self.natoms = natoms
+		self.eleNums = eleNums
 		self.eleNames = eleNames
 		self.eleMasses = eleMasses
 		self.mpitasks = mpitasks
@@ -37,34 +39,34 @@ class minimiser:
 
 		for i in range(self.n):
 
-			pool = minPool(self.natoms,self.eleNames,self.eleMasses
-				,self.n,self.stride,self.hpc,self.mpitasks)
+			pool = minPool(self.natoms,self.eleNums,self.eleNames,
+				self.eleMasses,self.n,self.stride,self.hpc,self.mpitasks)
 
-			# strucNum = 0
+			strucNum = 0
 			
-			# self.checkDB
-			# self.lockDB
-			# self.readPool()
-			# self.unlockDB
+			self.checkDB
+			self.lockDB
+			self.readPool()
+			self.unlockDB
 
-			# for line in self.poolList:		
-			# 	strucNum += 1
-			# 	if "NotMinimised" in line:
-			# 		self.minimisePool(strucNum)
-			# 		break
+			for line in self.poolList:		
+				strucNum += 1
+				if "NotMinimised" in line:
+					self.minimisePool(strucNum)
+					break
 
-		# while self.checkFinished() == False:
-		# 	pass
+		while self.checkFinished() == False:
+			pass
 		
-		# for i in range(self.n,self.n+1000):
+		for i in range(self.n,self.n+1000):
 
-		# 	calcNum = self.findLastDir() + 1
+			calcNum = self.findLastDir() + 1
 
-		# 	check = checkPool()
-		# 	converged = check.Convergence()
+			check = checkPool()
+			converged = check.Convergence()
 
-		# 	off = minOff(calcNum,self.natoms,self.eleNames,self.eleMasses
-		# 		,self.n,self.stride,self.hpc,self.mpitasks)
+			off = minOff(calcNum,self.natoms,self.eleNames,self.eleMasses
+				,self.n,self.stride,self.hpc,self.mpitasks)
 
 	# def minimiseOffspring(self,strucNum,offspring):
 
@@ -118,73 +120,73 @@ class minimiser:
 
 	# 	self.unlockDB
 
-	def minimisePool(self,strucNum):
+	# def minimisePool(self,strucNum):
 
-		stride = self.stride
-		xyzNum = ((strucNum-1)/stride) + 1
+	# 	stride = self.stride
+	# 	xyzNum = ((strucNum-1)/stride) + 1
 
-		'''
-		Grab structure 
-		from pool.dat
-		and write .xyz.
-		'''
+	# 	'''
+	# 	Grab structure 
+	# 	from pool.dat
+	# 	and write .xyz.
+	# 	'''
 
-		self.checkDB
-		self.lockDB
+	# 	self.checkDB
+	# 	self.lockDB
 		
-		initialXYZ = self.poolList[strucNum-2:strucNum+stride-2]
+	# 	initialXYZ = self.poolList[strucNum-2:strucNum+stride-2]
 		
-		self.unlockDB
+	# 	self.unlockDB
 
-		with open(str(xyzNum)+".xyz","w") as xyzFile:
-			for line in initialXYZ:
-				xyzFile.write(line)
+	# 	with open(str(xyzNum)+".xyz","w") as xyzFile:
+	# 		for line in initialXYZ:
+	# 			xyzFile.write(line)
 
-		'''
-		Write Running flag 
-		to pool and start 
-		DFT calculation.
-		'''
+	# 	'''
+	# 	Write Running flag 
+	# 	to pool and start 
+	# 	DFT calculation.
+	# 	'''
 
-		self.checkDB
-		self.lockDB
+	# 	self.checkDB
+	# 	self.lockDB
 
-		# Write Running flag to pool.dat
-		self.readPool()
-		self.poolList[strucNum-1] = "Running\n"
-		self.writePool()
+	# 	# Write Running flag to pool.dat
+	# 	self.readPool()
+	# 	self.poolList[strucNum-1] = "Running\n"
+	# 	self.writePool()
 
-		self.unlockDB
+	# 	self.unlockDB
 
-		# Run DFT calc
-		vaspIN = DFTin.vasp_input(xyzNum)
-		run = DFTsub.submit(self.hpc,xyzNum,self.mpitasks)
-		vaspOUT = DFTout.vasp_output(xyzNum,self.natoms)
+	# 	# Run DFT calc
+	# 	vaspIN = DFTin.vasp_input(xyzNum)
+	# 	run = DFTsub.submit(self.hpc,xyzNum,self.mpitasks)
+	# 	vaspOUT = DFTout.vasp_output(xyzNum,self.natoms)
 
-		'''
-		After completion take
-		final energy and coords
-		from OUTCAR and Update
-		poolList
-		'''
+	# 	'''
+	# 	After completion take
+	# 	final energy and coords
+	# 	from OUTCAR and Update
+	# 	poolList
+	# 	'''
 
-		self.checkDB
-		self.lockDB
+	# 	self.checkDB
+	# 	self.lockDB
 
-		self.readPool()
+	# 	self.readPool()
 
-		# Write final energy to pool.dat
-		energy = vaspOUT.final_energy
-		# Write final structure(minus element types)
-		finalXYZ = vaspOUT.final_coords
-		# Get element types and debox
-		finalXYZele = self.finalCoords(initialXYZ[2:],finalXYZ,vaspIN.box)
-		# Update pool 
-		self.poolList[strucNum:strucNum+stride-2] = finalXYZele
-		self.poolList[strucNum-1] = "Finished Energy = " + str(energy) + "\n"
-		self.writePool()
+	# 	# Write final energy to pool.dat
+	# 	energy = vaspOUT.final_energy
+	# 	# Write final structure(minus element types)
+	# 	finalXYZ = vaspOUT.final_coords
+	# 	# Get element types and debox
+	# 	finalXYZele = self.finalCoords(initialXYZ[2:],finalXYZ,vaspIN.box)
+	# 	# Update pool 
+	# 	self.poolList[strucNum:strucNum+stride-2] = finalXYZele
+	# 	self.poolList[strucNum-1] = "Finished Energy = " + str(energy) + "\n"
+	# 	self.writePool()
 
-		self.unlockDB
+	# 	self.unlockDB
 
 	def findPair(self):
 
@@ -210,38 +212,38 @@ class minimiser:
 
 		self.poolPos = [c1,c2]
 
-	def finalCoords(self,initialXYZ,finalXYZ,box):
+	# def finalCoords(self,initialXYZ,finalXYZ,box):
 
-		'''
-		Adds element types 
-		to final coordinates
-		from OUTCAR. Removes 
-		from centre of box
-		'''
+	# 	'''
+	# 	Adds element types 
+	# 	to final coordinates
+	# 	from OUTCAR. Removes 
+	# 	from centre of box
+	# 	'''
 
-		eleList = []
-		finalXYZele =[]
+	# 	eleList = []
+	# 	finalXYZele =[]
 
-		for line in initialXYZ:
-			ele, x,y,z = line.split()
-			eleList.append(ele)
+	# 	for line in initialXYZ:
+	# 		ele, x,y,z = line.split()
+	# 		eleList.append(ele)
 
-		# Take coords out of centre of box.
-		finalXYZ = [float(i) - box/2 for i in finalXYZ]
+	# 	# Take coords out of centre of box.
+	# 	finalXYZ = [float(i) - box/2 for i in finalXYZ]
 	
-		# Convert list to str for writing to pool.
-		finalXYZ = [str(i) for i in finalXYZ]
+	# 	# Convert list to str for writing to pool.
+	# 	finalXYZ = [str(i) for i in finalXYZ]
 
-		for i in range(0,len(finalXYZ),3):
-			xyz = str(finalXYZ[i]) + " " \
-			+ str(finalXYZ[i+1]) + " " \
-			+ str(finalXYZ[i+2]) + "\n"
-			xyzLine = eleList[i/3] + " " + xyz
-			finalXYZele.append(xyzLine)
+	# 	for i in range(0,len(finalXYZ),3):
+	# 		xyz = str(finalXYZ[i]) + " " \
+	# 		+ str(finalXYZ[i+1]) + " " \
+	# 		+ str(finalXYZ[i+2]) + "\n"
+	# 		xyzLine = eleList[i/3] + " " + xyz
+	# 		finalXYZele.append(xyzLine)
 
-		finalXYZele = CoM(finalXYZele,self.eleNames,self.eleMasses)
+	# 	finalXYZele = CoM(finalXYZele,self.eleNames,self.eleMasses)
 
-		return finalXYZele
+	# 	return finalXYZele
 
 	def checkFinished(self):
 
@@ -257,43 +259,43 @@ class minimiser:
 
 		return True
 
-	def readPool(self):
+	# def readPool(self):
 
-		'''
-		Reads pool at beginning/
-		throughout calculation.
-		'''
+	# 	'''
+	# 	Reads pool at beginning/
+	# 	throughout calculation.
+	# 	'''
 
-		with open("pool.dat","r") as pool:
-			self.poolList = pool.readlines()
+	# 	with open("pool.dat","r") as pool:
+	# 		self.poolList = pool.readlines()
 
-	def writePool(self):
+	# def writePool(self):
 
-		'''
-		Writes pool to
-		file after any
-		changes.
-		'''
+	# 	'''
+	# 	Writes pool to
+	# 	file after any
+	# 	changes.
+	# 	'''
 
-		with open("pool.dat","w") as pool:
-			for line in self.poolList:
-				pool.write(line)
+	# 	with open("pool.dat","w") as pool:
+	# 		for line in self.poolList:
+	# 			pool.write(line)
 
-	def lockDB(self):
+	# def lockDB(self):
 
-		with open("lock.db","w") as lock:
-			lock.write("locked")
+	# 	with open("lock.db","w") as lock:
+	# 		lock.write("locked")
 
-	def unlockDB(self):
+	# def unlockDB(self):
 
-		os.system("rm lock.db")
+	# 	os.system("rm lock.db")
 
-	def checkDB(self):
+	# def checkDB(self):
 
-		while os.path.exists("Lock.dat"):
-			pass 
-		else:
-			print "closed"
+	# 	while os.path.exists("Lock.dat"):
+	# 		pass 
+	# 	else:
+	# 		print "closed"
 
 	def findLastDir(self):
 
