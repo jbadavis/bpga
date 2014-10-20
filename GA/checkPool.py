@@ -47,6 +47,7 @@ class checkPool:
 		print poolMin - poolMax
 
 		if poolMin - poolMax > -0.01:
+			print "Calculation Converged"
 			return True
 		else:
 			return False
