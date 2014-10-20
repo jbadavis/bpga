@@ -42,18 +42,18 @@ class minimiser:
 			pool = minPool(self.natoms,self.eleNums,self.eleNames,
 				self.eleMasses,self.n,self.stride,self.hpc,self.mpitasks)
 
-			strucNum = 0
+			# strucNum = 0
 			
-			self.checkDB
-			self.lockDB
-			self.readPool()
-			self.unlockDB
+			# self.checkDB
+			# self.lockDB
+			# self.readPool()
+			# self.unlockDB
 
-			for line in self.poolList:		
-				strucNum += 1
-				if "NotMinimised" in line:
-					self.minimisePool(strucNum)
-					break
+			# for line in self.poolList:		
+			# 	strucNum += 1
+			# 	if "NotMinimised" in line:
+			# 		self.minimisePool(strucNum)
+			# 		break
 
 		while self.checkFinished() == False:
 			pass
