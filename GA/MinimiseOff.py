@@ -73,8 +73,8 @@ class minOff:
 
 	def runDFT(self):
 
-		# vaspIN = DFTin.vasp_input(self.xyzNum)
-		# run = DFTsub.submit(self.hpc,self.xyzNum,self.mpitasks)
+		vaspIN = DFTin.vasp_input(self.xyzNum)
+		run = DFTsub.submit(self.hpc,self.xyzNum,self.mpitasks)
 		self.vaspOUT = DFTout.vasp_output(self.xyzNum,self.natoms)
 
 		if self.vaspOUT.error:
@@ -91,9 +91,8 @@ class minOff:
 
 		energy = self.vaspOUT.final_energy
 
-		AcceptReject = checkPool(energy)
-
-		Accept = AcceptReject.checkEnergy()
+		AcceptReject = checkPool()
+		Accept = AcceptReject.checkEnergy(energy)
 
 		if Accept:
 			Index = AcceptReject.lowestIndex
@@ -105,7 +104,6 @@ class minOff:
 			self.poolList[Index+2:Index+self.stride] = NewCoordsEle
 			self.poolList[Index+1] = "Finished Energy = " + str(energy) + "\n"
 			self.writePool()
-
 
 		self.unlockDB
 
