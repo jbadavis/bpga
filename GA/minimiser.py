@@ -51,7 +51,7 @@ class minimiser:
 		while self.checkFinished() == False:
 			pass
 		
-		for i in range(self.n,self.n+1):
+		for i in range(self.n,self.n+1000):
 
 			calcNum = self.findLastDir() + 1
 
