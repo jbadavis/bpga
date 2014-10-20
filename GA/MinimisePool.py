@@ -86,14 +86,14 @@ class minPool:
 
 		# Write Running flag to pool.dat
 		self.readPool()
-		# self.poolList[self.strucNum-1] = "Running\n"
-		# self.writePool()
+		self.poolList[self.strucNum-1] = "Running\n"
+		self.writePool()
 
 		self.unlockDB()
 
 		# Run DFT calc
-		# self.vaspIN = DFTin.vasp_input(self.xyzNum)
-		# run = DFTsub.submit(self.hpc,self.xyzNum,self.mpitasks)
+		self.vaspIN = DFTin.vasp_input(self.xyzNum)
+		run = DFTsub.submit(self.hpc,self.xyzNum,self.mpitasks)
 		self.vaspOUT = DFTout.vasp_output(self.xyzNum,self.natoms)
 
 		if self.vaspOUT.error:
