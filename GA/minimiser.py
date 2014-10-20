@@ -15,7 +15,9 @@ from Select import tournamentSelect as select
 from Crossover import crossover as cross 
 from checkPool import checkPool as checkPool
 from CoM import CoM 
+from MinimisePool import minPool
 from MinimiseOff import minOff
+
 
 class minimiser:
 
@@ -35,83 +37,86 @@ class minimiser:
 
 		for i in range(self.n):
 
-			strucNum = 0
-			
-			self.checkDB
-			self.lockDB
-			self.readPool()
-			self.unlockDB
-
-			for line in self.poolList:		
-				strucNum += 1
-				if "NotMinimised" in line:
-					self.minimisePool(strucNum)
-					break
-
-		while self.checkFinished() == False:
-			pass
-		
-		for i in range(self.n,self.n+1000):
-
-			calcNum = self.findLastDir() + 1
-
-			check = checkPool()
-			converged = check.Convergence()
-
-			off = minOff(calcNum,self.natoms,self.eleNames,self.eleMasses
+			pool = minPool(self.natoms,self.eleNames,self.eleMasses
 				,self.n,self.stride,self.hpc,self.mpitasks)
 
-	def minimiseOffspring(self,strucNum,offspring):
+			# strucNum = 0
+			
+			# self.checkDB
+			# self.lockDB
+			# self.readPool()
+			# self.unlockDB
 
-		'''
-		Write XYZ for 
-		offspring.
-		'''
+			# for line in self.poolList:		
+			# 	strucNum += 1
+			# 	if "NotMinimised" in line:
+			# 		self.minimisePool(strucNum)
+			# 		break
 
-		xyzNum = strucNum
+		# while self.checkFinished() == False:
+		# 	pass
+		
+		# for i in range(self.n,self.n+1000):
 
-		with open(str(xyzNum)+".xyz","w") as xyzFile:
-			xyzFile.write(str(self.natoms) + "\n\n")
-			for line in offspring:
-				xyzFile.write(line)
+		# 	calcNum = self.findLastDir() + 1
 
-		vaspIN = DFTin.vasp_input(xyzNum)
-		run = DFTsub.submit(self.hpc,xyzNum,self.mpitasks)
-		vaspOUT = DFTout.vasp_output(xyzNum,self.natoms)
+		# 	check = checkPool()
+		# 	converged = check.Convergence()
 
-		if vaspOUT.error:
-			print "Error"
+		# 	off = minOff(calcNum,self.natoms,self.eleNames,self.eleMasses
+		# 		,self.n,self.stride,self.hpc,self.mpitasks)
 
-		'''
-		After completion take
-		final energy and coords
-		from OUTCAR and Update
-		poolList
-		'''
+	# def minimiseOffspring(self,strucNum,offspring):
 
-		self.checkDB
-		self.lockDB
+	# 	'''
+	# 	Write XYZ for 
+	# 	offspring.
+	# 	'''
 
-		self.readPool()
+	# 	xyzNum = strucNum
 
-		energy = vaspOUT.final_energy
+	# 	with open(str(xyzNum)+".xyz","w") as xyzFile:
+	# 		xyzFile.write(str(self.natoms) + "\n\n")
+	# 		for line in offspring:
+	# 			xyzFile.write(line)
 
-		AcceptReject = checkPool(energy)
+	# 	vaspIN = DFTin.vasp_input(xyzNum)
+	# 	run = DFTsub.submit(self.hpc,xyzNum,self.mpitasks)
+	# 	vaspOUT = DFTout.vasp_output(xyzNum,self.natoms)
 
-		Accept = AcceptReject.checkEnergy()
+	# 	if vaspOUT.error:
+	# 		print "Error"
 
-		if Accept:
-			Index = AcceptReject.lowestIndex
-			# StrucNum previously line number from file.
-			Index = Index * self.stride
-			NewCoords = vaspOUT.final_coords
-			OldCoords = self.poolList[Index:Index+self.stride]
-			NewCoordsEle = self.finalCoords(OldCoords[2:],NewCoords,vaspIN.box)
-			self.poolList[Index+2:Index+self.stride] = NewCoordsEle
-			self.poolList[Index+1] = "Finished Energy = " + str(energy) + "\n"
-			self.writePool()
+	# 	'''
+	# 	After completion take
+	# 	final energy and coords
+	# 	from OUTCAR and Update
+	# 	poolList
+	# 	'''
 
-		self.unlockDB
+	# 	self.checkDB
+	# 	self.lockDB
+
+	# 	self.readPool()
+
+	# 	energy = vaspOUT.final_energy
+
+	# 	AcceptReject = checkPool(energy)
+
+	# 	Accept = AcceptReject.checkEnergy()
+
+	# 	if Accept:
+	# 		Index = AcceptReject.lowestIndex
+	# 		# StrucNum previously line number from file.
+	# 		Index = Index * self.stride
+	# 		NewCoords = vaspOUT.final_coords
+	# 		OldCoords = self.poolList[Index:Index+self.stride]
+	# 		NewCoordsEle = self.finalCoords(OldCoords[2:],NewCoords,vaspIN.box)
+	# 		self.poolList[Index+2:Index+self.stride] = NewCoordsEle
+	# 		self.poolList[Index+1] = "Finished Energy = " + str(energy) + "\n"
+	# 		self.writePool()
+
+	# 	self.unlockDB
 
 	def minimisePool(self,strucNum):
 
