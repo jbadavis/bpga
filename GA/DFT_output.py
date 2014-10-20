@@ -22,8 +22,8 @@ class vasp_output:
 		self.final_energy = 0.0
 		self.natoms = int(natoms)
 		self.check_calc(i)
-		self.read_energy(i)
-		self.read_coords(i)
+		# self.read_energy(i)
+		# self.read_coords(i)
 
 	def check_calc(self,i):
 
@@ -34,7 +34,9 @@ class vasp_output:
 		'''
 
 		finish_str = "reached required accuracy"
+		errorStr = "Error EDDDAV:"
 		end = False
+		self.error = False
 
 		with open(str(i) + "/OUTCAR","r") as outcar:
 			while end == False:
@@ -42,7 +44,14 @@ class vasp_output:
 					if finish_str in line:
 						end = True
 						print "finished!"
+					elif errorStr in line:
+						self.error = True
+						end = True  
 				outcar.seek(0)
+
+		if end and self.error == False:
+			self.read_energy(i)
+			self.read_coords(i)
 
 	def read_energy(self,i):
 

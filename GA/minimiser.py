@@ -14,7 +14,8 @@ import DFT_submit as DFTsub
 from Select import tournamentSelect as select
 from Crossover import crossover as cross 
 from checkPool import checkPool as checkPool
-from CoM import CoM as CoM
+from CoM import CoM 
+from MinimiseOff import minOff
 
 class minimiser:
 
@@ -50,22 +51,26 @@ class minimiser:
 		while self.checkFinished() == False:
 			pass
 		
-		for i in range(self.n,self.n+1000):
+		for i in range(self.n,self.n+1):
 
-			self.checkDB
-			self.lockDB
+			# self.checkDB
+			# self.lockDB
 
 			calcNum = self.findLastDir() + 1
+			calcNum = 1
 
-			self.findPair()
+			off = minOff(calcNum,self.natoms,self.eleNames,self.eleMasses
+				,self.n,self.stride,self.hpc,self.mpitasks)
 
-			newClus = cross(self.clus1,self.clus2,self.natoms)
+			# self.findPair()
 
-			self.offspring = newClus.CutSplice()
+			# newClus = cross(self.clus1,self.clus2,self.natoms)
 
-			self.unlockDB
+			# self.offspring = newClus.CutSplice()
 
-			self.minimiseOffspring(calcNum,self.offspring)
+			# self.unlockDB
+
+			# self.minimiseOffspring(calcNum,self.offspring)
 
 	def minimiseOffspring(self,strucNum,offspring):
 
@@ -84,6 +89,9 @@ class minimiser:
 		vaspIN = DFTin.vasp_input(xyzNum)
 		run = DFTsub.submit(self.hpc,xyzNum,self.mpitasks)
 		vaspOUT = DFTout.vasp_output(xyzNum,self.natoms)
+
+		if vaspOUT.error:
+			print "Error"
 
 		'''
 		After completion take
