@@ -42,6 +42,7 @@ class minPool:
 			
 		self.checkDB()
 		self.lockDB()
+
 		self.readPool()
 		# self.unlockDB()
 
@@ -65,12 +66,12 @@ class minPool:
 		and write .xyz.
 		'''
 
-		self.checkDB()
-		self.lockDB()
+		# self.checkDB()
+		# self.lockDB()
 		
 		self.initialXYZ = self.poolList[self.strucNum-2:self.strucNum+self.stride-2]
 		
-		self.unlockDB()
+		# self.unlockDB()
 
 		with open(str(self.xyzNum)+".xyz","w") as xyzFile:
 			for line in self.initialXYZ:
@@ -84,15 +85,17 @@ class minPool:
 		DFT calculation.
 		'''
 
-		self.checkDB()
-		self.lockDB()
+		# self.checkDB()
+		# self.lockDB()
 
 		# Write Running flag to pool.dat
-		self.readPool()
+		# self.readPool()
 		# self.poolList[self.strucNum-1] = "Running\n"
-		self.writePool()
+		# self.writePool()
 
-		self.unlockDB()
+		# self.unlockDB()
+
+		print self.xyzNum
 
 		# Run DFT calc
 		self.vaspIN = DFTin.vasp_input(self.xyzNum)
