@@ -38,7 +38,7 @@ class minOff:
 		self.checkDB()
 		self.lockDB()
 
-		xyzNum = self.findLastDir() + 1
+		self.xyzNum = self.findLastDir() + 1
 
 		self.findPair()
 		self.produceOffspring()
