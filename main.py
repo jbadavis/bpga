@@ -8,7 +8,7 @@ Jack Davis
 '''
 
 import GA.pop as pop
-import GA.minimiser as minimiser
+from GA.poolGA import poolGA as poolGA
 
 npool = 10
 eleNums = [2,2]
@@ -32,4 +32,4 @@ minimising pool and
 then producing offspring. 
 '''
 
-minimise = minimiser.minimiser(natoms,eleNums,eleNames,eleMasses,npool,hpc,mpitasks)
+StartCalc = poolGA(natoms,eleNums,eleNames,eleMasses,npool,hpc,mpitasks)
