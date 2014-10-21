@@ -35,9 +35,7 @@ class minPool:
 	def runCalc(self):
 
 		self.findStruc()
-		self.getXYZ()
-		self.minimise()
-	
+
 	def findStruc(self):
 
 		self.strucNum = 0
@@ -50,6 +48,8 @@ class minPool:
 		for line in self.poolList:		
 			self.strucNum += 1
 			if "NotMinimised" in line:
+				self.getXYZ()
+				self.minimise()
 				break
 
 	def getXYZ(self):
@@ -116,11 +116,9 @@ class minPool:
 
 		self.readPool()
 
-		box = 10.0
-
 		energy = self.vaspOUT.final_energy
 		finalXYZ = self.vaspOUT.final_coords
-		finalXYZele = self.finalCoords(self.initialXYZ[2:],finalXYZ,box)#self.vaspIN.box)
+		finalXYZele = self.finalCoords(self.initialXYZ[2:],finalXYZ,self.vaspIN.box)
 		self.poolList[self.strucNum:self.strucNum+self.stride-2] = finalXYZele
 		self.poolList[self.strucNum-1] = "Finished Energy = " + str(energy) + "\n"
 		self.writePool()
