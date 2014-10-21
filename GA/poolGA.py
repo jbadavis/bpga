@@ -40,12 +40,15 @@ class poolGA:
 		
 		for i in range(self.n,self.n+1000):
 
-			calcNum = self.findLastDir() + 1
+			# calcNum = self.findLastDir() + 1
 
 			check = checkPool()
 			converged = check.Convergence()
 
-			off = minOff(calcNum,self.natoms,self.eleNames,self.eleMasses
+			# off = minOff(calcNum,self.natoms,self.eleNames,self.eleMasses
+			# 	,self.n,self.stride,self.hpc,self.mpitasks)
+
+			off = minOff(self.natoms,self.eleNames,self.eleMasses
 				,self.n,self.stride,self.hpc,self.mpitasks)
 
 	def findPair(self):

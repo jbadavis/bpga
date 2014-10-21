@@ -19,9 +19,10 @@ from CoM import CoM
 
 class minOff: 
 
-	def __init__(self,xyzNum,natoms,eleNames,eleMasses,n,stride,hpc,mpitasks):
+	def __init__(self,natoms,eleNames,eleMasses,n,stride,hpc,mpitasks):
+	# def __init__(self,xyzNum,natoms,eleNames,eleMasses,n,stride,hpc,mpitasks):
 		
-		self.xyzNum = xyzNum
+		# self.xyzNum = xyzNum
 		self.natoms = natoms
 		self.eleNames = eleNames
 		self.eleMasses = eleMasses
@@ -36,6 +37,8 @@ class minOff:
 
 		self.checkDB()
 		self.lockDB()
+
+		xyzNum = self.findLastDir() + 1
 
 		self.findPair()
 		self.produceOffspring()
@@ -146,6 +149,29 @@ class minOff:
 		finalXYZele = CoM(finalXYZele,self.eleNames,self.eleMasses)
 
 		return finalXYZele
+
+	def findLastDir(self):
+
+		'''
+		Finds directory
+		containing last
+		calculation.
+		'''
+
+		calcList = []
+		dirList = os.listdir(".")
+
+		for i in dirList:
+			try:
+				calcList.append(int(i))
+			except ValueError:
+				continue
+
+		calcList = sorted(calcList)
+
+		lastCalc = calcList[len(calcList)-1]
+
+		return lastCalc
 
 	def readPool(self):
 
