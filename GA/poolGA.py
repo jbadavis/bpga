@@ -42,6 +42,7 @@ class poolGA:
 
 		while Running:
 			Running = self.checkRunning()
+			print "Hello!!!"
 			pass
 
 		# for i in range(self.n,self.n+1000):
