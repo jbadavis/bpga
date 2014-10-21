@@ -30,15 +30,15 @@ class poolGA:
 
 	def runJobs(self):
 
-		# for i in range(self.n):
-		while self.checkFinished() == False:
+		notFinished = True
+
+		while notFinished:
 
 			pool = minPool(self.natoms,self.eleNums,self.eleNames,
 				self.eleMasses,self.n,self.stride,self.hpc,self.mpitasks)
 
-		# while self.checkFinished() == False:
-			# pass
-		
+			notFinished = self.checkFinished()
+
 		for i in range(self.n,self.n+1000):
 
 			check = checkPool()
@@ -56,8 +56,9 @@ class poolGA:
 
 		with open("pool.dat","r") as pool:
 			for line in pool:
-				if "Running" or "NotMinimised" in line:
-					return False
+				if "Running" in line:
+					return True
+				elif "NotMinimised" in line:
+					return True
 
-		return True
-
+		return False
