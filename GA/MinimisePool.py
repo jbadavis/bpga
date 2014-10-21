@@ -52,7 +52,7 @@ class minPool:
 			if "NotMinimised" in line:
 				self.poolList[self.strucNum-1] = "Running\n"
 				self.writePool()
-				self.unlockPool()
+				self.unlockDB()
 				self.getXYZ()
 				self.minimise()
 				break
