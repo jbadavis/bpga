@@ -31,21 +31,25 @@ class poolGA:
 	def runJobs(self):
 
 		notFinished = True
+		Running = True
 
 		while notFinished:
+
+			notFinished = self.checkFinished()
 
 			pool = minPool(self.natoms,self.eleNums,self.eleNames,
 				self.eleMasses,self.n,self.stride,self.hpc,self.mpitasks)
 
-			notFinished = self.checkFinished()
+		while Running:
+			pass
 
-		for i in range(self.n,self.n+1000):
+		# for i in range(self.n,self.n+1000):
 
-			check = checkPool()
-			converged = check.Convergence()
+		# 	check = checkPool()
+		# 	converged = check.Convergence()
 
-			off = minOff(self.natoms,self.eleNames,self.eleMasses
-				,self.n,self.stride,self.hpc,self.mpitasks)
+		# 	off = minOff(self.natoms,self.eleNames,self.eleMasses
+		# 		,self.n,self.stride,self.hpc,self.mpitasks)
 
 	def checkFinished(self):
 
@@ -56,9 +60,17 @@ class poolGA:
 
 		with open("pool.dat","r") as pool:
 			for line in pool:
-				if "Running" in line:
-					return True
-				elif "NotMinimised" in line:
+				if "NotMinimised" in line:
 					return True
 
 		return False
+
+	def checkRunning(self):
+
+		with open("pool.dat","r") as pool:
+			for line in pool:
+				if "Running" in line:
+					return True
+
+			return False
+
