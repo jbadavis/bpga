@@ -44,6 +44,7 @@ class minPool:
 		self.lockDB()
 
 		self.readPool()
+		
 		self.unlockDB()
 
 		for line in self.poolList:		

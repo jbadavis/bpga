@@ -1,5 +1,5 @@
 '''
-Minimiser
+poolGA
 
 Jack Davis
 
@@ -40,40 +40,11 @@ class poolGA:
 		
 		for i in range(self.n,self.n+1000):
 
-			# calcNum = self.findLastDir() + 1
-
 			check = checkPool()
 			converged = check.Convergence()
 
-			# off = minOff(calcNum,self.natoms,self.eleNames,self.eleMasses
-			# 	,self.n,self.stride,self.hpc,self.mpitasks)
-
 			off = minOff(self.natoms,self.eleNames,self.eleMasses
 				,self.n,self.stride,self.hpc,self.mpitasks)
-
-	def findPair(self):
-
-		'''
-		From tournamentSelect the
-		exact positions of the 
-		random clusters is found in 
-		the pool.
-		'''
-
-		# Select random pair 
-		selectPair = select(self.n)
-		pair = selectPair.pair
-
-		#Postions of pair in poollist
-		c1 = ((pair[0]-1)*self.stride)
-		c2 = ((pair[1]-1)*self.stride)
-
-		self.readPool()
-
-		self.clus1 = self.poolList[c1+2:c1+self.stride]
-		self.clus2 = self.poolList[c2+2:c2+self.stride]
-
-		self.poolPos = [c1,c2]
 
 	def checkFinished(self):
 
@@ -89,25 +60,3 @@ class poolGA:
 
 		return True
 
-	def findLastDir(self):
-
-		'''
-		Finds directory
-		containing last
-		calculation.
-		'''
-
-		calcList = []
-		dirList = os.listdir(".")
-
-		for i in dirList:
-			try:
-				calcList.append(int(i))
-			except ValueError:
-				continue
-
-		calcList = sorted(calcList)
-
-		lastCalc = calcList[len(calcList)-1]
-
-		return lastCalc
