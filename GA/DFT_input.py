@@ -106,7 +106,7 @@ class vasp_input:
 
 		sp.call(["mkdir", str(self.i)])
 
-		with open(str(self.i)"/POSCAR","w") as poscar:
+		with open(str(self.i)+"/POSCAR","w") as poscar:
 			poscar.write(str(self.i) + '\n')
 			poscar.write(str(self.box) + '\n')
 			poscar.write("1.0 0.0 0.0\n")
