@@ -31,7 +31,7 @@ class poolGA:
 	def runJobs(self):
 
 		# for i in range(self.n):
-		while self.checkFinished == False:
+		while self.checkFinished() == False:
 
 			pool = minPool(self.natoms,self.eleNums,self.eleNames,
 				self.eleMasses,self.n,self.stride,self.hpc,self.mpitasks)
