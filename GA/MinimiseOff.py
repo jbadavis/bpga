@@ -171,8 +171,10 @@ class minOff:
 
 	def lockDB(self):
 
-		with open("lock.db","w") as lock:
-			lock.write("locked")
+		os.system("touch lock.db")
+
+		# with open("lock.db","w") as lock:
+		# 	lock.write("locked")
 
 	def unlockDB(self):
 
@@ -180,8 +182,6 @@ class minOff:
 
 	def checkDB(self):
 
-		while os.path.exists("Lock.dat"):
+		while os.path.exists("Lock.db"):
 			pass 
-		# else:
-		# 	print "closed"
-		
+	

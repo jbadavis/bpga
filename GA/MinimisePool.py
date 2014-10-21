@@ -216,7 +216,6 @@ class minPool:
 
 	def checkDB(self):
 
-		while os.path.exists("Lock.dat"):
+		while os.path.exists("Lock.db"):
 			pass 
-		# else:
-			# print "closed"
+			
