@@ -50,6 +50,8 @@ class minPool:
 		for line in self.poolList:		
 			self.strucNum += 1
 			if "NotMinimised" in line:
+				# self.poolList[self.strucNum-1] = "Running\n"
+				# self.writePool()
 				self.getXYZ()
 				self.minimise()
 				break
