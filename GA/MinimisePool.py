@@ -138,7 +138,7 @@ class minPool:
 		r_ij = 3.0
 
 		for i in range(len(self.eleNames)):
-			for j in range(len(self.eleNums)):
+			for j in range(self.eleNums[i]):
 				x = ran.uniform(-1,1) * r_ij
 				y = ran.uniform(-1,1) * r_ij
 				z = ran.uniform(-1,1) * r_ij
