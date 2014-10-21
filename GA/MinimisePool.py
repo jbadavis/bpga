@@ -57,6 +57,8 @@ class minPool:
 				self.minimise()
 				break
 
+		self.unlockDB
+
 	def getXYZ(self):
 
 		self.xyzNum = ((self.strucNum-1)/self.stride) + 1
