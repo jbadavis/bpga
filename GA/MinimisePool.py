@@ -43,11 +43,14 @@ class minPool:
 		self.checkDB()
 		self.lockDB()
 		self.readPool()
-		self.unlockDB()
+		# self.unlockDB()
 
 		for line in self.poolList:		
 			self.strucNum += 1
 			if "NotMinimised" in line:
+				self.poolList[self.strucNum-1] = "Running\n"
+				self.writePool()
+				self.unlockDB()
 				self.getXYZ()
 				self.minimise()
 				break
@@ -86,7 +89,7 @@ class minPool:
 
 		# Write Running flag to pool.dat
 		self.readPool()
-		self.poolList[self.strucNum-1] = "Running\n"
+		# self.poolList[self.strucNum-1] = "Running\n"
 		self.writePool()
 
 		self.unlockDB()
@@ -218,4 +221,3 @@ class minPool:
 
 		while os.path.exists("Lock.db"):
 			pass 
-			
