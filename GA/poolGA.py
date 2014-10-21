@@ -41,6 +41,7 @@ class poolGA:
 				self.eleMasses,self.n,self.stride,self.hpc,self.mpitasks)
 
 		while Running:
+			Running = checkRunning()
 			pass
 
 		for i in range(self.n,self.n+1000):
