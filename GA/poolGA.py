@@ -42,7 +42,6 @@ class poolGA:
 
 		while Running:
 			Running = self.checkRunning()
-			print "Hello!!!"
 			pass
 
 		for i in range(self.n,self.n+1000):
@@ -74,4 +73,4 @@ class poolGA:
 				if "Running" in line:
 					return True
 
-			return False
+		return False
