@@ -45,13 +45,13 @@ class poolGA:
 			print "Hello!!!"
 			pass
 
-		# for i in range(self.n,self.n+1000):
+		for i in range(self.n,self.n+1000):
 
-		# 	check = checkPool()
-		# 	converged = check.Convergence()
+			check = checkPool()
+			converged = check.Convergence()
 
-		# 	off = minOff(self.natoms,self.eleNames,self.eleMasses
-		# 		,self.n,self.stride,self.hpc,self.mpitasks)
+			off = minOff(self.natoms,self.eleNames,self.eleMasses
+				,self.n,self.stride,self.hpc,self.mpitasks)
 
 	def checkFinished(self):
 
@@ -65,7 +65,6 @@ class poolGA:
 				if "NotMinimised" in line:
 					return True
 
-		# self.unlockDB()
 		return False
 
 	def checkRunning(self):
@@ -76,8 +75,3 @@ class poolGA:
 					return True
 
 			return False
-
-	# def unlockDB(self):
-
-	# 	os.system("rm lock.db")
-
