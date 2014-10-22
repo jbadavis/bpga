@@ -40,9 +40,9 @@ class poolGA:
 
 			notFinished = self.checkFinished()
 
-		while Running:
-			Running = self.checkRunning()
-			pass
+		# while Running:
+		# 	Running = self.checkRunning()
+		# 	pass
 
 		for i in range(self.n,self.n+1000):
 

@@ -86,8 +86,8 @@ class minOff:
 
 		run = DFTsub.submit(self.hpc,self.xyzNum,self.mpitasks)
 
-		self.unlockDB()
-	
+		self.unlockDB
+		
 		self.vaspOUT = DFTout.vasp_output(self.xyzNum,self.natoms)
 
 		if self.vaspOUT.error:
