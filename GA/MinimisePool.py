@@ -57,7 +57,7 @@ class minPool:
 				self.minimise()
 				break
 
-		self.unlockDB
+		self.unlockDB()
 
 	def getXYZ(self):
 
