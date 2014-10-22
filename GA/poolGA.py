@@ -35,10 +35,10 @@ class poolGA:
 
 		while notFinished:
 
-			notFinished = self.checkFinished()
-
 			pool = minPool(self.natoms,self.eleNums,self.eleNames,
 				self.eleMasses,self.n,self.stride,self.hpc,self.mpitasks)
+
+			notFinished = self.checkFinished()
 
 		while Running:
 			Running = self.checkRunning()
@@ -65,7 +65,7 @@ class poolGA:
 				if "NotMinimised" in line:
 					return True
 
-		self.unlockDB()
+		# self.unlockDB()
 		return False
 
 	def checkRunning(self):
@@ -77,7 +77,7 @@ class poolGA:
 
 			return False
 
-	def unlockDB(self):
+	# def unlockDB(self):
 
-		os.system("rm lock.db")
+	# 	os.system("rm lock.db")
 
