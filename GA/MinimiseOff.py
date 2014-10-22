@@ -44,7 +44,7 @@ class minOff:
 		self.produceOffspring()
 		self.vaspIN = DFTin.vasp_input(self.xyzNum)
 
-		self.unlockDB()
+		# self.unlockDB()
 
 		self.runDFT()
 
@@ -85,6 +85,9 @@ class minOff:
 	def runDFT(self):
 
 		run = DFTsub.submit(self.hpc,self.xyzNum,self.mpitasks)
+
+		self.unlockDB()
+	
 		self.vaspOUT = DFTout.vasp_output(self.xyzNum,self.natoms)
 
 		if self.vaspOUT.error:
