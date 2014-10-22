@@ -65,6 +65,7 @@ class poolGA:
 				if "NotMinimised" in line:
 					return True
 
+		self.unlockDB()
 		return False
 
 	def checkRunning(self):
@@ -75,4 +76,8 @@ class poolGA:
 					return True
 
 			return False
+
+	def unlockDB(self):
+
+		os.system("rm lock.db")
 
