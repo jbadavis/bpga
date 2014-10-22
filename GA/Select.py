@@ -7,6 +7,7 @@ Jack Davis
 '''
 
 from random import randrange
+import random as ran
 
 class tournamentSelect:
 
@@ -16,6 +17,7 @@ class tournamentSelect:
 		self.energies = []
 		self.getEnergies()
 		self.selectClusters(n)
+		ran.seed()
 
 	def getEnergies(self):
 
@@ -31,7 +33,7 @@ class tournamentSelect:
 					energyList = line.split()
 					self.energies.append(float(energyList[3]))
 				if "Running" in line:
-					self.energies.append(100.0)
+					self.energies.append("Running")
 
 	def selectClusters(self,n):
 
@@ -75,17 +77,20 @@ class tournamentSelect:
 		for i in tournList:
 			self.tournEnergy.append(self.energies[i-1])
 
+		# If running flag found choose new cluster.
+		while self.checkRunning():
+			pos = self.tournEnergy.index("Running")
+			random = randrange(0,self.n)
+			tournList[pos] = random
+			self.tournEnergy[pos] = self.energies[random]
+
 		# Get index of lowest energy from tournament. 
 		lowest = self.tournEnergy.index(min(self.tournEnergy))
 
 		return tournList[lowest]
 
-	# def checkRunning(self):
+	def checkRunning(self):
 
-	# 	for i in range(len(self.tournEnergy)):
-	# 		if self.tournEnergy[i] == "Running":
-	# 			print "Running"
-	# 			return True
-	# 			break
-
-	# 	return False
+		for i in range(2):
+			if self.tournEnergy[i] == "Running":
+				return True
