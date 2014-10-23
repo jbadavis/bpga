@@ -10,7 +10,6 @@ import os
 from random import randrange as randrange
 
 from MinimisePool import minPool
-from Offspring import Offspring as offDecide
 from MinimiseOff import minOff
 from MinimiseMut import minMut
 from Select import tournamentSelect as select
