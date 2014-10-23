@@ -52,6 +52,8 @@ class minPool:
 			if "NotMinimised" in line:
 				self.poolList[self.strucNum-1] = "Running\n"
 				self.writePool()
+				self.xyzNum = ((self.strucNum-1)/self.stride) + 1
+				os.system("mkdir " + str(self.xyzNum))
 				self.unlockDB()
 				self.getXYZ()
 				self.minimise()
@@ -60,8 +62,6 @@ class minPool:
 		self.unlockDB()
 
 	def getXYZ(self):
-
-		self.xyzNum = ((self.strucNum-1)/self.stride) + 1
 
 		'''
 		Grab structure 

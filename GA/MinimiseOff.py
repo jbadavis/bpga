@@ -19,7 +19,7 @@ from CoM import CoM
 
 class minOff: 
 
-	def __init__(self,natoms,eleNames,eleMasses,n,stride,hpc,mpitasks):
+	def __init__(self,natoms,eleNums,eleNames,eleMasses,n,stride,hpc,mpitasks):
 	# def __init__(self,xyzNum,natoms,eleNames,eleMasses,n,stride,hpc,mpitasks):
 		
 		# self.xyzNum = xyzNum
@@ -39,6 +39,7 @@ class minOff:
 		self.lockDB()
 
 		self.xyzNum = self.findLastDir() + 1
+		os.system("mkdir " + str(self.xyzNum))
 
 		self.findPair()
 		self.produceOffspring()

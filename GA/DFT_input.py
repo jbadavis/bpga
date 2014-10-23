@@ -104,7 +104,7 @@ class vasp_input:
 		in order of elements list
 		'''
 
-		sp.call(["mkdir", str(self.i)])
+		#sp.call(["mkdir", str(self.i)])
 
 		with open(str(self.i)+"/POSCAR","w") as poscar:
 			poscar.write(str(self.i) + '\n')

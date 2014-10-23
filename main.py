@@ -14,6 +14,7 @@ npool = 10
 eleNums = [2,2]
 eleNames = ["Ir","Pd"]
 eleMasses = [192.2,106.42]
+mutate = 1
 natoms = sum(eleNums)
 hpc = "bluebear"
 mpitasks = "24"
@@ -32,4 +33,4 @@ minimising pool and
 then producing offspring. 
 '''
 
-StartCalc = poolGA(natoms,eleNums,eleNames,eleMasses,npool,hpc,mpitasks)
+StartCalc = poolGA(natoms,eleNums,eleNames,eleMasses,mutate,npool,hpc,mpitasks)

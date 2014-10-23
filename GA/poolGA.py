@@ -7,17 +7,21 @@ Jack Davis
 '''
 
 import os
+from random import randrange as randrange
 
 from MinimisePool import minPool
+from Offspring import Offspring as offDecide
 from MinimiseOff import minOff
+from MinimiseMut import minMut
 from Select import tournamentSelect as select
 from checkPool import checkPool as checkPool
 
 class poolGA:
 
-	def __init__(self,natoms,eleNums,eleNames,eleMasses,n,hpc,mpitasks):
+	def __init__(self,natoms,eleNums,eleNames,eleMasses,mutate,n,hpc,mpitasks):
 		
 		self.n = n
+		self.mutate = mutate
 		self.natoms = natoms
 		self.eleNums = eleNums
 		self.eleNames = eleNames
@@ -49,8 +53,21 @@ class poolGA:
 			check = checkPool()
 			converged = check.Convergence()
 
+			self.decide()
+
 			off = minOff(self.natoms,self.eleNames,self.eleMasses
 				,self.n,self.stride,self.hpc,self.mpitasks)
+
+	def decide(self):
+
+		choice = randrange(0,self.n)
+
+		if choice < self.mutate:
+			off = minMut(self.natoms,self.eleNums,self.eleNames,self.eleMasses
+						,self.n,self.stride,self.hpc,self.mpitasks)
+		else:
+			off = minOff(self.natoms,self.eleNum,self.eleNames,self.eleMasses
+						,self.n,self.stride,self.hpc,self.mpitasks)
 
 	def checkFinished(self):
 
@@ -74,3 +91,27 @@ class poolGA:
 					return True
 
 		return False
+
+	# def findLastDir(self):
+
+	# 	'''
+	# 	Finds directory
+	# 	containing last
+	# 	calculation.
+	# 	'''
+
+	# 	calcList = []
+	# 	dirList = os.listdir(".")
+
+	# 	for i in dirList:
+	# 		try:
+	# 			calcList.append(int(i))
+	# 		except ValueError:
+	# 			continue
+
+	# 	calcList = sorted(calcList)
+
+	# 	lastCalc = calcList[len(calcList)-1]
+
+	# 	return lastCalc
+
