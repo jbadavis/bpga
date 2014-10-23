@@ -54,8 +54,8 @@ class poolGA:
 
 			self.decide()
 
-			off = minOff(self.natoms,self.eleNames,self.eleMasses
-				,self.n,self.stride,self.hpc,self.mpitasks)
+			# off = minOff(self.natoms,self.eleNames,self.eleMasses
+			# 	,self.n,self.stride,self.hpc,self.mpitasks)
 
 	def decide(self):
 
