@@ -20,9 +20,7 @@ from CoM import CoM
 class minOff: 
 
 	def __init__(self,natoms,eleNums,eleNames,eleMasses,n,stride,hpc,mpitasks):
-	# def __init__(self,xyzNum,natoms,eleNames,eleMasses,n,stride,hpc,mpitasks):
 		
-		# self.xyzNum = xyzNum
 		self.natoms = natoms
 		self.eleNames = eleNames
 		self.eleMasses = eleMasses

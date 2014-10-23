@@ -34,7 +34,6 @@ class poolGA:
 	def runJobs(self):
 
 		notFinished = True
-		Running = True
 
 		while notFinished:
 
@@ -43,19 +42,12 @@ class poolGA:
 
 			notFinished = self.checkFinished()
 
-		# while Running:
-		# 	Running = self.checkRunning()
-		# 	pass
-
 		for i in range(self.n,self.n+1000):
 
 			check = checkPool()
 			converged = check.Convergence()
 
 			self.decide()
-
-			# off = minOff(self.natoms,self.eleNames,self.eleMasses
-			# 	,self.n,self.stride,self.hpc,self.mpitasks)
 
 	def decide(self):
 
@@ -82,35 +74,11 @@ class poolGA:
 
 		return False
 
-	def checkRunning(self):
+	# def checkRunning(self):
 
-		with open("pool.dat","r") as pool:
-			for line in pool:
-				if "Running" in line:
-					return True
+	# 	with open("pool.dat","r") as pool:
+	# 		for line in pool:
+	# 			if "Running" in line:
+	# 				return True
 
-		return False
-
-	# def findLastDir(self):
-
-	# 	'''
-	# 	Finds directory
-	# 	containing last
-	# 	calculation.
-	# 	'''
-
-	# 	calcList = []
-	# 	dirList = os.listdir(".")
-
-	# 	for i in dirList:
-	# 		try:
-	# 			calcList.append(int(i))
-	# 		except ValueError:
-	# 			continue
-
-	# 	calcList = sorted(calcList)
-
-	# 	lastCalc = calcList[len(calcList)-1]
-
-	# 	return lastCalc
-
+	# 	return False
