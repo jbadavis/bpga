@@ -65,7 +65,7 @@ class poolGA:
 			off = minMut(self.natoms,self.eleNums,self.eleNames,self.eleMasses
 						,self.n,self.stride,self.hpc,self.mpitasks)
 		else:
-			off = minOff(self.natoms,self.eleNum,self.eleNames,self.eleMasses
+			off = minOff(self.natoms,self.eleNums,self.eleNames,self.eleMasses
 						,self.n,self.stride,self.hpc,self.mpitasks)
 
 	def checkFinished(self):
