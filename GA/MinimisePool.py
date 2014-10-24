@@ -53,7 +53,13 @@ class minPool:
 				self.poolList[self.strucNum-1] = "Running\n"
 				self.writePool()
 				self.xyzNum = ((self.strucNum-1)/self.stride) + 1
-				os.system("mkdir " + str(self.xyzNum))
+
+				if os.path.exists(self.xyzNum):
+					self.unlockDB()
+					break
+				else:
+					os.system("mkdir " + str(self.xyzNum))
+
 				self.unlockDB()
 				self.getXYZ()
 				self.minimise()
