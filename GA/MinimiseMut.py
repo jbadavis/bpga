@@ -55,6 +55,7 @@ class minMut:
 		r_ij = 3.0
 
 		with open(str(self.xyzNum)+".xyz","w") as xyzFile:
+			xyzFile.write(str(self.natoms)+"\n\n")
 			for i in range(len(self.eleNames)):
 				for j in range(self.eleNums[i]):
 					x = ran.uniform(-1,1) * r_ij
