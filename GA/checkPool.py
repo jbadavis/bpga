@@ -33,7 +33,7 @@ class checkPool:
 		HighestEnergy = max(self.energies)
 		self.lowestIndex = self.energies.index(HighestEnergy)
 
-		if newEnergy > HighestEnergy:
+		if newEnergy < HighestEnergy:
 			self.Index = self.energies.index(HighestEnergy)
 			return True
 		else:
