@@ -43,7 +43,7 @@ class minMut:
 		self.randomXYZ()
 
 		os.system("mkdir " + str(self.xyzNum))
-		self.vaspIN = DFTin.vasp_input(str(self.xyzNum))
+		self.vaspIN = DFTin.vasp_input(self.xyzNum)
 		
 		self.unlockDB()
 

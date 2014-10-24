@@ -54,7 +54,7 @@ class minPool:
 				self.writePool()
 				self.xyzNum = ((self.strucNum-1)/self.stride) + 1
 
-				if os.path.exists(self.xyzNum):
+				if os.path.exists(str(self.xyzNum)):
 					self.unlockDB()
 					break
 				else:
