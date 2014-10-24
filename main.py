@@ -11,10 +11,10 @@ import GA.pop as pop
 from GA.poolGA import poolGA as poolGA
 
 npool = 10
+mutate = 1
 eleNums = [2,2]
 eleNames = ["Ir","Pd"]
 eleMasses = [192.2,106.42]
-mutate = 1
 natoms = sum(eleNums)
 hpc = "bluebear"
 mpitasks = "24"
