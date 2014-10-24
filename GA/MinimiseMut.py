@@ -49,7 +49,6 @@ class minMut:
 
 		self.runDFT()
 
-
 	def randomXYZ(self):
 
 		r_ij = 3.0
@@ -88,6 +87,7 @@ class minMut:
 		Accept = AcceptReject.checkEnergy(energy)
 
 		if Accept:
+			print "Accepted"
 			Index = AcceptReject.lowestIndex
 			# StrucNum previously line number from file.
 			Index = Index * self.stride
