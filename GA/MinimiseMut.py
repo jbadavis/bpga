@@ -81,7 +81,7 @@ class minMut:
 
 		self.readPool()
 
-		energy = self.vaspOUT.final_energy
+		energy = float(self.vaspOUT.final_energy)
 
 		AcceptReject = checkPool()
 		Accept = AcceptReject.checkEnergy(energy)
