@@ -94,6 +94,13 @@ class minPool:
 		run = DFTsub.submit(self.hpc,self.xyzNum,self.mpitasks)
 		self.vaspOUT = DFTout.vasp_output(self.xyzNum,self.natoms)
 
+
+		'''
+		Check for errors in DFT.
+		Check if cluster has exploded.
+		Update pool!
+		'''
+
 		if self.vaspOUT.error:
 			print "*- Error in VASP Calculation -*"
 			self.genRandom()

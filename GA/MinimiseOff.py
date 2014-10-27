@@ -16,6 +16,7 @@ from Select import tournamentSelect as select
 from Crossover import crossover as cross 
 from checkPool import checkPool as checkPool
 from CoM import CoM 
+from Explode import exploded
 
 class minOff: 
 
@@ -87,6 +88,10 @@ class minOff:
 
 		if self.vaspOUT.error:
 			print "*- Error in VASP Calculation -*"
+			self.genRandom()
+		elif exploded(self.natoms,self.vaspOUT.final_coords):
+			print "*- Cluster Exploded! -*"
+			self.genRandom()
 		else:
 			self.updatePool()
 

@@ -15,6 +15,7 @@ import DFT_submit as DFTsub
 
 from checkPool import checkPool as checkPool
 from CoM import CoM 
+from Explode import exploded
 
 class minMut: 
 
@@ -71,6 +72,10 @@ class minMut:
 
 		if self.vaspOUT.error:
 			print "*- Error in VASP Calculation -*"
+			self.genRandom()
+		elif exploded(self.natoms,self.vaspOUT.final_coords):
+			print "*- Cluster Exploded! -*"
+			self.genRandom()
 		else:
 			self.updatePool()
 
