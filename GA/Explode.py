@@ -15,7 +15,7 @@ def exploded(natoms,vaspOUT):
 	r=[]
 
 	for line in vaspOUT:
-		ele,x,y,z = line.split()
+		x,y,z = line.split()
 		x = float(x)
 		y = float(y)
 		z = float(z)
