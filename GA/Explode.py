@@ -8,20 +8,22 @@ Jack Davis
 
 import numpy as np
 
-def exploded(natoms,vaspOUT):
+def exploded(natoms,coords):
 
-	coords=[]
+	# coords=[]
 	bonds=[]
 	r=[]
 
-	for line in vaspOUT:
-		x,y,z = line.split()
-		x = float(x)
-		y = float(y)
-		z = float(z)
-		coords.append(x)
-		coords.append(y)
-		coords.append(z)
+	# for line in vaspOUT:
+	# 	x,y,z = line.split()
+	# 	x = float(x)
+	# 	y = float(y)
+	# 	z = float(z)
+	# 	coords.append(x)
+	# 	coords.append(y)
+	# 	coords.append(z)
+
+	coords = [float(i) for i in coords]
 
 	for i in range(0,len(coords),3):
 		x1 = float(coords[i])
