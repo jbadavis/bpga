@@ -16,10 +16,12 @@ from Select import tournamentSelect as select
 from Crossover import crossover as cross 
 from checkPool import checkPool as checkPool
 from CoM import CoM 
+from Explode import exploded
 
 class minPool:
 
-	def __init__(self,natoms,eleNums,eleNames,eleMasses,n,stride,hpc,mpitasks):
+	def __init__(self,natoms,eleNums,eleNames,eleMasses
+				,n,stride,hpc,mpitasks):
 		
 		self.natoms = natoms
 		self.eleNums = eleNums
@@ -84,28 +86,19 @@ class minPool:
 	def minimise(self):
 
 		'''
-		Write Running flag 
-		to pool and start 
+		Start 
 		DFT calculation.
 		'''
 
-		# self.checkDB()
-		# self.lockDB()
-
-		# Write Running flag to pool.dat
-		# self.readPool()
-		# self.poolList[self.strucNum-1] = "Running\n"
-		# self.writePool()
-
-		# self.unlockDB()
-
-		# Run DFT calc
 		self.vaspIN = DFTin.vasp_input(self.xyzNum)
 		run = DFTsub.submit(self.hpc,self.xyzNum,self.mpitasks)
 		self.vaspOUT = DFTout.vasp_output(self.xyzNum,self.natoms)
 
 		if self.vaspOUT.error:
 			print "*- Error in VASP Calculation -*"
+			self.genRandom()
+		elif exploded(self.natoms,self.vaspOUT.final_coords):
+			print "*- Cluster Exploded! -*"
 			self.genRandom()
 		else:
 			self.updatePool()
