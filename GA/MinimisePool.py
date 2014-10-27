@@ -44,23 +44,23 @@ class minPool:
 		self.lockDB()
 
 		self.readPool()
-		
-		# self.unlockDB()
 
 		for line in self.poolList:		
 			self.strucNum += 1
 			if "NotMinimised" in line:
-				self.poolList[self.strucNum-1] = "Running\n"
-				self.writePool()
+
 				self.xyzNum = ((self.strucNum-1)/self.stride) + 1
 
-				if os.path.exists(str(self.xyzNum)):
+				if os.path.exists(str(self.xyzNum)) and "Restart" not in line:
 					self.unlockDB()
 					break
 				else:
+					self.poolList[self.strucNum-1] = "Running\n"
+					self.writePool()
 					os.system("mkdir " + str(self.xyzNum))
 
 				self.unlockDB()
+
 				self.getXYZ()
 				self.minimise()
 				break
@@ -74,14 +74,9 @@ class minPool:
 		from pool.dat
 		and write .xyz.
 		'''
-
-		# self.checkDB()
-		# self.lockDB()
 		
 		self.initialXYZ = self.poolList[self.strucNum-2:self.strucNum+self.stride-2]
 		
-		# self.unlockDB()
-
 		with open(str(self.xyzNum)+".xyz","w") as xyzFile:
 			for line in self.initialXYZ:
 				xyzFile.write(line)
