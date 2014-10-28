@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 '''
-DFT submission class for Ligand Mover.
+DFT submission class.
 
 Jack Davis
 

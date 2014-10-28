@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 '''
-DFT output class for Ligand Mover.
+DFT output class.
 
 Jack Davis
 

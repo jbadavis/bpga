@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 '''
-DFT input class for Ligand Mover.
+DFT input class.
 
 Jack Davis
 
