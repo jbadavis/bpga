@@ -61,8 +61,8 @@ class minOff:
 		pair = selectPair.pair
 
 		#Postions of pair in poollist
-		c1 = ((pair[0]-1)*self.stride)
-		c2 = ((pair[1]-1)*self.stride)
+		c1 = pair[0] * self.stride
+		c2 = pair[1] * self.stride
 
 		self.readPool()
 
