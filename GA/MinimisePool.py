@@ -54,8 +54,9 @@ class minPool:
 				self.xyzNum = ((self.strucNum-1)/self.stride) + 1
 
 				if os.path.exists(str(self.xyzNum)) and "Restart" not in line:
-					self.unlockDB()
-					break
+					if os.path.exists(str(self.xyzNum)+"/OUTCAR"):
+						self.unlockDB()
+						break
 				else:
 					self.poolList[self.strucNum-1] = "Running\n"
 					self.writePool()
