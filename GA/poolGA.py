@@ -73,12 +73,3 @@ class poolGA:
 					return True
 
 		return False
-
-	# def checkRunning(self):
-
-	# 	with open("pool.dat","r") as pool:
-	# 		for line in pool:
-	# 			if "Running" in line:
-	# 				return True
-
-	# 	return False
