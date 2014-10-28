@@ -16,7 +16,7 @@ eleNums = [2,2]
 eleNames = ["Ir","Pd"]
 eleMasses = [192.2,106.42]
 natoms = sum(eleNums)
-hpc = "bluebear"
+hpc = "bluebear" # Or Archer
 mpitasks = "24"
 
 '''
