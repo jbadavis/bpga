@@ -29,6 +29,8 @@ class submit:
     
     if hpc == "bluebear":
       self.bluebear(self.i)
+    elif hpc == "minerva":
+      self.minerva(self.i)
     elif hpc == "archer":
       self.archer(self.i,self.mpitasks)
       
@@ -42,6 +44,20 @@ class submit:
     base = os.environ["PWD"]
     runString = "mpirun vasp"
     moduleString = "module load apps/vasp; "
+    os.chdir(base + "/" + str(i))
+    os.system(moduleString + runString)
+    os.chdir(base)
+
+  def minerva(self,i):
+
+    '''
+    Job Submission for
+    Minerva
+    '''
+
+    base = os.environ["PWD"]
+    runString = "mpirun vasp"
+    moduleString = "module load vasp; "
     os.chdir(base + "/" + str(i))
     os.system(moduleString + runString)
     os.chdir(base)
