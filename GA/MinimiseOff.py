@@ -20,7 +20,8 @@ from Explode import exploded
 
 class minOff: 
 
-	def __init__(self,natoms,eleNums,eleNames,eleMasses,n,stride,hpc,mpitasks):
+	def __init__(self,natoms,eleNums,eleNames
+		,eleMasses,n,stride,hpc,mpitasks):
 		
 		self.natoms = natoms
 		self.eleNames = eleNames

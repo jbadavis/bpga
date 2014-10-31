@@ -17,7 +17,8 @@ from checkPool import checkPool as checkPool
 
 class poolGA:
 
-	def __init__(self,natoms,eleNums,eleNames,eleMasses,mutate,n,hpc,mpitasks):
+	def __init__(self,natoms,eleNums,eleNames,
+		eleMasses,mutate,n,hpc,mpitasks):
 		
 		self.n = n
 		self.mutate = mutate

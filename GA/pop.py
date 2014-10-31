@@ -38,6 +38,7 @@ class ranPool:
         '''
 
         r_ij = 3.0
+        scale = self.natoms**(1./3.)
 
         natoms = self.natoms
         eleNames = self.eleNames
@@ -49,9 +50,9 @@ class ranPool:
                 pool.write("NotMinimised " + str(struc+1) + "\n")
                 for i in range(len(eleNames)):
                     for j in range(eleNums[i]):
-                        x = ran.uniform(-1,1) * r_ij
-                        y = ran.uniform(-1,1) * r_ij
-                        z = ran.uniform(-1,1) * r_ij
+                        x = ran.uniform(0,1) * r_ij * scale
+                        y = ran.uniform(0,1) * r_ij * scale
+                        z = ran.uniform(0,1) * r_ij * scale
                         xyz = str(x) + " " + str(y) + " " + str(z) + "\n"
                         line = eleNames[i] + " " + xyz
                         pool.write(line)
