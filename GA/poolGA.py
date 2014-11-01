@@ -17,10 +17,11 @@ from checkPool import checkPool as checkPool
 
 class poolGA:
 
-	def __init__(self,natoms,eleNums,eleNames,
+	def __init__(self,natoms,r_ij,eleNums,eleNames,
 		eleMasses,mutate,n,hpc,mpitasks):
 		
 		self.n = n
+		self.r_ij = r_ij
 		self.mutate = mutate
 		self.natoms = natoms
 		self.eleNums = eleNums
@@ -38,7 +39,7 @@ class poolGA:
 
 		while notFinished:
 
-			pool = minPool(self.natoms,self.eleNums,self.eleNames,
+			pool = minPool(self.natoms,r_ij,self.eleNums,self.eleNames,
 				self.eleMasses,self.n,self.stride,self.hpc,self.mpitasks)
 
 			notFinished = self.checkFinished()
@@ -58,7 +59,7 @@ class poolGA:
 			off = minMut(self.natoms,self.eleNums,self.eleNames,self.eleMasses
 						,self.n,self.stride,self.hpc,self.mpitasks)
 		else:
-			off = minOff(self.natoms,self.eleNums,self.eleNames,self.eleMasses
+			off = minOff(self.natoms,r_ij,self.eleNums,self.eleNames,self.eleMasses
 						,self.n,self.stride,self.hpc,self.mpitasks)
 
 	def checkFinished(self):

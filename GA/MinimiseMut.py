@@ -19,9 +19,10 @@ from Explode import exploded
 
 class minMut: 
 
-	def __init__(self,natoms,eleNums,eleNames,eleMasses,n,stride,hpc,mpitasks):
+	def __init__(self,natoms,r_ij,eleNums,eleNames,eleMasses,n,stride,hpc,mpitasks):
 
 		self.natoms = natoms
+		self.r_ij = r_ij
 		self.eleNums = eleNums
 		self.eleNames = eleNames
 		self.eleMasses = eleMasses
@@ -59,9 +60,9 @@ class minMut:
 			xyzFile.write(str(self.natoms)+"\n\n")
 			for i in range(len(self.eleNames)):
 				for j in range(self.eleNums[i]):
-					x = ran.uniform(0,1) * r_ij * scale
-					y = ran.uniform(0,1) * r_ij * scale
-					z = ran.uniform(0,1) * r_ij * scale
+					x = ran.uniform(0,1) * self.r_ij * scale
+					y = ran.uniform(0,1) * self.r_ij * scale
+					z = ran.uniform(0,1) * self.r_ij * scale
 					xyz = str(x) + " " + str(y) + " " + str(z) + "\n"
 					xyzline = self.eleNames[i] + " " + xyz
 					xyzFile.write(xyzline)

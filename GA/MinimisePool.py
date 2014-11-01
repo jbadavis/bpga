@@ -20,10 +20,11 @@ from Explode import exploded
 
 class minPool:
 
-	def __init__(self,natoms,eleNums,eleNames,eleMasses
+	def __init__(self,natoms,r_ij,eleNums,eleNames,eleMasses
 				,n,stride,hpc,mpitasks):
 		
 		self.natoms = natoms
+		self.r_ij = r_ij
 		self.eleNums = eleNums
 		self.eleNames = eleNames
 		self.eleMasses = eleMasses
@@ -127,9 +128,12 @@ class minPool:
 
 		energy = self.vaspOUT.final_energy
 		finalXYZ = self.vaspOUT.final_coords
+
 		finalXYZele = self.finalCoords(self.initialXYZ[2:],finalXYZ,self.vaspIN.box)
+
 		self.poolList[self.strucNum:self.strucNum+self.stride-2] = finalXYZele
 		self.poolList[self.strucNum-1] = "Finished Energy = " + str(energy) + "\n"
+
 		self.writePool()
 
 		self.unlockDB()
@@ -147,9 +151,9 @@ class minPool:
 
 		for i in range(len(self.eleNames)):
 			for j in range(self.eleNums[i]):
-				x = ran.uniform(0,1) * r_ij * scale
-				y = ran.uniform(0,1) * r_ij * scale
-				z = ran.uniform(0,1) * r_ij * scale
+				x = ran.uniform(0,1) * self.r_ij * scale
+				y = ran.uniform(0,1) * self.r_ij * scale
+				z = ran.uniform(0,1) * self.r_ij * scale
 				xyz = str(x) + " " + str(y) + " " + str(z) + "\n"
 				xyzline = self.eleNames[i] + " " + xyz
 				ranStruc.append(xyzline)

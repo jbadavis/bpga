@@ -11,11 +11,12 @@ import os
 
 class ranPool:
 
-    def __init__(self,n,eleNums,eleNames):
+    def __init__(self,n,r_ij,eleNums,eleNames):
 
         ran.seed()
 
         self.nstrucs = n
+        self.r_ij = r_ij
         self.natoms = 0
         self.eleNums = eleNums
         self.eleNames = eleNames
@@ -50,9 +51,9 @@ class ranPool:
                 pool.write("NotMinimised " + str(struc+1) + "\n")
                 for i in range(len(eleNames)):
                     for j in range(eleNums[i]):
-                        x = ran.uniform(0,1) * r_ij * scale
-                        y = ran.uniform(0,1) * r_ij * scale
-                        z = ran.uniform(0,1) * r_ij * scale
+                        x = ran.uniform(0,1) * self.r_ij * scale
+                        y = ran.uniform(0,1) * self.r_ij * scale
+                        z = ran.uniform(0,1) * self.r_ij * scale
                         xyz = str(x) + " " + str(y) + " " + str(z) + "\n"
                         line = eleNames[i] + " " + xyz
                         pool.write(line)
