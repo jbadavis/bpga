@@ -142,9 +142,8 @@ class minPool:
 		self.readPool()
 
 		ranStruc = []
-		
 		r_ij = 3.0
-        scale = self.natoms**(1./3.)
+		scale = self.natoms**(1./3.)
 
 		for i in range(len(self.eleNames)):
 			for j in range(self.eleNums[i]):
