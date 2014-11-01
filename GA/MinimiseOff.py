@@ -61,7 +61,8 @@ class minOff:
 		selectPair = select(self.n)
 		pair = selectPair.pair
 
-		pair = [i-1 for i in pair]
+		# Not sure if this correct or not?!
+		# pair = [i-1 for i in pair]
 
 		#Postions of pair in poollist
 		c1 = pair[0] * self.stride
