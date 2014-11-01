@@ -33,4 +33,5 @@ minimising pool and
 then producing offspring. 
 '''
 
-StartCalc = poolGA(natoms,eleNums,eleNames,eleMasses,mutate,npool,hpc,mpitasks)
+StartCalc = poolGA(natoms,eleNums,eleNames
+			,eleMasses,mutate,npool,hpc,mpitasks)
