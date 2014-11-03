@@ -19,7 +19,8 @@ from Explode import exploded
 
 class minMut: 
 
-	def __init__(self,natoms,r_ij,eleNums,eleNames,eleMasses,n,stride,hpc,mpitasks):
+	def __init__(self,natoms,r_ij,eleNums,eleNames
+		,eleMasses,n,stride,hpc,mpitasks):
 
 		self.natoms = natoms
 		self.r_ij = r_ij
