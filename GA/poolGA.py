@@ -56,10 +56,10 @@ class poolGA:
 		choice = randrange(0,self.n)
 
 		if choice < self.mutate:
-			off = minMut(self.natoms,self.eleNums,self.eleNames
+			off = minMut(self.natoms,self.r_ij,self.eleNums,self.eleNames
 				,self.eleMasses,self.n,self.stride,self.hpc,self.mpitasks)
 		else:
-			off = minOff(self.natoms,self.r_ij,self.eleNums,self.eleNames
+			off = minOff(self.natoms,self.eleNums,self.eleNames
 				,self.eleMasses,self.n,self.stride,self.hpc,self.mpitasks)
 
 	def checkFinished(self):
