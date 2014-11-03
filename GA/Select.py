@@ -40,7 +40,7 @@ class tournamentSelect:
 		'''
 		Selects random 
 		pair from pool
-		for crossover
+		for crossover.
 		'''
 
 		clust1 = self.tournament()
@@ -54,43 +54,91 @@ class tournamentSelect:
 	def tournament(self):
 
 		'''
-		Selects random 
-		clusters, chooses
-		the one with the 
-		lowest energy.
+		Randomly select 
+		tournament ensuring 
+		a running calculation
+		isn't chosen.
 		'''
 
-		# Change to accept larger tournaments
-		size = 2 # Do not change!
-		tournList = []
+		size=2 
+		self.tournList=[]
+		tournEnergy=[]
 
-		# Select two random clusters for comparison.
 		for i in range(size):
-			tournList.append(randrange(1,self.n+1))
+			self.tournList.append(randrange(0,self.n))
 
-		# Ensure that the two clusters are different. 
-		while tournList[0] == tournList[1]:
-			tournList[1] = randrange(1,self.n+1)
+		while self.tournList[0] == self.tournList[1]:
+			self.tournList[1] = randrange(0,self.n)
 
-		# Get energies of two chosen clusters.
-		self.tournEnergy = []
-		for i in tournList:
-			self.tournEnergy.append(self.energies[i-1])
-
-		# If running flag found choose new cluster.
 		while self.checkRunning():
-			pos = self.tournEnergy.index("Running")
-			random = randrange(0,self.n)
-			tournList[pos] = random
-			self.tournEnergy[pos] = self.energies[random]
+			self.tournList[self.index] = randrange(self.n)
 
-		# Get index of lowest energy from tournament. 
-		lowest = self.tournEnergy.index(min(self.tournEnergy))
+		for i in range(size):
+			tournEnergy.append(self.energies[self.tournList[i]])
 
-		return tournList[lowest]
+		return self.energies.index(min(tournEnergy))
 
 	def checkRunning(self):
 
 		for i in range(2):
-			if self.tournEnergy[i] == "Running":
+			self.index = self.tournList[i]
+			if self.energies[self.index] == "Running":
+				self.index = i
 				return True
+				break
+		return False
+
+	# def tournament(self):
+
+	# 	'''
+	# 	Selects random 
+	# 	clusters, chooses
+	# 	the one with the 
+	# 	lowest energy.
+	# 	'''
+
+	# 	# Change to accept larger tournaments
+	# 	size = 2 # Do not change!
+	# 	tournList = []
+
+	# 	# Select two random clusters for comparison.
+	# 	for i in range(size):
+	# 		tournList.append(randrange(0,self.n))
+
+	# 	# Ensure that the two clusters are different. 
+	# 	while tournList[0] == tournList[1]:
+	# 		tournList[1] = randrange(0,self.n)
+
+	# 	# Get energies of two chosen clusters.
+	# 	self.tournEnergy = []
+	# 	for i in tournList:
+	# 		self.tournEnergy.append(self.energies[i-1])
+
+	# 	# If running flag found choose new cluster.
+	# 	while self.checkRunning():
+	# 		pos = self.tournEnergy.index("Running")
+	# 		random = randrange(0,self.n)
+	# 		tournList[pos] = random
+	# 		self.tournEnergy[pos] = self.energies[random]
+
+	# 	self.tournEnergy = [-107.40002552, -106.60122626]
+
+	# 	# Get index of lowest energy from tournament. 
+	# 	lowest = self.tournEnergy.index(min(self.tournEnergy))
+
+	# 	print tournList
+	# 	print tournList[lowest]
+
+	# 	return tournList[lowest]
+
+	# def checkRunning(self):
+
+	# 	for struc in self.tournEnergy:
+	# 		if struc == "Running":
+	# 			return True
+	# 			break
+	# 	return False 
+	# 		# if self.tournEnergy[i] == "Running":
+	# 		# 	return True
+	# 		# 	break
+	# 		# return False
