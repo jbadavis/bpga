@@ -8,9 +8,10 @@ Jack Davis
 
 import os
 
-import DFT_input as DFTin
 import DFT_output as DFTout
 import DFT_submit as DFTsub
+
+from DFT_input import vasp_input as DFTin
 
 from Select import tournamentSelect as select
 from Crossover import crossover as cross 
@@ -43,7 +44,10 @@ class minOff:
 
 		self.findPair()
 		self.produceOffspring()
-		self.vaspIN = DFTin.vasp_input(self.xyzNum)
+
+		self.vaspIN = DFTin(self.xyzNum,self.eleNames
+					,self.eleMasses,self.eleNums)
+
 		self.unlockDB()
 
 		self.runDFT()
@@ -201,15 +205,12 @@ class minOff:
 
 		os.system("touch lock.db")
 
-		# with open("lock.db","w") as lock:
-		# 	lock.write("locked")
-
 	def unlockDB(self):
 
 		os.system("rm lock.db")
 
 	def checkDB(self):
 
-		while os.path.exists("Lock.db"):
+		while os.path.exists("lock.db"):
 			pass 
 	

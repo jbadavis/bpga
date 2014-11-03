@@ -8,9 +8,11 @@ Jack Davis
 
 import os
 import random as ran
-import DFT_input as DFTin
+
 import DFT_output as DFTout
 import DFT_submit as DFTsub
+
+from DFT_input import vasp_input as DFTin
 
 from Select import tournamentSelect as select
 from Crossover import crossover as cross 
@@ -20,8 +22,8 @@ from Explode import exploded
 
 class minPool:
 
-	def __init__(self,natoms,r_ij,eleNums,eleNames,eleMasses
-				,n,stride,hpc,mpitasks):
+	def __init__(self,natoms,r_ij,eleNums,eleNames
+		,eleMasses,n,stride,hpc,mpitasks):
 		
 		self.natoms = natoms
 		self.r_ij = r_ij
@@ -62,14 +64,14 @@ class minPool:
 					self.writePool()
 					# This causes excess cannot mkdir errors. 
 					os.system("mkdir " + str(self.xyzNum))
-
-				self.unlockDB()
+					self.unlockDB()
 
 				self.getXYZ()
 				self.minimise()
 				break
 
-		self.unlockDB()
+		if os.path.exists("lock.db"): 
+			self.unlockDB()
 
 	def getXYZ(self):
 
@@ -92,7 +94,9 @@ class minPool:
 		DFT calculation.
 		'''
 
-		self.vaspIN = DFTin.vasp_input(self.xyzNum)
+		self.vaspIN = DFTin(self.xyzNum,self.eleNames
+					,self.eleMasses,self.eleNums)
+
 		run = DFTsub.submit(self.hpc,self.xyzNum,self.mpitasks)
 		self.vaspOUT = DFTout.vasp_output(self.xyzNum,self.natoms)
 
@@ -221,8 +225,7 @@ class minPool:
 
 	def lockDB(self):
 
-		with open("lock.db","w") as lock:
-			lock.write("locked")
+		os.system("touch lock.db")
 
 	def unlockDB(self):
 
@@ -230,5 +233,5 @@ class minPool:
 
 	def checkDB(self):
 
-		while os.path.exists("Lock.db"):
+		while os.path.exists("lock.db"):
 			pass 

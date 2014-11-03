@@ -9,9 +9,10 @@ Jack Davis
 import os
 import random as ran
 
-import DFT_input as DFTin
 import DFT_output as DFTout
 import DFT_submit as DFTsub
+
+from DFT_input import vasp_input as DFTin
 
 from checkPool import checkPool as checkPool
 from CoM import CoM 
@@ -46,15 +47,16 @@ class minMut:
 		self.randomXYZ()
 
 		os.system("mkdir " + str(self.xyzNum))
-		self.vaspIN = DFTin.vasp_input(self.xyzNum)
-		
+
+		self.vaspIN = DFTin(self.xyzNum,self.eleNames
+					,self.eleMasses,self.eleNums)
+							
 		self.unlockDB()
 
 		self.runDFT()
 
 	def randomXYZ(self):
-
-		r_ij = 3.0
+		
 		scale = self.natoms**(1./3.)
 
 		with open(str(self.xyzNum)+".xyz","w") as xyzFile:

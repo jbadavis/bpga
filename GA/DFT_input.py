@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 '''
 DFT input class.
 
@@ -11,74 +9,41 @@ Jack Davis
 import sys 
 import subprocess as sp
 
+from CoM import CoM 
+
 class vasp_input:
 
 	'''
-	Creates POSCAR input files in directories from .xyz's
+	Creates POSCAR input files 
+	in directories from .xyz's
 	'''
 
-	def __init__(self,i):
+	def __init__(self,i,eleNames
+		,eleMasses,eleNums):
 
 		self.i = i
-
-		self.elements = []
-		self.ele_num = []
-		self.eleXYZ = []
+		self.eleNames = eleNames
+		self.eleMasses = eleMasses
+		self.eleNums = eleNums
 
 		self.read_xyz() 
-		self.count_elements()
 		self.cell_size()
 		self.write_poscar()
-
 
 	def read_xyz(self):
 
 		'''
 		Reads previously created .xyz
-		into class coord list
+		into class coord list.
 		'''
 
 		with open(str(self.i) + ".xyz") as xyz:
-			# Read number of atoms from line 1 of xyz.
 			self.natoms = xyz.readline()
-			# Read comment from line 2 of xyz.
 			comment = xyz.readline()
-			# Read coordinates into list.
 			self.coords = xyz.readlines()
 
-	def count_elements(self):
+		self.coords = CoM(self.coords,self.eleNames,self.eleMasses)
 
-		'''
-		Using the class coord list
-		the number of different 
-		elements is counted
-		'''
-
-		counter = 0
-
-		# Adds all different ele names to list.
-		for line in self.coords: 
-			ele, x, y, z = line.split()
-			if counter == 0:
-				self.elements.append(ele)
-			elif counter > 0:
-				if ele not in self.elements:
-					self.elements.append(ele)
-			counter += 1
-
-		# Counts number of instances of each ele. 
-		for element in self.elements: 
-			counter = 0
-			for line in self.coords: 
-				ele, x, y, z = line.split()
-				if element == ele:
-					counter += 1
-			self.ele_num.append(str(counter))
-
-		for i in range(len(self.elements)):
-			for j in range(int(self.ele_num[i])):
-				self.eleXYZ.append(self.elements[i])
-	
 	def cell_size(self):
 
 		'''
@@ -104,6 +69,8 @@ class vasp_input:
 		in order of elements list
 		'''
 
+		self.eleNums = [str(i) for i in self.eleNums]
+
 		#sp.call(["mkdir", str(self.i)])
 
 		with open(str(self.i)+"/POSCAR","w") as poscar:
@@ -112,10 +79,10 @@ class vasp_input:
 			poscar.write("1.0 0.0 0.0\n")
 			poscar.write("0.0 1.0 0.0\n")
 			poscar.write("0.0 0.0 1.0\n")
-			poscar.write(" ".join(self.elements) + '\n')
-			poscar.write(" ".join(self.ele_num) + '\n')
+			poscar.write(" ".join(self.eleNames) + '\n')
+			poscar.write(" ".join(self.eleNums) + '\n')
 			poscar.write("Direct\n")
-			for element in self.elements:
+			for element in self.eleNames:
 				for line in self.coords:
 					ele, x, y, z = line.split()
 					if ele == element:
@@ -127,27 +94,3 @@ class vasp_input:
 			sp.call(["cp", "INCAR" ,str(self.i)])
 			sp.call(["cp", "KPOINTS" ,str(self.i)])
 			sp.call(["cp", "POTCAR" ,str(self.i)])
-
-class qe_input:
-
-	"""
-	Creates .in for Quantum Espresso 
-	Calculations - requires DFT.in
-	containing input parameters
-	"""
-
-	def __init__(self,i):
-		self.i = i
-		self.qe_input()
-
-	def qe_input(self):
-		with open("DFT.in",'r') as dft:
-			xyz = open(str(self.i) + ".xyz",'r')
-			qe_out = open(str(self.i) + ".in",'w')
-			coords = xyz.readlines()
-			for line in dft:
-				if "coordinates" in line:
-					for line in coords[2:]:
-						qe_out.write(line)
-				qe_out.write(str(line))
-		
