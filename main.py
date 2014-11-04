@@ -9,15 +9,16 @@ Jack Davis
 
 from GA.pop import ranPool
 from GA.poolGA import poolGA
+import GA.Input as In
 
 npool = 10
-mutate = 1
-r_ij = 2.0
+mutate = 2
+r_ij = 3.0
 eleNums = [2,2]
 eleNames = ["Ir","Pd"]
-eleMasses = [192.2,106.42]
+eleMasses = In.masses(eleNames)
 natoms = sum(eleNums)
-hpc = "bluebear" # archer/minerva
+hpc = In.hpc()
 mpitasks = "24"
 
 '''
