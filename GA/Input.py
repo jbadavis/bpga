@@ -17,7 +17,7 @@ def hpc():
 		return "bluebear"		
 	elif "hpclogin" in host:
 		return "minerva"
-	elif "eslogin" in host:
+	elif "mom" in host:
 		return "archer"
 	elif "MacBook" in host:
 		return "local"
