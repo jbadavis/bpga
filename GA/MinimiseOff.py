@@ -27,6 +27,7 @@ class minOff:
 		self.natoms = natoms
 		self.eleNames = eleNames
 		self.eleMasses = eleMasses
+		self.eleNums = eleNums
 		self.n = n
 		self.stride = stride
 		self.hpc = hpc
