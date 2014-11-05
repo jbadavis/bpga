@@ -9,6 +9,8 @@ Jack Davis
 import os
 import random as ran
 
+import Database as db
+
 import DFT_output as DFTout
 import DFT_submit as DFTsub
 
@@ -45,8 +47,8 @@ class minPool:
 
 		self.strucNum = 0
 			
-		self.checkDB()
-		self.lockDB()
+		db.check()
+		db.lock()
 
 		self.readPool()
 
@@ -57,21 +59,21 @@ class minPool:
 				self.xyzNum = ((self.strucNum-1)/self.stride) + 1
 
 				if os.path.exists(str(self.xyzNum)) and "Restart" not in line:
-						self.unlockDB()
+						db.unlock()
 						break
 				else:
 					self.poolList[self.strucNum-1] = "Running\n"
 					self.writePool()
 					# This causes excess cannot mkdir errors. 
 					os.system("mkdir " + str(self.xyzNum))
-					self.unlockDB()
+					db.unlock()
 
 				self.getXYZ()
 				self.minimise()
 				break
 
 		if os.path.exists("lock.db"): 
-			self.unlockDB()
+			db.unlock()
 
 	def getXYZ(self):
 
@@ -125,8 +127,8 @@ class minPool:
 		poolList
 		'''
 
-		self.checkDB()
-		self.lockDB()
+		db.check()
+		db.lock()
 
 		self.readPool()
 
@@ -140,12 +142,12 @@ class minPool:
 
 		self.writePool()
 
-		self.unlockDB()
+		db.unlock()
 
 	def genRandom(self):
 
-		self.checkDB()
-		self.lockDB()
+		db.check()
+		db.lock()
 
 		self.readPool()
 
@@ -166,7 +168,7 @@ class minPool:
 		self.poolList[self.strucNum-1] = "NotMinimised Restart" + "\n"
 
 		self.writePool()
-		self.unlockDB()
+		db.unlock()
 
 	def finalCoords(self,initialXYZ,finalXYZ,box):
 
@@ -222,16 +224,3 @@ class minPool:
 		with open("pool.dat","w") as pool:
 			for line in self.poolList:
 				pool.write(line)
-
-	def lockDB(self):
-
-		os.system("touch lock.db")
-
-	def unlockDB(self):
-
-		os.system("rm lock.db")
-
-	def checkDB(self):
-
-		while os.path.exists("lock.db"):
-			pass 

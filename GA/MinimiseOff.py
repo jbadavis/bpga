@@ -8,6 +8,8 @@ Jack Davis
 
 import os
 
+import Database as db
+
 import DFT_output as DFTout
 import DFT_submit as DFTsub
 
@@ -37,8 +39,8 @@ class minOff:
 
 	def runCalc(self):
 
-		self.checkDB()
-		self.lockDB()
+		db.check()
+		db.lock()
 
 		self.xyzNum = self.findLastDir() + 1
 		os.system("mkdir " + str(self.xyzNum))
@@ -49,7 +51,7 @@ class minOff:
 		self.vaspIN = DFTin(self.xyzNum,self.eleNames
 					,self.eleMasses,self.eleNums)
 
-		self.unlockDB()
+		db.unlock()
 
 		self.runDFT()
 
@@ -101,8 +103,8 @@ class minOff:
 
 	def updatePool(self):
 
-		self.checkDB()
-		self.lockDB()
+		db.check()
+		db.lock()
 
 		self.readPool()
 
@@ -122,7 +124,7 @@ class minOff:
 			self.poolList[Index+1] = "Finished Energy = " + str(energy) + "\n"
 			self.writePool()
 
-		self.unlockDB()
+		db.unlock()
 
 	def finalCoords(self,initialXYZ,finalXYZ,box):
 
@@ -201,17 +203,4 @@ class minOff:
 		with open("pool.dat","w") as pool:
 			for line in self.poolList:
 				pool.write(line)
-
-	def lockDB(self):
-
-		os.system("touch lock.db")
-
-	def unlockDB(self):
-
-		os.system("rm lock.db")
-
-	def checkDB(self):
-
-		while os.path.exists("lock.db"):
-			pass 
 	

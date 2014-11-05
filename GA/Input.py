@@ -13,7 +13,7 @@ def hpc():
 
 	host = check_output(['hostname'])
 
-	if "bb2login" in host:
+	if "bb2" in host:
 		return "bluebear"		
 	elif "hpclogin" in host:
 		return "minerva"

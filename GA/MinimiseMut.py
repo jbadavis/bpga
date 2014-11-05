@@ -9,6 +9,8 @@ Jack Davis
 import os
 import random as ran
 
+import Database as db
+
 import DFT_output as DFTout
 import DFT_submit as DFTsub
 
@@ -39,8 +41,8 @@ class minMut:
 
 	def runCalc(self):
 
-		self.checkDB()
-		self.lockDB()
+		db.check()
+		db.lock()
 
 		self.xyzNum = self.findLastDir() + 1
 
@@ -51,7 +53,7 @@ class minMut:
 		self.vaspIN = DFTin(self.xyzNum,self.eleNames
 					,self.eleMasses,self.eleNums)
 							
-		self.unlockDB()
+		db.unlock()
 
 		self.runDFT()
 
@@ -84,8 +86,8 @@ class minMut:
 
 	def updatePool(self):
 
-		self.checkDB()
-		self.lockDB()
+		db.check()
+		db.lock()
 
 		self.readPool()
 
@@ -185,20 +187,4 @@ class minMut:
 		with open("pool.dat","w") as pool:
 			for line in self.poolList:
 				pool.write(line)
-
-	def lockDB(self):
-
-		os.system("touch lock.db")
-
-		# with open("lock.db","w") as lock:
-		# 	lock.write("locked")
-
-	def unlockDB(self):
-
-		os.system("rm lock.db")
-
-	def checkDB(self):
-
-		while os.path.exists("Lock.db"):
-			pass 
-			
+				
