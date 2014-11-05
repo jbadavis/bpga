@@ -27,6 +27,10 @@ class checkPool:
 				if "Finished Energy" in line:
 					energyList = line.split()
 					self.energies.append(float(energyList[3]))
+				elif "Running" in line:
+					self.energies.append(-9000000)
+				elif "NotMinimised" in line:
+					self.energies.append(-9000000)
 
 	def checkEnergy(self,newEnergy):
 
