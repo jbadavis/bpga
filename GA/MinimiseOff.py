@@ -119,7 +119,10 @@ class minOff:
 			Index = Index * self.stride
 			NewCoords = self.vaspOUT.final_coords
 			OldCoords = self.poolList[Index:Index+self.stride]
-			NewCoordsEle = self.finalCoords(OldCoords[2:],NewCoords,self.vaspIN.box)
+
+			NewCoordsEle = self.finalCoords(OldCoords[2:]
+							,NewCoords,self.vaspIN.box)
+
 			self.poolList[Index+2:Index+self.stride] = NewCoordsEle
 			self.poolList[Index+1] = "Finished Energy = " + str(energy) + "\n"
 			self.writePool()
