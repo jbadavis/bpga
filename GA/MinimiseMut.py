@@ -108,7 +108,7 @@ class minMut:
 			self.poolList[Index+1] = "Finished Energy = " + str(energy) + "\n"
 			self.writePool()
 
-		self.unlockDB()
+		db.unlock()
 
 	def finalCoords(self,initialXYZ,finalXYZ,box):
 
