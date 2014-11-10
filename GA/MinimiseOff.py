@@ -39,11 +39,39 @@ class minOff:
 
 	def runCalc(self):
 
+		'''
+		Start calculation
+		making new 
+		directory.
+		'''
+
 		db.check()
 		db.lock()
 
 		self.xyzNum = self.findLastDir() + 1
+
 		os.system("mkdir " + str(self.xyzNum))
+
+		self.findPair()
+		self.produceOffspring()
+
+		self.vaspIN = DFTin(self.xyzNum,self.eleNames
+					,self.eleMasses,self.eleNums)
+
+		db.unlock()
+
+		self.runDFT()
+
+	def restart(self):
+
+		'''
+		Restart Calculation
+		without making 
+		new directory.
+		'''
+
+		db.check()
+		db.lock()
 
 		self.findPair()
 		self.produceOffspring()
@@ -96,8 +124,12 @@ class minOff:
 
 		if self.vaspOUT.error:
 			print "*- Error in VASP Calculation -*"
+			self.restart()
+
 		elif exploded(self.natoms,self.vaspOUT.final_coords):
 			print "*- Cluster Exploded! -*"
+			self.restart()
+			
 		else:
 			self.updatePool()
 
