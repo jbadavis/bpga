@@ -19,7 +19,8 @@ from Select import tournamentSelect as select
 from Crossover import crossover as cross 
 from checkPool import checkPool as checkPool
 from CoM import CoM 
-from Explode import exploded
+
+from Explode import checkClus
 
 class minOff: 
 
@@ -109,8 +110,20 @@ class minOff:
 
 	def produceOffspring(self):
 
-		newClus = cross(self.clus1,self.clus2,self.natoms)
-		self.offspring = newClus.CutSplice()
+		noOverlap = True
+		noExplode = True 
+
+		while noOverlap:
+
+			newClus = cross(self.clus1,self.clus2,self.natoms)
+			self.offspring = newClus.CutSplice()
+
+			check = checkClus(self.natoms,self.offspring)
+			noExplode = check.exploded()
+			noOverlap = check.overlap()
+
+			print "Exploded ", check.exploded()
+			print "Overlap ", check.overlap()
 
 		with open(str(self.xyzNum)+".xyz","w") as xyzFile:
 			xyzFile.write(str(self.natoms) + "\n\n")
@@ -122,15 +135,20 @@ class minOff:
 		run = DFTsub.submit(self.hpc,self.xyzNum,self.mpitasks)
 		self.vaspOUT = DFTout.vasp_output(self.xyzNum,self.natoms)
 
+		check = checkClus(self.natoms,self.vaspOUT.final_coords)
+
 		if self.vaspOUT.error:
+
 			print "*- Error in VASP Calculation -*"
 			self.restart()
 
-		elif exploded(self.natoms,self.vaspOUT.final_coords):
+		elif check.exploded():
+
 			print "*- Cluster Exploded! -*"
 			self.restart()
-			
+
 		else:
+
 			self.updatePool()
 
 	def updatePool(self):

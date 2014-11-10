@@ -20,7 +20,8 @@ from Select import tournamentSelect as select
 from Crossover import crossover as cross 
 from checkPool import checkPool as checkPool
 from CoM import CoM 
-from Explode import exploded
+
+from Explode import checkClus
 
 class minPool:
 
@@ -109,13 +110,20 @@ class minPool:
 		Update pool!
 		'''
 
+		check = checkClus(self.natoms,self.vaspOUT.final_coords)
+
 		if self.vaspOUT.error:
+
 			print "*- Error in VASP Calculation -*"
 			self.genRandom()
-		elif exploded(self.natoms,self.vaspOUT.final_coords):
+
+		elif check.exploded():
+
 			print "*- Cluster Exploded! -*"
 			self.genRandom()
+
 		else:
+			
 			self.updatePool()
 
 	def updatePool(self):

@@ -18,7 +18,8 @@ from DFT_input import vasp_input as DFTin
 
 from checkPool import checkPool as checkPool
 from CoM import CoM 
-from Explode import exploded
+
+from Explode import checkClus
 
 class minMut: 
 
@@ -57,6 +58,26 @@ class minMut:
 
 		self.runDFT()
 
+	def restart(self):
+
+		'''
+		Restart Calculation
+		without making 
+		new directory.
+		'''
+
+		db.check()
+		db.lock()
+
+		self.randomXYZ()
+
+		self.vaspIN = DFTin(self.xyzNum,self.eleNames
+					,self.eleMasses,self.eleNums)
+
+		db.unlock()
+
+		self.runDFT()
+
 	def randomXYZ(self):
 		
 		scale = self.natoms**(1./3.)
@@ -77,11 +98,20 @@ class minMut:
 		run = DFTsub.submit(self.hpc,self.xyzNum,self.mpitasks)
 		self.vaspOUT = DFTout.vasp_output(self.xyzNum,self.natoms)
 
+		check = checkClus(self.natoms,self.vaspOUT.final_coords)
+
 		if self.vaspOUT.error:
+
 			print "*- Error in VASP Calculation -*"
-		elif exploded(self.natoms,self.vaspOUT.final_coords):
+			self.restart()
+
+		elif check.exploded():
+
 			print "*- Cluster Exploded! -*"
+			self.restart()
+
 		else:
+			
 			self.updatePool()
 
 	def updatePool(self):
