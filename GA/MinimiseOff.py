@@ -122,8 +122,7 @@ class minOff:
 			noExplode = check.exploded()
 			noOverlap = check.overlap()
 
-			print "Exploded ", check.exploded()
-			print "Overlap ", check.overlap()
+			self.findPair()
 
 		with open(str(self.xyzNum)+".xyz","w") as xyzFile:
 			xyzFile.write(str(self.natoms) + "\n\n")
