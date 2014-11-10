@@ -51,6 +51,9 @@ class minOff:
 
 		self.xyzNum = self.findLastDir() + 1
 
+		while os.path.exists(str(self.xyzNum)): 
+			self.xyzNum = self.findLastDir() + 1 
+
 		os.system("mkdir " + str(self.xyzNum))
 
 		self.findPair()
