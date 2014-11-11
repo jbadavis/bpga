@@ -12,10 +12,10 @@ from GA.poolGA import poolGA
 import GA.Input as In
 
 npool = 10
-mutate = 2
+mutate = 0
 r_ij = 3.0
-eleNums = [2,2]
-eleNames = ["Ir","Pd"]
+eleNums = [8]
+eleNames = ["Rh"]
 eleMasses = In.masses(eleNames)
 natoms = sum(eleNums)
 hpc = In.hpc()
