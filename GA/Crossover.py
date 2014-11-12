@@ -10,6 +10,8 @@ Jack Davis
 import numpy as np
 import random as ran
 
+from checkPool import checkPool
+
 class crossover:
 
 	def __init__(self,clus1,
@@ -32,11 +34,8 @@ class crossover:
 		fitness=[]
 		self.fitPair=[]
 
-		with open("pool.dat","r") as pool:
-			for line in pool:
-				if "Finished" in line:
-					energyList = line.split()
-					energies.append(float(energyList[3]))	
+		getEn = checkPool()
+		energies = getEn.energies
 
 		energies = sorted(energies)
 		minEn = energies[0]
