@@ -23,7 +23,7 @@ class crossover:
 		self.offspring = []
 
 		self.CheckComp()
-		self.fitness()
+		# self.fitness()
 		self.prepare()
 
 	def fitness(self):
@@ -127,6 +127,7 @@ class crossover:
 
 	def CutSpliceWeighted(self):
 
+		self.fitness()
 
 		# Monometallic
 		fit1 = self.fitPair[0]
