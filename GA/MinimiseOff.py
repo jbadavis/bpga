@@ -119,7 +119,8 @@ class minOff:
 		while noOverlap:
 
 			newClus = cross(self.clus1,self.clus2,self.natoms)
-			self.offspring = newClus.CutSplice()
+			# self.offspring = newClus.CutSplice()
+			self.offspring = newClus.CutSpliceRandom()
 
 			check = checkClus(self.natoms,self.offspring)
 			noExplode = check.exploded()
