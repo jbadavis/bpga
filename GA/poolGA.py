@@ -54,7 +54,16 @@ class poolGA:
 			check = checkPool()
 			converged = check.Convergence()
 
-			self.decide()
+			if self.checkRunning:
+
+				off = minMut(self.natoms,self.r_ij
+					,self.eleNums,self.eleNames
+					,self.eleMasses,self.n
+					,self.stride,self.hpc
+					,self.mpitasks)
+
+			else:
+				self.decide()
 
 	def decide(self):
 
@@ -71,6 +80,20 @@ class poolGA:
 				,self.eleNames,self.eleMasses
 				,self.n,self.cross,self.stride
 				,self.hpc,self.mpitasks)
+
+	def checkRunning(self):
+
+		'''
+		Check if pool
+		is running.
+		'''
+
+		with open("pool.dat","r") as pool:
+			for line in pool:
+				if "Running" in line:
+					return True
+
+		return False
 
 	def checkFinished(self):
 
