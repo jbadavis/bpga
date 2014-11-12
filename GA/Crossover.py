@@ -87,6 +87,19 @@ class crossover:
 
 		return sortedClus
 
+	def CutSpliceRandom(self):	
+
+		# Monometallic
+		start = ran.randrange(self.natoms)
+
+		for i in range(start):
+			self.offspring.append(self.clus1[i])
+
+		for j in range(start,self.natoms):
+			self.offspring.append(self.clus2[j])
+
+		return self.offspring
+
 	def CutSplice(self):	
 
 		# Monometallic
