@@ -104,7 +104,7 @@ class minMut:
 		with open(str(self.xyzNum)+".xyz","w") as xyzFile:
 			c = 0
 			xyzFile.write(str(self.natoms)+"\n")
-			xyzFile.write("NotMinimised\n")
+			xyzFile.write("Mutant\n")
 			for i in range(len(self.eleNames)):
 				for j in range(self.eleNums[i]):
 					xyz = coords[c]
