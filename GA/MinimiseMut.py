@@ -99,20 +99,17 @@ class minMut:
 			noExplode = check.exploded()
 			noOverlap = check.overlap()
 
-			print "Exploded ", check.exploded()
-			print "Overlap ", check.overlap()
-
 		coords = [coords[i:i + 3] for i in range(0, len(coords), 3)]
 
 		with open(str(self.xyzNum)+".xyz","w") as xyzFile:
 			c = 0
-			xyzFile.write(str(self.natoms)+"\n\n")
+			xyzFile.write(str(self.natoms)+"\n")
+			xyzFile.write("NotMinimised\n")
 			for i in range(len(self.eleNames)):
 				for j in range(self.eleNums[i]):
 					xyz = coords[c]
-					xyzLine = str(xyz[i]) + " " + \
-					str(xyz[i+1]) + " " + \
-					str(xyz[i+2]) + "\n"
+					xyz = [str(i) for i in xyz]
+					xyzLine = xyz[0]+" "+xyz[1]+" "+xyz[2]+"\n"
 					xyzlineEle = self.eleNames[i] + " " + xyzLine
 					xyzFile.write(xyzlineEle)
 					c += 1

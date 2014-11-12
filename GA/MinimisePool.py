@@ -69,6 +69,7 @@ class minPool:
 				self.poolList[self.strucNum-1] = "Running\n"
 
 				os.system("mkdir "+str(self.xyzNum))
+
 				self.writePool()
 				db.unlock()
 

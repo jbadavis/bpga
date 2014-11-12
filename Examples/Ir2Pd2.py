@@ -37,4 +37,4 @@ then producing offspring.
 '''
 
 StartCalc = poolGA(natoms,r_ij,eleNums,eleNames
-			,eleMasses,mutate,npool,hpc,mpitasks)
+      ,eleMasses,mutate,npool,cross,hpc,mpitasks)
