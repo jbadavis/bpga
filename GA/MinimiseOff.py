@@ -38,9 +38,7 @@ class minOff:
 		self.stride = stride
 		self.hpc = hpc
 		self.mpitasks = mpitasks
-
-		print self.cross
-
+		
 		self.runCalc()
 
 	def runCalc(self):
