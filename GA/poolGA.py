@@ -54,7 +54,7 @@ class poolGA:
 			check = checkPool()
 			converged = check.Convergence()
 
-			if self.checkRunning:
+			if self.checkRunning():
 
 				off = minMut(self.natoms,self.r_ij
 					,self.eleNums,self.eleNames
