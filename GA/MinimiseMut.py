@@ -108,7 +108,7 @@ class minMut:
 			for i in range(len(self.eleNames)):
 				for j in range(self.eleNums[i]):
 					xyz = coords[c]
-					xyz = [str(i) for i in xyz]
+					xyz = [str(k) for k in xyz]
 					xyzLine = xyz[0]+" "+xyz[1]+" "+xyz[2]+"\n"
 					xyzlineEle = self.eleNames[i] + " " + xyzLine
 					xyzFile.write(xyzlineEle)
