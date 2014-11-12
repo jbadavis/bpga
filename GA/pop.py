@@ -9,6 +9,7 @@ Jack Davis
 import os
 import random as ran
 
+import Database as db
 from Explode import checkClus
 
 class ranPool:
@@ -27,10 +28,15 @@ class ranPool:
         for i in self.eleNums:
             self.natoms += i
 
+        db.check()
+        db.lock()
+
         popExists = os.path.exists("pool.dat")
 
         if popExists == False:
             self.genPool()
+
+        db.unlock()
 
     def genPool(self):
 
