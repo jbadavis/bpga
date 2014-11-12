@@ -7,6 +7,8 @@ Jack Davis
 '''
 
 import os
+import time
+
 
 def lock():
 
@@ -19,4 +21,5 @@ def unlock():
 def check():
 
 	while os.path.exists("lock.db"):
-		pass
+		time.sleep(0.5)
+		
