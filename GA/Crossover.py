@@ -12,7 +12,8 @@ import random as ran
 
 class crossover:
 
-	def __init__(self,clus1,clus2,natoms,pair):
+	def __init__(self,clus1,
+		clus2,natoms,pair):
 		
 		self.clus1 = clus1
 		self.clus2 = clus2
