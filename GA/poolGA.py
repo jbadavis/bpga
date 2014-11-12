@@ -17,8 +17,9 @@ from checkPool import checkPool as checkPool
 
 class poolGA:
 
-	def __init__(self,natoms,r_ij,eleNums,eleNames,
-		eleMasses,mutate,n,hpc,mpitasks):
+	def __init__(self,natoms,r_ij,eleNums
+		,eleNames,eleMasses,mutate
+		,n,cross,hpc,mpitasks):
 		
 		self.n = n
 		self.r_ij = r_ij
@@ -27,6 +28,7 @@ class poolGA:
 		self.eleNums = eleNums
 		self.eleNames = eleNames
 		self.eleMasses = eleMasses
+		self.cross = cross
 		self.mpitasks = mpitasks
 		self.stride = natoms + 2
 		self.hpc = hpc
@@ -39,12 +41,15 @@ class poolGA:
 
 		while notFinished:
 
-			pool = minPool(self.natoms,self.r_ij,self.eleNums,self.eleNames,
-				self.eleMasses,self.n,self.stride,self.hpc,self.mpitasks)
+			pool = minPool(self.natoms,self.r_ij
+				,self.eleNums,self.eleNames
+				,self.eleMasses,self.n
+				,self.stride,self.hpc
+				,self.mpitasks)
 
 			notFinished = self.checkFinished()
 
-		for i in range(self.n,self.n+1000):
+		for i in range(self.n,self.n+1):
 
 			check = checkPool()
 			converged = check.Convergence()
@@ -56,11 +61,16 @@ class poolGA:
 		choice = randrange(0,self.n)
 
 		if choice < self.mutate:
-			off = minMut(self.natoms,self.r_ij,self.eleNums,self.eleNames
-				,self.eleMasses,self.n,self.stride,self.hpc,self.mpitasks)
+			off = minMut(self.natoms,self.r_ij
+				,self.eleNums,self.eleNames
+				,self.eleMasses,self.n
+				,self.stride,self.hpc
+				,self.mpitasks)
 		else:
-			off = minOff(self.natoms,self.eleNums,self.eleNames
-				,self.eleMasses,self.n,self.stride,self.hpc,self.mpitasks)
+			off = minOff(self.natoms,self.eleNums
+				,self.eleNames,self.eleMasses
+				,self.n,self.cross,self.stride
+				,self.hpc,self.mpitasks)
 
 	def checkFinished(self):
 

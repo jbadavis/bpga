@@ -16,6 +16,7 @@ mutate = 2
 r_ij = 3.0
 eleNums = [20]
 eleNames = ["Au"]
+cross = "weighted"
 eleMasses = In.masses(eleNames)
 natoms = sum(eleNums)
 hpc = In.hpc()

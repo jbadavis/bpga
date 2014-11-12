@@ -25,16 +25,19 @@ from Explode import checkClus
 class minOff: 
 
 	def __init__(self,natoms,eleNums,eleNames
-		,eleMasses,n,stride,hpc,mpitasks):
+		,eleMasses,n,cross,stride,hpc,mpitasks):
 		
 		self.natoms = natoms
 		self.eleNames = eleNames
 		self.eleMasses = eleMasses
 		self.eleNums = eleNums
 		self.n = n
+		self.cross = cross
 		self.stride = stride
 		self.hpc = hpc
 		self.mpitasks = mpitasks
+
+		print self.cross
 
 		self.runCalc()
 
@@ -98,11 +101,11 @@ class minOff:
 
 		# Select random pair 
 		selectPair = select(self.n)
-		pair = selectPair.pair
+		self.pair = selectPair.pair
 
 		#Postions of pair in poollist
-		c1 = pair[0] * self.stride
-		c2 = pair[1] * self.stride
+		c1 = self.pair[0] * self.stride
+		c2 = self.pair[1] * self.stride
 
 		self.readPool()
 
@@ -118,9 +121,14 @@ class minOff:
 
 		while noOverlap:
 
-			newClus = cross(self.clus1,self.clus2,self.natoms)
+			newClus = cross(self.clus1,self.clus2,self.natoms,self.pair)
+
 			# self.offspring = newClus.CutSplice()
-			self.offspring = newClus.CutSpliceRandom()
+
+			if self.cross == "random":
+				self.offspring = newClus.CutSpliceRandom()
+			elif self.cross == "weighted":
+				self.offspring = newClus.CutSpliceWeighted()
 
 			check = checkClus(self.natoms,self.offspring)
 			noExplode = check.exploded()

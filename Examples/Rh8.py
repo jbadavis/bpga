@@ -16,6 +16,7 @@ mutate = 0
 r_ij = 3.0
 eleNums = [8]
 eleNames = ["Rh"]
+cross = "weighted"
 eleMasses = In.masses(eleNames)
 natoms = sum(eleNums)
 hpc = In.hpc()
@@ -36,4 +37,4 @@ then producing offspring.
 '''
 
 StartCalc = poolGA(natoms,r_ij,eleNums,eleNames
-			,eleMasses,mutate,npool,hpc,mpitasks)
+			,eleMasses,mutate,npool,cross,hpc,mpitasks)
