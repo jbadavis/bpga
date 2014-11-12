@@ -79,19 +79,43 @@ class minMut:
 		self.runDFT()
 
 	def randomXYZ(self):
-		
+
 		scale = self.natoms**(1./3.)
 
+		coords = []
+
+		noOverlap = True
+		noExplode = True 	
+
+		while noOverlap and noExplode:
+
+			coords = []
+
+			for i in range(self.natoms*3):
+				coords.append(ran.uniform(0,1)*self.r_ij*scale)	
+
+			check = checkClus(self.natoms,coords)
+
+			noExplode = check.exploded()
+			noOverlap = check.overlap()
+
+			print "Exploded ", check.exploded()
+			print "Overlap ", check.overlap()
+
+		coords = [coords[i:i + 3] for i in range(0, len(coords), 3)]
+
 		with open(str(self.xyzNum)+".xyz","w") as xyzFile:
+			c = 0
 			xyzFile.write(str(self.natoms)+"\n\n")
 			for i in range(len(self.eleNames)):
 				for j in range(self.eleNums[i]):
-					x = ran.uniform(0,1) * self.r_ij * scale
-					y = ran.uniform(0,1) * self.r_ij * scale
-					z = ran.uniform(0,1) * self.r_ij * scale
-					xyz = str(x) + " " + str(y) + " " + str(z) + "\n"
-					xyzline = self.eleNames[i] + " " + xyz
-					xyzFile.write(xyzline)
+					xyz = coords[c]
+					xyzLine = str(xyz[i]) + " " + \
+					str(xyz[i+1]) + " " + \
+					str(xyz[i+2]) + "\n"
+					xyzlineEle = self.eleNames[i] + " " + xyzLine
+					xyzFile.write(xyzlineEle)
+					c += 1
 
 	def runDFT(self):
 
