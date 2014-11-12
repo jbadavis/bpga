@@ -7,6 +7,7 @@ Jack Davis
 '''
 
 import os
+import time
 import random as ran
 
 import Database as db
@@ -25,8 +26,10 @@ from Explode import checkClus
 
 class minPool:
 
-	def __init__(self,natoms,r_ij,eleNums,eleNames
-		,eleMasses,n,stride,hpc,mpitasks):
+	def __init__(self,natoms,r_ij
+		,eleNums,eleNames
+		,eleMasses,n,stride
+		,hpc,mpitasks):
 		
 		self.natoms = natoms
 		self.r_ij = r_ij
@@ -54,23 +57,33 @@ class minPool:
 		self.readPool()
 
 		for line in self.poolList:		
+			
 			self.strucNum += 1
+			self.xyzNum = ((self.strucNum-1)/self.stride)+1
+
+			if os.path.exists(str(self.xyzNum)):
+				time.sleep(0.5)
+			
 			if "NotMinimised" in line:
 
-				self.xyzNum = ((self.strucNum-1)/self.stride) + 1
+				self.poolList[self.strucNum-1] = "Running\n"
 
-				if os.path.exists(str(self.xyzNum)) and "Restart" not in line:
-						db.unlock()
-						break
-				else:
-					self.poolList[self.strucNum-1] = "Running\n"
-					self.writePool()
-					# This causes excess cannot mkdir errors. 
-					os.system("mkdir " + str(self.xyzNum))
-					db.unlock()
+				os.system("mkdir "+str(self.xyzNum))
+				self.writePool()
+				db.unlock()
 
 				self.getXYZ()
-				self.minimise()
+				self.minimise
+				break
+
+			elif "Restart" in line:
+
+				self.poolList[self.strucNum-1] = "Running\n"
+				self.writePool()
+				db.unlock()
+
+				self.getXYZ()
+				self.minimise
 				break
 
 		if os.path.exists("lock.db"): 
@@ -173,7 +186,7 @@ class minPool:
 				ranStruc.append(xyzline)
 
 		self.poolList[self.strucNum:self.strucNum+self.stride-2] = ranStruc
-		self.poolList[self.strucNum-1] = "NotMinimised Restart" + "\n"
+		self.poolList[self.strucNum-1] = "Restart" + "\n"
 
 		self.writePool()
 		db.unlock()

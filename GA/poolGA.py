@@ -49,7 +49,7 @@ class poolGA:
 
 			notFinished = self.checkFinished()
 
-		for i in range(self.n,self.n+1):
+		for i in range(self.n,self.n+1000):
 
 			check = checkPool()
 			converged = check.Convergence()
