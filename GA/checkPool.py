@@ -21,7 +21,7 @@ class checkPool:
 		from pool.dat after
 		convergence.
 		'''
-		
+
 		with open("pool.dat","r") as pool:
 			for line in pool:
 				if "Finished Energy" in line:
@@ -53,5 +53,3 @@ class checkPool:
 			return True
 		else:
 			return False
-
-test=checkPool()
