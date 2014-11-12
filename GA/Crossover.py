@@ -12,21 +12,45 @@ import random as ran
 
 class crossover:
 
-	def __init__(self,clus1,clus2,natoms):
+	def __init__(self,clus1,clus2,natoms,pair):
 		
 		self.clus1 = clus1
 		self.clus2 = clus2
 		self.pair = [clus1,clus2]
 		self.natoms = natoms 
+		self.pairPos = pair
 		self.offspring = []
 
 		self.CheckComp()
+		self.fitness()
 		self.prepare()
+
+	def fitness(self):
+		
+		energies=[]
+		fitness=[]
+		self.fitPair=[]
+
+		with open("pool.dat","r") as pool:
+			for line in pool:
+				if "Finished" in line:
+					energyList = line.split()
+					energies.append(float(energyList[3]))	
+
+		energies = sorted(energies)
+		minEn = energies[0]
+		rangeEn = energies[len(energies)-1] - energies[0]
+
+		for energy in energies:
+			fit=0.5*(1-np.tanh(2.*((energy-minEn)/rangeEn)-1.))
+			fitness.append(fit)
+
+		self.fitPair.append(fitness[self.pairPos[0]])
+		self.fitPair.append(fitness[self.pairPos[1]])
 
 	def prepare(self):
 
 		for i in range(len(self.pair)):
-			# self.pair[i] = self.centre(self.pair[i])
  			self.pair[i] = self.rotate(self.pair[i])
 			self.pair[i] = self.sortZ(self.pair[i])
 
@@ -91,6 +115,24 @@ class crossover:
 
 		# Monometallic
 		start = ran.randrange(self.natoms)
+
+		for i in range(start):
+			self.offspring.append(self.clus1[i])
+
+		for j in range(start,self.natoms):
+			self.offspring.append(self.clus2[j])
+
+		return self.offspring
+
+	def CutSpliceWeighted(self):
+
+
+		# Monometallic
+		fit1 = self.fitPair[0]
+		fit2 = self.fitPair[1]
+
+		start = self.natoms*(fit1/(fit1+fit2))
+		start = int(start)
 
 		for i in range(start):
 			self.offspring.append(self.clus1[i])
