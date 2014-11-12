@@ -24,8 +24,10 @@ from Explode import checkClus
 
 class minOff: 
 
-	def __init__(self,natoms,eleNums,eleNames
-		,eleMasses,n,cross,stride,hpc,mpitasks):
+	def __init__(self,natoms,eleNums
+		,eleNames,eleMasses
+		,n,cross,stride
+		,hpc,mpitasks):
 		
 		self.natoms = natoms
 		self.eleNames = eleNames
