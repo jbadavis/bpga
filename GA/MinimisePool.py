@@ -73,7 +73,7 @@ class minPool:
 				db.unlock()
 
 				self.getXYZ()
-				self.minimise
+				self.minimise()
 				break
 
 			elif "Restart" in line:
@@ -83,7 +83,7 @@ class minPool:
 				db.unlock()
 
 				self.getXYZ()
-				self.minimise
+				self.minimise()
 				break
 
 		if os.path.exists("lock.db"): 
