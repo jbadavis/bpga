@@ -99,7 +99,7 @@ class checkClus:
 			start += self.natoms
 			tooLong = 0
 			for bond in bonds:
-				if float(bond) < 1.5 and float(bond) != 0.:
+				if float(bond) < .9 and float(bond) != 0.:
 					return True
 
 		return False
