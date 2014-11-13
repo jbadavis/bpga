@@ -16,6 +16,8 @@ class crossover:
 
 	def __init__(self,clus1,
 		clus2,natoms,pair):
+
+		ran.seed()
 		
 		self.clus1 = clus1
 		self.clus2 = clus2
