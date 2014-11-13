@@ -84,7 +84,7 @@ class minOff:
 		self.produceOffspring()
 
 		self.vaspIN = DFTin(self.xyzNum,self.eleNames
-					,self.eleMasses,self.eleNums)
+			,self.eleMasses,self.eleNums)
 
 		db.unlock()
 
@@ -121,7 +121,8 @@ class minOff:
 
 		while noOverlap:
 
-			newClus = cross(self.clus1,self.clus2,self.natoms,self.pair)
+			newClus = cross(self.clus1,self.clus2
+				,self.natoms,self.pair)
 
 			# self.offspring = newClus.CutSplice()
 
