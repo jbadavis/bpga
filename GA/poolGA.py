@@ -92,6 +92,8 @@ class poolGA:
 			for line in pool:
 				if "Running" in line:
 					return True
+				elif "Restart" in line:
+					return True
 
 		return False
 
@@ -105,6 +107,8 @@ class poolGA:
 		with open("pool.dat","r") as pool:
 			for line in pool:
 				if "NotMinimised" in line:
+					return True
+				elif "Restart" in line:
 					return True
 
 		return False
