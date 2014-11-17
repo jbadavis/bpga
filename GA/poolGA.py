@@ -18,8 +18,8 @@ from checkPool import checkPool as checkPool
 class poolGA:
 
 	def __init__(self,natoms,r_ij,eleNums
-		,eleNames,eleMasses,mutate
-		,n,cross,hpc,mpitasks):
+		,eleNames,eleMasses,mutate,n
+		,cross,mutType,hpc,mpitasks):
 		
 		self.n = n
 		self.r_ij = r_ij
@@ -29,6 +29,7 @@ class poolGA:
 		self.eleNames = eleNames
 		self.eleMasses = eleMasses
 		self.cross = cross
+		self.mutType = mutType
 		self.mpitasks = mpitasks
 		self.stride = natoms + 2
 		self.hpc = hpc
@@ -55,12 +56,12 @@ class poolGA:
 			converged = check.Convergence()
 
 			if self.checkRunning():
-
+				
 				off = minMut(self.natoms,self.r_ij
-					,self.eleNums,self.eleNames
-					,self.eleMasses,self.n
-					,self.stride,self.hpc
-					,self.mpitasks)
+					,"random",self.eleNums
+					,self.eleNames,self.eleMasses
+					,self.n,self.stride
+					,self.hpc,self.mpitasks)
 
 			else:
 				self.decide()
@@ -71,10 +72,10 @@ class poolGA:
 
 		if choice < self.mutate:
 			off = minMut(self.natoms,self.r_ij
-				,self.eleNums,self.eleNames
-				,self.eleMasses,self.n
-				,self.stride,self.hpc
-				,self.mpitasks)
+				,self.mutType,self.eleNums
+				,self.eleNames,self.eleMasses
+				,self.n,self.stride
+				,self.hpc,self.mpitasks)
 		else:
 			off = minOff(self.natoms,self.eleNums
 				,self.eleNames,self.eleMasses

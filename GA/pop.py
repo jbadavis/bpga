@@ -10,6 +10,7 @@ import os
 import random as ran
 
 import Database as db
+from fixOverlap import fixOverlap
 from Explode import checkClus
 
 class ranPool:
@@ -50,20 +51,13 @@ class ranPool:
 
         for struc in range(self.nstrucs):
 
-            noOverlap = True
+            coords=[]
 
-            while noOverlap:
-                
-                coords=[]
+            for i in range(self.natoms*3):
+                coords.append(ran.uniform(0,1)*self.r_ij*scale) 
 
-                for i in range(self.natoms*3):
-                    coords.append(ran.uniform(0,1)*self.r_ij*scale) 
-
-                check = checkClus(self.natoms,coords)
-
-                noOverlap = check.overlap()
-
-            coords = [coords[i:i + 3] for i in range(0, len(coords), 3)]
+            coordsFix = fixOverlap(coords)
+            coordsFix = [coordsFix[i:i + 3] for i in range(0, len(coordsFix), 3)]
 
             with open("pool.dat","a") as xyzFile:
                 c = 0
@@ -71,9 +65,62 @@ class ranPool:
                 xyzFile.write("NotMinimised\n")
                 for i in range(len(self.eleNames)):
                     for j in range(self.eleNums[i]):
-                        xyz = coords[c]
+                        xyz = coordsFix[c]
                         xyz = [str(k) for k in xyz]
                         xyzLine = xyz[0]+" "+xyz[1]+" "+xyz[2]+"\n"
                         xyzlineEle = self.eleNames[i] + " " + xyzLine
                         xyzFile.write(xyzlineEle)
                         c += 1
+
+            # with open("fix.dat","a") as fixFile:
+            #     c = 0
+            #     fixFile.write(str(self.natoms)+"\n")
+            #     fixFile.write("NotMinimised\n")
+            #     for i in range(len(self.eleNames)):
+            #         for j in range(self.eleNums[i]):
+            #             xyz = coordsFix[c]
+            #             xyz = [str(k) for k in xyz]
+            #             xyzLine = xyz[0]+" "+xyz[1]+" "+xyz[2]+"\n"
+            #             xyzlineEle = self.eleNames[i] + " " + xyzLine
+            #             fixFile.write(xyzlineEle)
+            #             c += 1
+
+    # def genPool(self):
+
+    #     '''
+    #     Generates initial
+    #     random population
+    #     database.
+    #     '''
+
+    #     scale = self.natoms**(1./3.)
+
+    #     for struc in range(self.nstrucs):
+
+    #         noOverlap = True
+
+    #         while noOverlap:
+                
+    #             coords=[]
+
+    #             for i in range(self.natoms*3):
+    #                 coords.append(ran.uniform(0,1)*self.r_ij*scale) 
+
+    #             check = checkClus(self.natoms,coords)
+
+    #             noOverlap = check.overlap()
+
+    #         coords = [coords[i:i + 3] for i in range(0, len(coords), 3)]
+
+    #         with open("pool.dat","a") as xyzFile:
+    #             c = 0
+    #             xyzFile.write(str(self.natoms)+"\n")
+    #             xyzFile.write("NotMinimised\n")
+    #             for i in range(len(self.eleNames)):
+    #                 for j in range(self.eleNums[i]):
+    #                     xyz = coords[c]
+    #                     xyz = [str(k) for k in xyz]
+    #                     xyzLine = xyz[0]+" "+xyz[1]+" "+xyz[2]+"\n"
+    #                     xyzlineEle = self.eleNames[i] + " " + xyzLine
+    #                     xyzFile.write(xyzlineEle)
+    #                     c += 1

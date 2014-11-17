@@ -19,15 +19,18 @@ from DFT_input import vasp_input as DFTin
 from checkPool import checkPool as checkPool
 from CoM import CoM 
 
+from fixOverlap import fixOverlap
 from Explode import checkClus
 
 class minMut: 
 
-	def __init__(self,natoms,r_ij,eleNums,eleNames
-		,eleMasses,n,stride,hpc,mpitasks):
+	def __init__(self,natoms,r_ij,mutType
+		,eleNums,eleNames,eleMasses
+		,n,stride,hpc,mpitasks):
 
 		self.natoms = natoms
 		self.r_ij = r_ij
+		self.mutType = mutType
 		self.eleNums = eleNums
 		self.eleNames = eleNames
 		self.eleMasses = eleMasses
@@ -47,7 +50,10 @@ class minMut:
 
 		self.xyzNum = self.findLastDir() + 1
 
-		self.randomXYZ()
+		if self.mutType == "random":
+			self.randomMutate()
+		elif self.mutType == "move":
+			self.moveMutate()
 
 		os.system("mkdir " + str(self.xyzNum))
 
@@ -78,41 +84,74 @@ class minMut:
 
 		self.runDFT()
 
-	def randomXYZ(self):
+	def randomMutate(self):
 
 		scale = self.natoms**(1./3.)
 
-		coords = []
+		coords=[]
 
-		noOverlap = True
-		noExplode = True 	
+		for i in range(self.natoms*3):
+			coords.append(ran.uniform(0,1)*self.r_ij*scale) 
 
-		while noOverlap and noExplode:
+		self.writeXYZ(coords)
 
-			coords = []
+	def moveMutate(self):
 
-			for i in range(self.natoms*3):
-				coords.append(ran.uniform(0,1)*self.r_ij*scale)	
+		'''
+		Pick random 
+		structure 
+		from pool and 
+		displace two
+		atoms.
+		'''
 
-			check = checkClus(self.natoms,coords)
+		coords=[]
 
-			noExplode = check.exploded()
-			noOverlap = check.overlap()
+		scale = self.natoms**(1./3.)
 
-		coords = [coords[i:i + 3] for i in range(0, len(coords), 3)]
+		ranStruc=ran.randrange(0,self.n)
+		ranAtom=ran.randrange(0,self.natoms)
+		ranPoolPos=ranStruc*self.stride
+
+		self.readPool()
+
+		clus=self.poolList[ranPoolPos:ranPoolPos+self.stride]
+		clus=clus[2:]
+
+		for i in ran.sample(range(0,self.natoms),2):
+			ranCoods=clus[i]
+			ele,x,y,z=ranCoods.split()
+			ranX=float(x)+ran.uniform(-1.,1.)
+			ranY=float(y)+ran.uniform(-1.,1.)
+			ranZ=float(z)+ran.uniform(-1.,1.)
+			ranLine=ele+" "+str(ranX)+" "+str(ranY)+" "+str(ranZ)+"\n"
+			clus[ranAtom]=ranLine
+
+		for line in clus:
+			ele,x,y,z = line.split()
+			coords.append(float(x))
+			coords.append(float(y))
+			coords.append(float(z))
+
+		self.writeXYZ(coords)	
+
+	def writeXYZ(self,coords):	
+
+		coordsFix = fixOverlap(coords)
+		coordsFix = [coordsFix[i:i + 3] for i in range(0, len(coordsFix), 3)]
 
 		with open(str(self.xyzNum)+".xyz","w") as xyzFile:
 			c = 0
 			xyzFile.write(str(self.natoms)+"\n")
-			xyzFile.write("Mutant\n")
+			xyzFile.write("NotMinimised\n")
 			for i in range(len(self.eleNames)):
 				for j in range(self.eleNums[i]):
-					xyz = coords[c]
+					xyz = coordsFix[c]
 					xyz = [str(k) for k in xyz]
 					xyzLine = xyz[0]+" "+xyz[1]+" "+xyz[2]+"\n"
 					xyzlineEle = self.eleNames[i] + " " + xyzLine
 					xyzFile.write(xyzlineEle)
-					c += 1
+					c += 1		
 
 	def runDFT(self):
 
@@ -122,17 +161,12 @@ class minMut:
 		check = checkClus(self.natoms,self.vaspOUT.final_coords)
 
 		if self.vaspOUT.error:
-
 			print "*- Error in VASP Calculation -*"
 			self.restart()
-
 		elif check.exploded():
-
 			print "*- Cluster Exploded! -*"
 			self.restart()
-
-		else:
-			
+		else:	
 			self.updatePool()
 
 	def updatePool(self):

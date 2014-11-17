@@ -12,11 +12,12 @@ from GA.poolGA import poolGA
 import GA.Input as In
 
 npool = 10
+mutType = "move"
+cross = "weighted"
 mutate = 2
 r_ij = 3.0
 eleNums = [20]
 eleNames = ["Au"]
-cross = "weighted"
 eleMasses = In.masses(eleNames)
 natoms = sum(eleNums)
 hpc = In.hpc()
@@ -36,5 +37,6 @@ minimising pool and
 then producing offspring. 
 '''
 
-StartCalc = poolGA(natoms,r_ij,eleNums,eleNames
-      ,eleMasses,mutate,npool,cross,hpc,mpitasks)
+StartCalc = poolGA(natoms,r_ij,eleNums
+	,eleNames,eleMasses,mutate,npool
+	,cross,mutType,hpc,mpitasks)
