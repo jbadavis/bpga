@@ -162,6 +162,9 @@ class minPool:
 		coords=[]
 		scale = self.natoms**(1./3.)
 
+		finalEn=self.vaspOUT.final_energy
+		finalCoords=self.vaspOUT.final_coords
+
 		for i in range(self.natoms*3):
 			coords.append(ran.uniform(0,1)*self.r_ij*scale) 
 
