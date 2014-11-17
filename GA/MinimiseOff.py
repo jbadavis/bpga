@@ -63,7 +63,7 @@ class minOff:
 		self.produceOffspring()
 
 		self.vaspIN = DFTin(self.xyzNum,self.eleNames
-					,self.eleMasses,self.eleNums)
+			,self.eleMasses,self.eleNums)
 
 		db.unlock()
 
