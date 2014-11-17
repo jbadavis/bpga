@@ -75,7 +75,10 @@ class minMut:
 		db.check()
 		db.lock()
 
-		self.randomXYZ()
+		if self.mutType == "random":
+			self.randomMutate()
+		elif self.mutType == "move":
+			self.moveMutate()
 
 		self.vaspIN = DFTin(self.xyzNum,self.eleNames
 					,self.eleMasses,self.eleNums)
@@ -190,6 +193,6 @@ class minMut:
 				,Index,self.eleNums,
 				self.eleNames,self.eleMasses
 				,finalEn,finalCoords
-				,self.stride,vaspIN.box)
+				,self.stride,self.vaspIN.box)
 
 

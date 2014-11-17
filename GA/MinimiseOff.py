@@ -174,5 +174,5 @@ class minOff:
 				,Index,self.eleNums,
 				self.eleNames,self.eleMasses
 				,finalEn,finalCoords
-				,self.stride,vaspIN.box)
+				,self.stride,self.vaspIN.box)
 
