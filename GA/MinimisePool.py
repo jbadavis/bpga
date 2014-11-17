@@ -12,10 +12,9 @@ import random as ran
 
 import Database as db
 
-import DFT_output as DFTout
-import DFT_submit as DFTsub
-
 from DFT_input import vasp_input as DFTin
+from DFT_output import vasp_output as DFTout
+from DFT_submit import submit as DFTsub
 
 from Select import tournamentSelect as select
 from Crossover import crossover as cross 
@@ -56,23 +55,22 @@ class minPool:
 		db.check()
 		db.lock()
 
-		self.readPool()
+		self.poolList = db.readPool()
 
 		for line in self.poolList:		
 			
-			self.strucNum += 1
-			self.xyzNum = ((self.strucNum-1)/self.stride)+1
+			self.xyzNum = (self.strucNum/self.stride)+1
 
 			if os.path.exists(str(self.xyzNum)):
 				time.sleep(0.5)
 			
 			if "NotMinimised" in line:
 
-				self.poolList[self.strucNum-1] = "Running\n"
+				self.poolList[self.strucNum] = "Running\n"
 
 				os.system("mkdir "+str(self.xyzNum))
 
-				self.writePool()
+				db.writePool(self.poolList)
 				db.unlock()
 
 				self.getXYZ()
@@ -81,13 +79,15 @@ class minPool:
 
 			elif "Restart" in line:
 
-				self.poolList[self.strucNum-1] = "Running\n"
-				self.writePool()
+				self.poolList[self.strucNum] = "Running\n"
+				db.writePool(self.poolList)
 				db.unlock()
 
 				self.getXYZ()
 				self.minimise()
 				break
+
+			self.strucNum += 1
 
 		if os.path.exists("lock.db"): 
 			db.unlock()
@@ -99,11 +99,14 @@ class minPool:
 		from pool.dat
 		and write .xyz.
 		'''
+
+		strucNum=self.strucNum
+		stride=self.stride
 		
-		self.initialXYZ = self.poolList[self.strucNum-2:self.strucNum+self.stride-2]
+		initialXYZ = self.poolList[strucNum-1:strucNum+stride-1]
 		
 		with open(str(self.xyzNum)+".xyz","w") as xyzFile:
-			for line in self.initialXYZ:
+			for line in initialXYZ:
 				xyzFile.write(line)
 
 	def minimise(self):
@@ -116,9 +119,8 @@ class minPool:
 		self.vaspIN = DFTin(self.xyzNum,self.eleNames
 					,self.eleMasses,self.eleNums)
 
-		run = DFTsub.submit(self.hpc,self.xyzNum,self.mpitasks)
-		self.vaspOUT = DFTout.vasp_output(self.xyzNum,self.natoms)
-
+		run = DFTsub(self.hpc,self.xyzNum,self.mpitasks)
+		self.vaspOUT = DFTout(self.xyzNum,self.natoms)
 
 		'''
 		Check for errors in DFT.
@@ -129,17 +131,12 @@ class minPool:
 		check = checkClus(self.natoms,self.vaspOUT.final_coords)
 
 		if self.vaspOUT.error:
-
 			print "*- Error in VASP Calculation -*"
 			self.genRandom()
-
 		elif check.exploded():
-
 			print "*- Cluster Exploded! -*"
 			self.genRandom()
-
-		else:
-			
+		else:	
 			self.updatePool()
 
 	def updatePool(self):
@@ -151,100 +148,25 @@ class minPool:
 		poolList
 		'''
 
-		db.check()
-		db.lock()
+		finalEn=self.vaspOUT.final_energy
+		finalCoords=self.vaspOUT.final_coords
 
-		self.readPool()
-
-		energy = self.vaspOUT.final_energy
-		finalXYZ = self.vaspOUT.final_coords
-
-		finalXYZele = self.finalCoords(self.initialXYZ[2:],finalXYZ,self.vaspIN.box)
-
-		self.poolList[self.strucNum:self.strucNum+self.stride-2] = finalXYZele
-		self.poolList[self.strucNum-1] = "Finished Energy = " + str(energy) + "\n"
-
-		self.writePool()
-
-		db.unlock()
+		db.updatePool("Finish"
+			,self.strucNum,self.eleNums,
+			self.eleNames,self.eleMasses
+			,finalEn,finalCoords
+			,self.stride,vaspIN.box)
 
 	def genRandom(self):
 
-		db.check()
-		db.lock()
-
-		self.readPool()
-
-		ranStruc = []
-		r_ij = 3.0
+		coords=[]
 		scale = self.natoms**(1./3.)
 
-		for i in range(len(self.eleNames)):
-			for j in range(self.eleNums[i]):
-				x = ran.uniform(0,1) * self.r_ij * scale
-				y = ran.uniform(0,1) * self.r_ij * scale
-				z = ran.uniform(0,1) * self.r_ij * scale
-				xyz = str(x) + " " + str(y) + " " + str(z) + "\n"
-				xyzline = self.eleNames[i] + " " + xyz
-				ranStruc.append(xyzline)
+		for i in range(self.natoms*3):
+			coords.append(ran.uniform(0,1)*self.r_ij*scale) 
 
-		self.poolList[self.strucNum:self.strucNum+self.stride-2] = ranStruc
-		self.poolList[self.strucNum-1] = "Restart" + "\n"
-
-		self.writePool()
-		db.unlock()
-
-	def finalCoords(self,initialXYZ,finalXYZ,box):
-
-		'''
-		Adds element types 
-		to final coordinates
-		from OUTCAR. Removes 
-		from centre of box
-		'''
-
-		eleList = []
-		finalXYZele =[]
-
-		for line in initialXYZ:
-			ele, x,y,z = line.split()
-			eleList.append(ele)
-
-		# Take coords out of centre of box.
-		finalXYZ = [float(i) - box/2 for i in finalXYZ]
-	
-		# Convert list to str for writing to pool.
-		finalXYZ = [str(i) for i in finalXYZ]
-
-		for i in range(0,len(finalXYZ),3):
-			xyz = str(finalXYZ[i]) + " " \
-			+ str(finalXYZ[i+1]) + " " \
-			+ str(finalXYZ[i+2]) + "\n"
-			xyzLine = eleList[i/3] + " " + xyz
-			finalXYZele.append(xyzLine)
-
-		finalXYZele = CoM(finalXYZele,self.eleNames,self.eleMasses)
-
-		return finalXYZele
-
-	def readPool(self):
-
-		'''
-		Reads pool at beginning/
-		throughout calculation.
-		'''
-
-		with open("pool.dat","r") as pool:
-			self.poolList = pool.readlines()
-
-	def writePool(self):
-
-		'''
-		Writes pool to
-		file after any
-		changes.
-		'''
-
-		with open("pool.dat","w") as pool:
-			for line in self.poolList:
-				pool.write(line)
+		db.updatePool("Restart"
+			,self.strucNum,self.eleNums,
+			self.eleNames,self.eleMasses
+			,finalEn,finalCoords
+			,self.stride,vaspIN.box)
