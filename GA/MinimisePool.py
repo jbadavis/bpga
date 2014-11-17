@@ -160,10 +160,9 @@ class minPool:
 	def genRandom(self):
 
 		coords=[]
-		scale = self.natoms**(1./3.)
+		scale=self.natoms**(1./3.)
 
 		finalEn=self.vaspOUT.final_energy
-		finalCoords=self.vaspOUT.final_coords
 
 		for i in range(self.natoms*3):
 			coords.append(ran.uniform(0,1)*self.r_ij*scale) 
@@ -171,5 +170,5 @@ class minPool:
 		db.updatePool("Restart"
 			,self.strucNum,self.eleNums,
 			self.eleNames,self.eleMasses
-			,finalEn,finalCoords
-			,self.stride,self.vaspIN.box)
+			,finalEn,coords,self.stride
+			,self.vaspIN.box)
