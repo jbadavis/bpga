@@ -48,7 +48,6 @@ class minOff:
 		directory.
 		'''
 
-		db.check()
 		db.lock()
 
 		self.xyzNum = db.findLastDir() + 1
@@ -76,7 +75,6 @@ class minOff:
 		new directory.
 		'''
 
-		db.check()
 		db.lock()
 
 		self.findPair()
@@ -114,7 +112,8 @@ class minOff:
 			self.findPair()
 
 		with open(str(self.xyzNum)+".xyz","w") as xyzFile:
-			xyzFile.write(str(self.natoms) + "\n\n")
+			xyzFile.write(str(self.natoms)+"\n")
+			xyzFile.write("Crossover"+"\n")
 			for line in self.offspring:
 				xyzFile.write(line)
 

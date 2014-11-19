@@ -45,7 +45,6 @@ class minMut:
 
 	def runCalc(self):
 
-		db.check()
 		db.lock()
 
 		self.xyzNum = db.findLastDir() + 1
@@ -72,7 +71,6 @@ class minMut:
 		new directory.
 		'''
 
-		db.check()
 		db.lock()
 
 		if self.mutType == "random":

@@ -52,7 +52,6 @@ class minPool:
 
 		time.sleep(ran.uniform(0,2.0))
 			
-		db.check()
 		db.lock()
 
 		self.poolList = db.readPool()
