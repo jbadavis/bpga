@@ -6,10 +6,11 @@ Jack Davis
 5/11/2014
 '''
 
-import os
-import time
+import os, time, errno
 
 from CoM import CoM 
+
+global fd
 
 def updatePool(upType,strucNum
 	,eleNums,eleNames,eleMasses
@@ -23,7 +24,6 @@ def updatePool(upType,strucNum
 	poolList
 	'''
 
-	check()
 	lock()
 
 	poolList = readPool()
@@ -124,14 +124,38 @@ def writePool(poolList):
 
 def lock():
 
-	os.system("touch lock.db")
+	'''
+	An atomic operation on *most* OSes and filesystems
+	Quote from man for open(2):
+	
+	"On NFS, O_EXCL is supported only when using NFSv3 or later on
+	 kernel 2.6 or later.  In NFS environments where O_EXCL support
+	 is not provided, programs that rely on it for performing
+	 locking tasks will contain a race condition."
+	'''
+
+	global fd
+
+	while True:
+
+		try:
+			fd = os.open('lock.db', os.O_CREAT|os.O_EXCL|os.O_RDWR)
+			return
+
+		except OSError as oserr:
+			if oserr.errno == errno.EEXIST:
+				time.sleep(0.5)	# Sleep for 500ms between polls
+			else:
+				raise
 
 def unlock():
 
-	os.system("rm lock.db")
+	global fd
 
-def check():
-
-	while os.path.exists("lock.db"):
-		time.sleep(0.5)
+	if (fd != None):
+		os.close(fd)
+		os.remove('lock.db')
+		fd = None
+	else:
+		raise Exception("Attempted database unlock when not holding lock.")
 		
