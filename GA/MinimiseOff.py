@@ -24,9 +24,9 @@ from Explode import checkClus
 class minOff: 
 
 	def __init__(self,natoms,eleNums
-		,eleNames,eleMasses
-		,n,cross,stride
-		,hpc,mpitasks):
+				,eleNames,eleMasses
+				,n,cross,stride
+				,hpc,mpitasks):
 		
 		self.natoms = natoms
 		self.eleNames = eleNames
@@ -96,7 +96,8 @@ class minOff:
 		while noOverlap:
 
 			newClus = cross(self.clus1,self.clus2
-				,self.natoms,self.pair)
+							,self.eleNums,self.eleNames
+							,self.natoms,self.pair)
 
 			# self.offspring = newClus.CutSplice()
 
