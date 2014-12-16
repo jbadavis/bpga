@@ -14,14 +14,18 @@ from checkPool import checkPool
 
 class crossover:
 
-	def __init__(self,clus1,
-		clus2,natoms,pair):
+	def __init__(self,clus1
+				,clus2,eleNums
+				,eleNames,natoms
+				,pair):
 
 		ran.seed()
 		
 		self.clus1 = clus1
 		self.clus2 = clus2
 		self.pair = [clus1,clus2]
+		self.eleNames = eleNames
+		self.eleNums = eleNums
 		self.natoms = natoms 
 		self.pairPos = pair
 		self.offspring = []
@@ -144,6 +148,25 @@ class crossover:
 			self.offspring.append(self.clus2[j])
 
 		return self.offspring
+
+	def BiCutSpliceWeighted(self):
+
+		self.fitness()
+
+
+		fit1 = self.fitPair[0]
+		fit2 = self.fitPair[1]
+
+		cut = self.natoms*(fit1/(fit1+fit2))
+		cut = int(cut)
+
+		for i in range(cut):
+			self.offspring.append(self.clus1[i])
+
+		for j in range(cut,self.natoms):
+			self.offspring.append(self.clus2[j])
+
+		print self.offspring
 
 	def CutSplice(self):	
 
