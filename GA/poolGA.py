@@ -17,9 +17,11 @@ from checkPool import checkPool as checkPool
 
 class poolGA:
 
-	def __init__(self,natoms,r_ij,eleNums
-		,eleNames,eleMasses,mutate,n
-		,cross,mutType,hpc,mpitasks):
+	def __init__(self,natoms,r_ij
+				,eleNums,eleNames
+				,eleMasses,mutate
+				,n,cross,mutType
+				,hpc,mpitasks):
 		
 		self.n = n
 		self.r_ij = r_ij
