@@ -99,12 +99,12 @@ class minOff:
 							,self.eleNums,self.eleNames
 							,self.natoms,self.pair)
 
-			# self.offspring = newClus.CutSplice()
-
 			if self.cross == "random":
 				self.offspring = newClus.CutSpliceRandom()
 			elif self.cross == "weighted":
 				self.offspring = newClus.CutSpliceWeighted()
+			elif self.cross == "bimetallic":
+				self.offspring = newClus.CutSplice()
 
 			check = checkClus(self.natoms,self.offspring)
 			noExplode = check.exploded()
