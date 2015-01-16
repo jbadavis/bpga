@@ -33,3 +33,19 @@ Ensure your submission script contains the following line -
 
 python Run.py
 ```
+
+### Crossover ### 
+
+Available crossover methods - 
+
+```
+#!shell
+
+cross = "random"
+cross = "weighted"
+cross = "bimetallic" 
+```
+
+"Random" chooses a random cutting plane whereas for "weighted" this is determined by the fitness.
+
+Currently bimetallic crossover takes 50% from each cluster. 
