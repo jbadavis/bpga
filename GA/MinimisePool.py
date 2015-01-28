@@ -119,16 +119,24 @@ class minPool:
 		'''
 
 		self.vaspIN = DFTin(self.xyzNum,self.eleNames
-					,self.eleMasses,self.eleNums)
+						,self.eleMasses,self.eleNums)
 
 		exitcode = os.system(self.subString)
 
-		if exitcode == 0:
-			# Get Energy.
-			# Get Coordinates.
+		output = vaspOUT(self.xyzNum
+						,self.natoms)
+
+		self.finalEnergy = output.getEnergy()
+		self.finalCoords = output.getCoords()
+
+		check = checkClus(self.natoms,self.final_coords)
+
+		if exitcode == 0 and check.exploded == False:
+
 			self.updatePool()
-			pass
+			
 		else:
+
 			self.genRandom()
 
 	# 	self.vaspIN = DFTin(self.xyzNum,self.eleNames
@@ -169,7 +177,7 @@ class minPool:
 		db.updatePool("Finish"
 			,self.strucNum,self.eleNums,
 			self.eleNames,self.eleMasses
-			,finalEn,finalCoords
+			,self.finalEnergy,self.finalCoords
 			,self.stride,self.vaspIN.box)
 
 	def genRandom(self):

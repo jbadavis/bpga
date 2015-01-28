@@ -16,44 +16,12 @@ class vasp_output:
 	VASP OUTCAR file
 	'''
 	
-	def __init__(self,i,natoms):
-		
-		self.final_coords = []	
-		self.final_energy = 0.0
+	def __init__(self,calcNum,natoms):
+
+		self.calcNum = calcNum
 		self.natoms = int(natoms)
-		self.check_calc(i)
-		# self.read_energy(i)
-		# self.read_coords(i)
 
-	def check_calc(self,i):
-
-		'''
-		Check to see if VASP calculation
-		has converged by searching OUTCAR
-		for a string continuously
-		'''
-
-		finish_str = "reached required accuracy"
-		errorStr = "Error EDDDAV:"
-		end = False
-		self.error = False
-
-		with open(str(i) + "/OUTCAR","r") as outcar:
-			while end == False:
-				for line in outcar:
-					if finish_str in line:
-						end = True
-						print "finished!"
-					elif errorStr in line:
-						self.error = True
-						end = True  
-				outcar.seek(0)
-
-		if end and self.error == False:
-			self.read_energy(i)
-			self.read_coords(i)
-
-	def read_energy(self,i):
+	def getEnergy(self):
 
 		'''
 		Returns final energy from
@@ -62,14 +30,15 @@ class vasp_output:
 
 		energy_str = "energy  without entropy="
 
-		with open(str(i) + "/OUTCAR","r") as outcar:
+		with open(str(self.i) + "/OUTCAR","r") as outcar:
 			for line in outcar:
 				if energy_str in line:
 					energy = line.split()
    		print "Found the final energy"
-   		self.final_energy = energy[6]
 
-	def read_coords(self,i):
+   		return energy[6]
+
+	def getCoords(self):
 
 		'''
 		Finds final coordinates 
@@ -78,11 +47,10 @@ class vasp_output:
 		'''
 
 		counter = 0
-		found = False
 		strucNums = []
 		coord_str = " POSITION"
 
-		with open(str(i) + "/OUTCAR","r") as outcar:
+		with open(str(self.i) + "/OUTCAR","r") as outcar:
 			outcarList = outcar.readlines()
 		for line in outcarList:
 			counter += 1
@@ -97,7 +65,8 @@ class vasp_output:
 
 		for line in outcarList[top:bottom]:
 			xyz = line.split()
-			self.final_coords.append(xyz[0])
-			self.final_coords.append(xyz[1])
-			self.final_coords.append(xyz[2])
-		print "Found final coordinates"
+			final_coords.append(xyz[0])
+			final_coords.append(xyz[1])
+			final_coords.append(xyz[2])
+		
+		return finalCoords
