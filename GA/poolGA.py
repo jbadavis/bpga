@@ -21,7 +21,8 @@ class poolGA:
 				,eleNums,eleNames
 				,eleMasses,mutate
 				,n,cross,mutType
-				,hpc,mpitasks):
+				,hpc,mpitasks
+				,subString):
 		
 		self.n = n
 		self.r_ij = r_ij
@@ -35,6 +36,7 @@ class poolGA:
 		self.mpitasks = mpitasks
 		self.stride = natoms + 2
 		self.hpc = hpc
+		self.subString = subString
 
 		self.runJobs()
 
@@ -48,7 +50,7 @@ class poolGA:
 				,self.eleNums,self.eleNames
 				,self.eleMasses,self.n
 				,self.stride,self.hpc
-				,self.mpitasks)
+				,self.mpitasks,self.subString)
 
 			notFinished = self.checkFinished()
 

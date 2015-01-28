@@ -28,7 +28,8 @@ class minPool:
 	def __init__(self,natoms,r_ij
 		,eleNums,eleNames
 		,eleMasses,n,stride
-		,hpc,mpitasks):
+		,hpc,mpitasks
+		,subString):
 		
 		self.natoms = natoms
 		self.r_ij = r_ij
@@ -39,6 +40,7 @@ class minPool:
 		self.stride = stride
 		self.hpc = hpc
 		self.mpitasks = mpitasks
+		self.subString = subString
 
 		self.runCalc()
 
@@ -108,6 +110,7 @@ class minPool:
 			for line in initialXYZ:
 				xyzFile.write(line)
 
+	
 	def minimise(self):
 
 		'''
@@ -118,25 +121,38 @@ class minPool:
 		self.vaspIN = DFTin(self.xyzNum,self.eleNames
 					,self.eleMasses,self.eleNums)
 
-		run = DFTsub(self.hpc,self.xyzNum,self.mpitasks)
-		self.vaspOUT = DFTout(self.xyzNum,self.natoms)
+		exitcode = os.system(self.subString)
 
-		'''
-		Check for errors in DFT.
-		Check if cluster has exploded.
-		Update pool!
-		'''
-
-		check = checkClus(self.natoms,self.vaspOUT.final_coords)
-
-		if self.vaspOUT.error:
-			print "*- Error in VASP Calculation -*"
-			self.genRandom()
-		elif check.exploded():
-			print "*- Cluster Exploded! -*"
-			self.genRandom()
-		else:	
+		if exitcode == 0:
+			# Get Energy.
+			# Get Coordinates.
 			self.updatePool()
+			pass
+		else:
+			self.genRandom()
+
+	# 	self.vaspIN = DFTin(self.xyzNum,self.eleNames
+	# 				,self.eleMasses,self.eleNums)
+
+	# 	run = DFTsub(self.hpc,self.xyzNum,self.mpitasks)
+	# 	self.vaspOUT = DFTout(self.xyzNum,self.natoms)
+
+	# 	'''
+	# 	Check for errors in DFT.
+	# 	Check if cluster has exploded.
+	# 	Update pool!
+	# 	'''
+
+	# 	check = checkClus(self.natoms,self.vaspOUT.final_coords)
+
+	# 	if self.vaspOUT.error:
+	# 		print "*- Error in VASP Calculation -*"
+	# 		self.genRandom()
+	# 	elif check.exploded():
+	# 		print "*- Cluster Exploded! -*"
+	# 		self.genRandom()
+	# 	else:	
+	# 		self.updatePool()
 
 	def updatePool(self):
 
