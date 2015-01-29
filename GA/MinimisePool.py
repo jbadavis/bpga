@@ -128,9 +128,6 @@ class minPool:
 
 		check = checkClus(self.natoms,self.finalCoords)
 
-		print check.exploded()
-		print self.exitcode
-
 		if self.exitcode == 0 and check.exploded() == False:
 
 			self.updatePool()
@@ -170,14 +167,14 @@ class minPool:
 
 	def genRandom(self):
 
-		coords=[]
+		ranCoords=[]
 		scale=self.natoms**(1./3.)
 
 		for i in range(self.natoms*3):
-			coords.append(ran.uniform(0,1)*self.r_ij*scale) 
+			ranCoords.append(ran.uniform(0,1)*self.r_ij*scale) 
 
 		db.updatePool("Restart"
 			,self.strucNum,self.eleNums,
 			self.eleNames,self.eleMasses
-			,self.finalEnergy,self.finalCoords
+			,self.finalEnergy,ranCoords
 			,self.stride,self.vaspIN.box)

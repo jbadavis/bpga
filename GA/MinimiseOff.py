@@ -26,7 +26,8 @@ class minOff:
 	def __init__(self,natoms,eleNums
 				,eleNames,eleMasses
 				,n,cross,stride
-				,hpc,mpitasks):
+				,hpc,mpitasks
+				,subString):
 		
 		self.natoms = natoms
 		self.eleNames = eleNames
@@ -37,6 +38,7 @@ class minOff:
 		self.stride = stride
 		self.hpc = hpc
 		self.mpitasks = mpitasks
+		self.subString = subString
 		
 		self.runCalc()
 
@@ -61,7 +63,7 @@ class minOff:
 		self.produceOffspring()
 
 		self.vaspIN = DFTin(self.xyzNum,self.eleNames
-			,self.eleMasses,self.eleNums)
+						,self.eleMasses,self.eleNums)
 
 		db.unlock()
 
@@ -80,9 +82,8 @@ class minOff:
 		self.findPair()
 		self.produceOffspring()
 
-		self.vaspIN = DFTin(self.xyzNum
-			,self.eleNames,self.eleMasses
-			,self.eleNums)
+		self.vaspIN = DFTin(self.xyzNum,self.eleNames
+						,self.eleMasses,self.eleNums)
 
 		db.unlock()
 
