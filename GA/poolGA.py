@@ -21,7 +21,6 @@ class poolGA:
 				,eleNums,eleNames
 				,eleMasses,mutate
 				,n,cross,mutType
-				,hpc,mpitasks
 				,subString):
 		
 		self.n = n
@@ -33,10 +32,9 @@ class poolGA:
 		self.eleMasses = eleMasses
 		self.cross = cross
 		self.mutType = mutType
-		self.mpitasks = mpitasks
-		self.stride = natoms + 2
-		self.hpc = hpc
 		self.subString = subString
+
+		self.stride = natoms + 2
 
 		self.runJobs()
 
