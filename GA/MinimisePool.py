@@ -128,7 +128,7 @@ class minPool:
 
 		check = checkClus(self.natoms,self.finalCoords)
 
-		print check.explode()
+		print check.exploded()
 		print self.exitcode
 
 		if self.exitcode == 0 and check.exploded() == False:
