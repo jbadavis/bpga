@@ -48,6 +48,7 @@ class vasp_output:
 
 		counter = 0
 		strucNums = []
+		finalCoords = []
 		coord_str = " POSITION"
 
 		with open(str(self.calcNum) + "/OUTCAR","r") as outcar:
@@ -65,8 +66,8 @@ class vasp_output:
 
 		for line in outcarList[top:bottom]:
 			xyz = line.split()
-			final_coords.append(xyz[0])
-			final_coords.append(xyz[1])
-			final_coords.append(xyz[2])
+			finalCoords.append(xyz[0])
+			finalCoords.append(xyz[1])
+			finalCoords.append(xyz[2])
 		
 		return finalCoords
