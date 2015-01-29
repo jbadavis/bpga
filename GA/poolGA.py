@@ -79,9 +79,9 @@ class poolGA:
 				,self.mutType,self.eleNums
 				,self.eleNames,self.eleMasses
 				,self.n,self.stride
-				,self.hpc,self.mpitasks)
+				,self.subString)
 		else:
-			
+
 			off = minOff(self.natoms,self.eleNums
 				,self.eleNames,self.eleMasses
 				,self.n,self.cross,self.stride
