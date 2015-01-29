@@ -12,7 +12,6 @@ import Database as db
 
 from DFT_input import vasp_input as DFTin
 from DFT_output import vasp_output as DFTout
-from DFT_submit import submit as DFTsub
 
 from Select import tournamentSelect as select
 from Crossover import crossover as cross 

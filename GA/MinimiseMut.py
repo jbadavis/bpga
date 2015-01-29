@@ -13,7 +13,6 @@ import Database as db
 
 from DFT_input import vasp_input as DFTin
 from DFT_output import vasp_output as DFTout
-from DFT_submit import submit as DFTsub
 
 from checkPool import checkPool as checkPool
 from CoM import CoM 
@@ -54,13 +53,10 @@ class minMut:
 			self.moveMutate()
 
 		os.system("mkdir " + str(self.xyzNum))
-
-		self.vaspIN = DFTin(self.xyzNum,self.eleNames
-					,self.eleMasses,self.eleNums)
 							
 		db.unlock()
 
-		self.runDFT()
+		self.minimise()
 
 	def restart(self):
 
@@ -77,12 +73,9 @@ class minMut:
 		elif self.mutType == "move":
 			self.moveMutate()
 
-		self.vaspIN = DFTin(self.xyzNum,self.eleNames
-					,self.eleMasses,self.eleNums)
-
 		db.unlock()
 
-		self.runDFT()
+		self.minimise()
 
 	def randomMutate(self):
 
@@ -156,31 +149,55 @@ class minMut:
 					xyzLine = xyz[0]+" "+xyz[1]+" "+xyz[2]+"\n"
 					xyzlineEle = self.eleNames[i] + " " + xyzLine
 					xyzFile.write(xyzlineEle)
-					c += 1		
+					c += 1	
 
-	def runDFT(self):
+	def minimise(self):
 
-		run = DFTsub(self.hpc,self.xyzNum,self.mpitasks)
-		self.vaspOUT = DFTout(self.xyzNum,self.natoms)
+		'''
+		Start 
+		DFT calculation.
+		'''
 
-		check = checkClus(self.natoms,self.vaspOUT.final_coords)
+		self.vaspIN = DFTin(self.xyzNum,self.eleNames
+						,self.eleMasses,self.eleNums)
 
-		if self.vaspOUT.error:
-			print "*- Error in VASP Calculation -*"
-			self.restart()
-		elif check.exploded():
-			print "*- Cluster Exploded! -*"
-			self.restart()
-		else:	
+		self.doDFT()
+
+		output = DFTout(self.xyzNum
+						,self.natoms)
+
+		self.finalEnergy = output.getEnergy()
+		self.finalCoords = output.getCoords()
+
+		check = checkClus(self.natoms,self.finalCoords)
+
+		if self.exitcode == 0 and check.exploded() == False:
+
 			self.updatePool()
+			
+		else:
+
+			self.restart()
+
+	def doDFT(self):
+
+		'''
+		Change directory and 
+		submit calculation.
+		'''
+
+		base = os.environ["PWD"]
+		os.chdir(base+"/"+str(self.xyzNum))
+
+		self.exitcode = os.system(self.subString)
+		
+		os.chdir(base)
+
 
 	def updatePool(self):
 
-		finalEn=self.vaspOUT.final_energy
-		finalCoords=self.vaspOUT.final_coords
-
 		AcceptReject = checkPool()
-		Accept = AcceptReject.checkEnergy(float(finalEn))
+		Accept = AcceptReject.checkEnergy(float(self.finalEnergy))
 
 		if Accept:
 			Index = AcceptReject.lowestIndex
@@ -189,7 +206,5 @@ class minMut:
 			db.updatePool("Finish"
 				,Index,self.eleNums,
 				self.eleNames,self.eleMasses
-				,finalEn,finalCoords
+				,self.finalEnergy,self.finalCoords
 				,self.stride,self.vaspIN.box)
-
-
