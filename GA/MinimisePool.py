@@ -121,10 +121,7 @@ class minPool:
 		self.vaspIN = DFTin(self.xyzNum,self.eleNames
 						,self.eleMasses,self.eleNums)
 
-		baseDir = os.environ["PWD"]
-		os.chdir(base+"/"+self.xyzNum)
-		exitcode = os.system(self.subString)
-		os.chdir(base)
+		self.doDFT()
 
 		output = vaspOUT(self.xyzNum
 						,self.natoms)
