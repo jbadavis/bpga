@@ -49,7 +49,7 @@ class minPool:
 
 		self.strucNum = 0
 
-		time.sleep(ran.uniform(self.xyzNum))
+		time.sleep(ran.uniform(0.0,2.0))
 			
 		db.lock()
 
