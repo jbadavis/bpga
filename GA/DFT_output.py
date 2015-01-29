@@ -30,7 +30,7 @@ class vasp_output:
 
 		energy_str = "energy  without entropy="
 
-		with open(str(self.i) + "/OUTCAR","r") as outcar:
+		with open(str(self.calcNum) + "/OUTCAR","r") as outcar:
 			for line in outcar:
 				if energy_str in line:
 					energy = line.split()
@@ -50,7 +50,7 @@ class vasp_output:
 		strucNums = []
 		coord_str = " POSITION"
 
-		with open(str(self.i) + "/OUTCAR","r") as outcar:
+		with open(str(self.calcNum) + "/OUTCAR","r") as outcar:
 			outcarList = outcar.readlines()
 		for line in outcarList:
 			counter += 1
