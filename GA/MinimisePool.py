@@ -49,7 +49,7 @@ class minPool:
 
 		self.strucNum = 0
 
-		time.sleep(ran.uniform(0,2.0))
+		time.sleep(ran.uniform(self.xyzNum))
 			
 		db.lock()
 
@@ -127,6 +127,9 @@ class minPool:
 		self.finalCoords = output.getCoords()
 
 		check = checkClus(self.natoms,self.finalCoords)
+
+		print check.explode
+		print self.exitcode
 
 		if self.exitcode == 0 and check.exploded == False:
 
