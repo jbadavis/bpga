@@ -128,7 +128,7 @@ class minPool:
 
 		check = checkClus(self.natoms,self.finalCoords)
 
-		if exitcode == 0 and check.exploded == False:
+		if self.exitcode == 0 and check.exploded == False:
 
 			self.updatePool()
 			
@@ -146,7 +146,7 @@ class minPool:
 		base = os.environ["PWD"]
 		os.chdir(base+"/"+str(self.xyzNum))
 
-		exitcode = os.system(self.subString)
+		self.exitcode = os.system(self.subString)
 		
 		os.chdir(base)
 
