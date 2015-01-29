@@ -126,7 +126,7 @@ class minPool:
 		self.finalEnergy = output.getEnergy()
 		self.finalCoords = output.getCoords()
 
-		check = checkClus(self.natoms,self.final_coords)
+		check = checkClus(self.natoms,self.finalCoords)
 
 		if exitcode == 0 and check.exploded == False:
 
@@ -159,9 +159,6 @@ class minPool:
 		poolList
 		'''
 
-		finalEn=self.vaspOUT.final_energy
-		finalCoords=self.vaspOUT.final_coords
-
 		db.updatePool("Finish"
 			,self.strucNum,self.eleNums,
 			self.eleNames,self.eleMasses
@@ -172,8 +169,6 @@ class minPool:
 
 		coords=[]
 		scale=self.natoms**(1./3.)
-
-		finalEn=self.vaspOUT.final_energy
 
 		for i in range(self.natoms*3):
 			coords.append(ran.uniform(0,1)*self.r_ij*scale) 
