@@ -147,7 +147,7 @@ class minPool:
 		'''
 
 		base = os.environ["PWD"]
-		os.chdir(base+"/"+self.xyzNum)
+		os.chdir(base+"/"+str(self.xyzNum))
 
 		exitcode = os.system(self.subString)
 		
