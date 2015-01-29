@@ -121,7 +121,10 @@ class minPool:
 		self.vaspIN = DFTin(self.xyzNum,self.eleNames
 						,self.eleMasses,self.eleNums)
 
+		baseDir = os.environ["PWD"]
+		os.chdir(base+"/"+self.xyzNum)
 		exitcode = os.system(self.subString)
+		os.chdir(base)
 
 		output = vaspOUT(self.xyzNum
 						,self.natoms)
@@ -139,28 +142,19 @@ class minPool:
 
 			self.genRandom()
 
-	# 	self.vaspIN = DFTin(self.xyzNum,self.eleNames
-	# 				,self.eleMasses,self.eleNums)
+	def doDFT(self):
 
-	# 	run = DFTsub(self.hpc,self.xyzNum,self.mpitasks)
-	# 	self.vaspOUT = DFTout(self.xyzNum,self.natoms)
+		'''
+		Change directory and 
+		submit calculation.
+		'''
 
-	# 	'''
-	# 	Check for errors in DFT.
-	# 	Check if cluster has exploded.
-	# 	Update pool!
-	# 	'''
+		base = os.environ["PWD"]
+		os.chdir(base+"/"+self.xyzNum)
 
-	# 	check = checkClus(self.natoms,self.vaspOUT.final_coords)
-
-	# 	if self.vaspOUT.error:
-	# 		print "*- Error in VASP Calculation -*"
-	# 		self.genRandom()
-	# 	elif check.exploded():
-	# 		print "*- Cluster Exploded! -*"
-	# 		self.genRandom()
-	# 	else:	
-	# 		self.updatePool()
+		exitcode = os.system(self.subString)
+		
+		os.chdir(base)
 
 	def updatePool(self):
 
@@ -193,5 +187,5 @@ class minPool:
 		db.updatePool("Restart"
 			,self.strucNum,self.eleNums,
 			self.eleNames,self.eleMasses
-			,finalEn,coords,self.stride
-			,self.vaspIN.box)
+			,self.finalEnergy,self.finalCoords
+			,self.stride,self.vaspIN.box)
