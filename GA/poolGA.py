@@ -49,8 +49,7 @@ class poolGA:
 			pool = minPool(self.natoms,self.r_ij
 				,self.eleNums,self.eleNames
 				,self.eleMasses,self.n
-				,self.stride,self.hpc
-				,self.mpitasks,self.subString)
+				,self.stride,self.subString)
 
 			notFinished = self.checkFinished()
 
@@ -65,7 +64,7 @@ class poolGA:
 					,"random",self.eleNums
 					,self.eleNames,self.eleMasses
 					,self.n,self.stride
-					,self.hpc,self.mpitasks)
+					,self.subString)
 
 			else:
 				self.decide()
@@ -75,16 +74,18 @@ class poolGA:
 		choice = randrange(0,self.n)
 
 		if choice < self.mutate:
+
 			off = minMut(self.natoms,self.r_ij
 				,self.mutType,self.eleNums
 				,self.eleNames,self.eleMasses
 				,self.n,self.stride
 				,self.hpc,self.mpitasks)
 		else:
+			
 			off = minOff(self.natoms,self.eleNums
 				,self.eleNames,self.eleMasses
 				,self.n,self.cross,self.stride
-				,self.hpc,self.mpitasks)
+				,self.subString)
 
 	def checkRunning(self):
 

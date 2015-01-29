@@ -26,7 +26,7 @@ class minMut:
 	def __init__(self,natoms,r_ij
 		,mutType,eleNums,eleNames
 		,eleMasses,n,stride
-		,hpc,mpitasks):
+		,subString):
 
 		self.natoms = natoms
 		self.r_ij = r_ij
@@ -36,8 +36,7 @@ class minMut:
 		self.eleMasses = eleMasses
 		self.n = n
 		self.stride = stride
-		self.hpc = hpc
-		self.mpitasks = mpitasks
+		self.subString = subString
 
 		ran.seed()
 

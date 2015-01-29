@@ -27,7 +27,6 @@ class minPool:
 	def __init__(self,natoms,r_ij
 		,eleNums,eleNames
 		,eleMasses,n,stride
-		,hpc,mpitasks
 		,subString):
 		
 		self.natoms = natoms
@@ -37,8 +36,6 @@ class minPool:
 		self.eleMasses = eleMasses
 		self.n = n
 		self.stride = stride
-		self.hpc = hpc
-		self.mpitasks = mpitasks
 		self.subString = subString
 
 		ran.seed()

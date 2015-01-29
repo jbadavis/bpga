@@ -26,7 +26,6 @@ class minOff:
 	def __init__(self,natoms,eleNums
 				,eleNames,eleMasses
 				,n,cross,stride
-				,hpc,mpitasks
 				,subString):
 		
 		self.natoms = natoms
@@ -36,8 +35,6 @@ class minOff:
 		self.n = n
 		self.cross = cross
 		self.stride = stride
-		self.hpc = hpc
-		self.mpitasks = mpitasks
 		self.subString = subString
 		
 		self.runCalc()
@@ -67,7 +64,7 @@ class minOff:
 
 		db.unlock()
 
-		self.runDFT()
+		self.minimise()
 
 	def restart(self):
 
@@ -82,12 +79,9 @@ class minOff:
 		self.findPair()
 		self.produceOffspring()
 
-		self.vaspIN = DFTin(self.xyzNum,self.eleNames
-						,self.eleMasses,self.eleNums)
-
 		db.unlock()
 
-		self.runDFT()
+		self.minimise()
 
 	def produceOffspring(self):
 
@@ -143,29 +137,68 @@ class minOff:
 
 		self.poolPos = [c1,c2]
 
-	def runDFT(self):
+	def minimise(self):
 
-		run = DFTsub(self.hpc,self.xyzNum,self.mpitasks)
-		self.vaspOUT = DFTout(self.xyzNum,self.natoms)
+		'''
+		Start 
+		DFT calculation.
+		'''
 
-		check = checkClus(self.natoms,self.vaspOUT.final_coords)
+		self.vaspIN = DFTin(self.xyzNum,self.eleNames
+						,self.eleMasses,self.eleNums)
 
-		if self.vaspOUT.error:
-			print "*- Error in VASP Calculation -*"
-			self.restart()
-		elif check.exploded():
-			print "*- Cluster Exploded! -*"
-			self.restart()
-		else:
+		self.doDFT()
+
+		output = DFTout(self.xyzNum
+						,self.natoms)
+
+		self.finalEnergy = output.getEnergy()
+		self.finalCoords = output.getCoords()
+
+		check = checkClus(self.natoms,self.finalCoords)
+
+		if self.exitcode == 0 and check.exploded() == False:
+
 			self.updatePool()
+			
+		else:
+
+			self.restart()
+
+	def doDFT(self):
+
+		'''
+		Change directory and 
+		submit calculation.
+		'''
+
+		base = os.environ["PWD"]
+		os.chdir(base+"/"+str(self.xyzNum))
+
+		self.exitcode = os.system(self.subString)
+		
+		os.chdir(base)
+
+	# def runDFT(self):
+
+	# 	run = DFTsub(self.hpc,self.xyzNum,self.mpitasks)
+	# 	self.vaspOUT = DFTout(self.xyzNum,self.natoms)
+
+	# 	check = checkClus(self.natoms,self.vaspOUT.final_coords)
+
+	# 	if self.vaspOUT.error:
+	# 		print "*- Error in VASP Calculation -*"
+	# 		self.restart()
+	# 	elif check.exploded():
+	# 		print "*- Cluster Exploded! -*"
+	# 		self.restart()
+	# 	else:
+	# 		self.updatePool()
 
 	def updatePool(self):
 
-		finalEn=self.vaspOUT.final_energy
-		finalCoords=self.vaspOUT.final_coords
-
 		AcceptReject = checkPool()
-		Accept = AcceptReject.checkEnergy(float(finalEn))
+		Accept = AcceptReject.checkEnergy(float(self.finalEnergy))
 
 		if Accept:
 			Index = AcceptReject.lowestIndex
@@ -174,6 +207,6 @@ class minOff:
 			db.updatePool("Finish"
 				,Index,self.eleNums,
 				self.eleNames,self.eleMasses
-				,finalEn,finalCoords
+				,self.finalEnergy,self.finalCoords
 				,self.stride,self.vaspIN.box)
 
