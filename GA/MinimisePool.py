@@ -117,10 +117,9 @@ class minPool:
 
 		self.doDFT()
 
-		output = DFTout(self.xyzNum
-						,self.natoms)
-
 		if self.exitcode == 0:
+
+			output = DFTout(self.xyzNum,self.natoms)
 
 			self.finalEnergy = output.getEnergy()
 			self.finalCoords = output.getCoords()
@@ -147,7 +146,7 @@ class minPool:
 
 		self.exitcode = os.system(self.subString)
 
-		print self.exitcode
+		print "EXITCODE = " + str(self.exitcode)
 		
 		os.chdir(base)
 
