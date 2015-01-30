@@ -129,7 +129,6 @@ class minPool:
 			if check.exploded() == False:
 
 				self.updatePool()
-				
 		else:
 
 			self.genRandom()
@@ -146,8 +145,9 @@ class minPool:
 
 		self.exitcode = os.system(self.subString)
 
-		print "EXITCODE = " + str(self.exitcode)
-		
+		with open("Exitcodes","a") as exit:
+			exit.write("Exitcode = "+str(self.exitcode))
+			
 		os.chdir(base)
 
 	def updatePool(self):
@@ -174,7 +174,7 @@ class minPool:
 			ranCoords.append(ran.uniform(0,1)*self.r_ij*scale) 
 
 		db.updatePool("Restart"
-			,self.strucNum,self.eleNums,
-			self.eleNames,self.eleMasses
+			,self.strucNum,self.eleNums
+			,self.eleNames,self.eleMasses
 			,self.finalEnergy,ranCoords
 			,self.stride,self.vaspIN.box)
