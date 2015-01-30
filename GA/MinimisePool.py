@@ -120,15 +120,17 @@ class minPool:
 		output = DFTout(self.xyzNum
 						,self.natoms)
 
-		self.finalEnergy = output.getEnergy()
-		self.finalCoords = output.getCoords()
+		if self.exitcode == 0:
 
-		check = checkClus(self.natoms,self.finalCoords)
+			self.finalEnergy = output.getEnergy()
+			self.finalCoords = output.getCoords()
 
-		if self.exitcode == 0 and check.exploded() == False:
+			check = checkClus(self.natoms,self.finalCoords)
 
-			self.updatePool()
-			
+			if check.exploded() == False:
+
+				self.updatePool()
+				
 		else:
 
 			self.genRandom()
@@ -144,6 +146,8 @@ class minPool:
 		os.chdir(base+"/"+str(self.xyzNum))
 
 		self.exitcode = os.system(self.subString)
+
+		print self.exitcode
 		
 		os.chdir(base)
 
