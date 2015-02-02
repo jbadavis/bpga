@@ -10,13 +10,15 @@ import os
 import random as ran
 
 import Database as db
+
 from fixOverlap import fixOverlap
 from Explode import checkClus
 
 class ranPool:
 
     def __init__(self,n,r_ij
-        ,eleNums,eleNames):
+                ,eleNums
+                ,eleNames):
 
         ran.seed()
 
@@ -31,9 +33,7 @@ class ranPool:
 
         db.lock()
 
-        popExists = os.path.exists("pool.dat")
-
-        if popExists == False:
+        if os.path.exists("pool.dat") == False:
             self.genPool()
 
         db.unlock()
@@ -46,27 +46,48 @@ class ranPool:
         database.
         '''
 
+        coords=[]
+
         scale = self.natoms**(1./3.)
 
-        for struc in range(self.nstrucs):
-
-            coords=[]
-
-            for i in range(self.natoms*3):
+        for i in range(self.nstrucs):
+            for j in range(self.natoms*3):
                 coords.append(ran.uniform(0,1)*self.r_ij*scale) 
 
-            coordsFix = fixOverlap(coords)
-            coordsFix = [coordsFix[i:i + 3] for i in range(0, len(coordsFix), 3)]
+        '''
+        Generate list of
+        element names.
+        '''
 
-            with open("pool.dat","a") as xyzFile:
-                c = 0
-                xyzFile.write(str(self.natoms)+"\n")
-                xyzFile.write("NotMinimised\n")
-                for i in range(len(self.eleNames)):
-                    for j in range(self.eleNums[i]):
-                        xyz = coordsFix[c]
-                        xyz = [str(k) for k in xyz]
-                        xyzLine = xyz[0]+" "+xyz[1]+" "+xyz[2]+"\n"
-                        xyzlineEle = self.eleNames[i] + " " + xyzLine
-                        xyzFile.write(xyzlineEle)
-                        c += 1
+        eleList=[]
+
+        for i in range(len(self.eleNames)):
+            for j in range(self.eleNums[i]):
+                eleList.append(self.eleNames[i])
+
+        '''
+        Write pool.dat
+        '''
+
+        with open("pool.dat","w") as poolFile:
+            for i in range(self.nstrucs):
+
+                poolFile.write(str(self.natoms)+"\n")
+                poolFile.write("NotMinimised\n")
+
+                start = i * self.natoms*3
+                finish = start + self.natoms*3
+                clus = coords[start:finish]
+                
+                clus = fixOverlap(clus)
+                clus = [str(i) for i in clus]
+
+                for j in range(0,len(clus),3):
+
+                    ele = eleList[j/3]
+                    x = str(clus[j])
+                    y = str(clus[j+1])
+                    z = str(clus[j+2])
+
+                    poolFile.write(ele+" "+x+" "+" "+y+" "+z+"\n")
+                    
