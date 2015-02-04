@@ -127,11 +127,9 @@ class minPool:
 			check = checkClus(self.natoms,self.finalCoords)
 
 			if check.exploded() == False:
-
 				self.updatePool()
-		else:
-
-			self.genRandom()
+			else:
+				self.genRandom()
 
 	def doDFT(self):
 
