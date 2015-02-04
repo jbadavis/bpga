@@ -142,7 +142,7 @@ class minPool:
 		exitcode = os.system(self.subString)
 
 		with open(base+"/exitcodes.dat","a") as exit:
-			exit.write(str(self.xyzNum)
+			exit.write(str(self.xyzNum))
 			exit.write(" Exitcode = "+str(exitcode)+"\n")
 			
 		os.chdir(base)
