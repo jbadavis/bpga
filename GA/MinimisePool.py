@@ -115,9 +115,7 @@ class minPool:
 		self.vaspIN = DFTin(self.xyzNum,self.eleNames
 						,self.eleMasses,self.eleNums)
 
-		self.doDFT()
-
-		if self.exitcode == 0:
+		if self.doDFT() == 0:
 
 			output = DFTout(self.xyzNum,self.natoms)
 
@@ -141,12 +139,15 @@ class minPool:
 		base = os.environ["PWD"]
 		os.chdir(base+"/"+str(self.xyzNum))
 
-		self.exitcode = os.system(self.subString)
+		exitcode = os.system(self.subString)
 
 		with open(base+"/exitcodes.dat","a") as exit:
-			exit.write("Exitcode = "+str(self.exitcode))
+			exit.write(str(self.xyzNum)
+			exit.write(" Exitcode = "+str(exitcode)+"\n")
 			
 		os.chdir(base)
+
+		return exitcode
 
 	def updatePool(self):
 
