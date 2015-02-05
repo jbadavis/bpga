@@ -146,23 +146,22 @@ class minOff:
 		self.vaspIN = DFTin(self.xyzNum,self.eleNames
 						,self.eleMasses,self.eleNums)
 
-		self.doDFT()
+		if self.doDFT() == 0:
 
-		output = DFTout(self.xyzNum
-						,self.natoms)
+			output = DFTout(self.xyzNum,self.natoms)
 
-		self.finalEnergy = output.getEnergy()
-		self.finalCoords = output.getCoords()
+			if output.checkError():
+				self.genRandom()
+			else:
+				self.finalEnergy = output.getEnergy()
+				self.finalCoords = output.getCoords()
 
-		check = checkClus(self.natoms,self.finalCoords)
+				check = checkClus(self.natoms,self.finalCoords)
 
-		if self.exitcode == 0 and check.exploded() == False:
-
-			self.updatePool()
-			
-		else:
-
-			self.restart()
+				if check.exploded() == False:
+					self.updatePool()
+				else:
+					self.genRandom()
 
 	def doDFT(self):
 
@@ -174,9 +173,15 @@ class minOff:
 		base = os.environ["PWD"]
 		os.chdir(base+"/"+str(self.xyzNum))
 
-		self.exitcode = os.system(self.subString)
-		
+		exitcode = os.system(self.subString)
+
+		with open(base+"/exitcodes.dat","a") as exit:
+			exit.write(str(self.xyzNum))
+			exit.write(" Exitcode = "+str(exitcode)+"\n")
+			
 		os.chdir(base)
+
+		return exitcode
 
 	# def runDFT(self):
 
