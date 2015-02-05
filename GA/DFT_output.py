@@ -23,6 +23,8 @@ class vasp_output:
 
 	def checkError(self):
 
+		errorStr = "Error EDDDAV:"
+
 		with open(str(self.calcNum) + "/OUTCAR","r") as outcar:
 			for line in outcar:
 				if errorStr in line:
