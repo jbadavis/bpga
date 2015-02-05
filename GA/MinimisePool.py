@@ -118,7 +118,7 @@ class minPool:
 
 			output = DFTout(self.xyzNum,self.natoms)
 
-			if DFTout.checkError():
+			if output.checkError():
 				self.genRandom()
 			else:
 				self.finalEnergy = output.getEnergy()
