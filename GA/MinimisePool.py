@@ -103,7 +103,6 @@ class minPool:
 		with open(str(self.xyzNum)+".xyz","w") as xyzFile:
 			for line in initialXYZ:
 				xyzFile.write(line)
-
 	
 	def minimise(self):
 
@@ -119,15 +118,18 @@ class minPool:
 
 			output = DFTout(self.xyzNum,self.natoms)
 
-			self.finalEnergy = output.getEnergy()
-			self.finalCoords = output.getCoords()
-
-			check = checkClus(self.natoms,self.finalCoords)
-
-			if check.exploded() == False:
-				self.updatePool()
-			else:
+			if DFTout.checkError:
 				self.genRandom()
+			else:
+				self.finalEnergy = output.getEnergy()
+				self.finalCoords = output.getCoords()
+
+				check = checkClus(self.natoms,self.finalCoords)
+
+				if check.exploded() == False:
+					self.updatePool()
+				else:
+					self.genRandom()
 
 	def doDFT(self):
 

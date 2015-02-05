@@ -21,6 +21,15 @@ class vasp_output:
 		self.calcNum = calcNum
 		self.natoms = int(natoms)
 
+	def checkError(self):
+
+		with open(str(self.calcNum) + "/OUTCAR","r") as outcar:
+			for line in outcar:
+				if errorStr in line:
+					return True
+				else:
+					return False
+
 	def getEnergy(self):
 
 		'''
