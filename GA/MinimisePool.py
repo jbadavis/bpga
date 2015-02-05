@@ -118,7 +118,7 @@ class minPool:
 
 			output = DFTout(self.xyzNum,self.natoms)
 
-			if DFTout.checkError:
+			if DFTout.checkError():
 				self.genRandom()
 			else:
 				self.finalEnergy = output.getEnergy()
@@ -174,8 +174,10 @@ class minPool:
 		for i in range(self.natoms*3):
 			ranCoords.append(ran.uniform(0,1)*self.r_ij*scale) 
 
+		finalEnergy = 0.0
+
 		db.updatePool("Restart"
 			,self.strucNum,self.eleNums
 			,self.eleNames,self.eleMasses
-			,self.finalEnergy,ranCoords
+			,finalEnergy,ranCoords
 			,self.stride,self.vaspIN.box)
