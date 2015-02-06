@@ -56,6 +56,12 @@ class crossover:
 
 	def prepare(self):
 
+		'''
+		Using the pair list rotate
+		and the sort the cluster by
+		the z coordinate.
+		'''
+
 		for i in range(len(self.pair)):
  			self.pair[i] = self.rotate(self.pair[i])
 			self.pair[i] = self.sortZ(self.pair[i])
@@ -149,24 +155,23 @@ class crossover:
 
 		return self.offspring
 
-	def BiCutSpliceWeighted(self):
+	# def BiCutSpliceWeighted(self):
 
-		self.fitness()
+	# 	self.fitness()
 
+	# 	fit1 = self.fitPair[0]
+	# 	fit2 = self.fitPair[1]
 
-		fit1 = self.fitPair[0]
-		fit2 = self.fitPair[1]
+	# 	cut = self.natoms*(fit1/(fit1+fit2))
+	# 	cut = int(cut)
 
-		cut = self.natoms*(fit1/(fit1+fit2))
-		cut = int(cut)
+	# 	for i in range(cut):
+	# 		self.offspring.append(self.clus1[i])
 
-		for i in range(cut):
-			self.offspring.append(self.clus1[i])
+	# 	for j in range(cut,self.natoms):
+	# 		self.offspring.append(self.clus2[j])
 
-		for j in range(cut,self.natoms):
-			self.offspring.append(self.clus2[j])
-
-		print self.offspring
+	# 	print self.offspring
 
 	def CutSplice(self):	
 
