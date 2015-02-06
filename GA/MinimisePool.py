@@ -119,7 +119,7 @@ class minPool:
 			output = DFTout(self.xyzNum,self.natoms)
 
 			if output.checkError():
-				self.genRandom()
+				self.restart()
 			else:
 				self.finalEnergy = output.getEnergy()
 				self.finalCoords = output.getCoords()
@@ -129,7 +129,7 @@ class minPool:
 				if check.exploded() == False:
 					self.updatePool()
 				else:
-					self.genRandom()
+					self.restart()
 
 	def doDFT(self):
 
@@ -166,7 +166,12 @@ class minPool:
 			,self.finalEnergy,self.finalCoords
 			,self.stride,self.vaspIN.box)
 
-	def genRandom(self):
+	def restart(self):
+
+		'''
+		Generate new random geometry
+		for restart.
+		'''
 
 		ranCoords=[]
 		scale=self.natoms**(1./3.)

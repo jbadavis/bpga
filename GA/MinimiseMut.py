@@ -168,7 +168,7 @@ class minMut:
 			output = DFTout(self.xyzNum,self.natoms)
 
 			if output.checkError():
-				self.genRandom()
+				self.restart()
 			else:
 				self.finalEnergy = output.getEnergy()
 				self.finalCoords = output.getCoords()
@@ -178,7 +178,7 @@ class minMut:
 				if check.exploded() == False:
 					self.updatePool()
 				else:
-					self.genRandom()
+					self.restart()
 
 	def doDFT(self):
 
