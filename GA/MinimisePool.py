@@ -46,7 +46,7 @@ class minPool:
 
 		self.strucNum = 0
 
-		time.sleep(ran.uniform(0.0,2.0))
+		# time.sleep(ran.uniform(0.0,2.0))
 			
 		db.lock()
 
@@ -144,6 +144,8 @@ class minPool:
 
 		base = os.environ["PWD"]
 		os.chdir(base+"/"+str(self.xyzNum))
+
+		self.subString += " > Output.dat"
 
 		exitcode = os.system(self.subString)
 
