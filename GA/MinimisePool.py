@@ -131,6 +131,10 @@ class minPool:
 				else:
 					self.restart()
 
+		else:
+
+			self.restart()
+
 	def doDFT(self):
 
 		'''
