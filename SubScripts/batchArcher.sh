@@ -10,6 +10,11 @@ cd $PBS_O_WORKDIR
 
 module load vasp5
 
+# Stops job if program crashes
+# and begins running on the 
+# launcher nodes. 
+ulimit -t 3600
+
 for i in {1..2}; do
   python Run.py &
   sleep 10
