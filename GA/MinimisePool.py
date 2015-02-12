@@ -145,8 +145,6 @@ class minPool:
 		base = os.environ["PWD"]
 		os.chdir(base+"/"+str(self.xyzNum))
 
-		self.subString += " > Output.dat"
-
 		exitcode = os.system(self.subString)
 
 		with open(base+"/exitcodes.dat","a") as exit:
