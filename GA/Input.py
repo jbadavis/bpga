@@ -7,20 +7,9 @@ Jack Davis
 4/11/14
 '''
 
+import sys
+
 from subprocess import check_output
-
-def hpc():
-
-	host = check_output(['hostname'])
-
-	if "bb2" in host:
-		return "bluebear"		
-	elif "hpclogin" in host:
-		return "minerva"
-	elif "mom" in host:
-		return "archer"
-	elif "MacBook" in host:
-		return "local"
 
 def masses(eleNames):
 
@@ -37,3 +26,13 @@ def masses(eleNames):
 		eleMasses.append(eles[sym])
 
 	return eleMasses
+
+def checkFiles():
+
+	inFiles = ["INCAR","POTCAR","KPOINTS"]
+
+	for File in inFiles:
+		try:
+			fd = open(File)
+		except IOError:
+			raise Exception("No "+File+" File!")

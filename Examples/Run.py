@@ -23,6 +23,8 @@ natoms = sum(eleNums)
 
 subString = "aprun -n 24 vasp5.gamma"
 
+In.checkFiles()
+
 '''
 If a pool.dat doesn't
 already exist, pop
