@@ -6,6 +6,8 @@ Jack Davis
 20/10/14
 '''
 
+import sys
+
 import os
 import random as ran
 
@@ -23,9 +25,9 @@ from Explode import checkClus
 class minMut: 
 
 	def __init__(self,natoms,r_ij
-		,mutType,eleNums,eleNames
-		,eleMasses,n,stride
-		,subString):
+				,mutType,eleNums,eleNames
+				,eleMasses,n,stride
+				,subString):
 
 		self.natoms = natoms
 		self.r_ij = r_ij
@@ -51,6 +53,8 @@ class minMut:
 			self.randomMutate()
 		elif self.mutType == "move":
 			self.moveMutate()
+		elif self.mutType == "homotop":
+			self.homotopSwap()
 
 		os.system("mkdir " + str(self.xyzNum))
 							
@@ -125,6 +129,52 @@ class minMut:
 			coords.append(float(z))
 
 		self.writeXYZ(coords)	
+
+	def homotopSwap(self):
+
+		'''
+		Select cluster 
+		from pool
+		'''
+
+		poolList = db.readPool()
+
+		ranStruc=ran.randrange(0,self.n)
+		ranPoolPos=ranStruc*self.stride
+
+		clus = poolList[ranPoolPos:ranPoolPos+self.stride]
+		clus = clus[2:]
+
+		'''
+		Make list of atoms.
+		'''
+
+		eleList = []
+
+		for line in clus:
+			ele,x,y,z = line.split()
+			eleList.append(ele)
+
+		'''
+		Shuffle the elements
+		making sure they don't 
+		stay the same.
+		'''
+
+	 	ran.shuffle(eleList)
+
+	 	'''
+	 	Print XYZ
+	 	'''
+
+	 	with open(str(self.xyzNum)+".xyz","w") as xyzFile:
+			xyzFile.write(str(self.natoms)+"\n")
+			xyzFile.write("Mutant\n")
+			for i in range(len(clus)):
+				ele,x,y,z = clus[i].split()
+				ele = eleList[i]
+				xyzLine = ele+" "+x+" "+y+" "+z+"\n"
+				xyzFile.write(xyzLine)
 
 	def moveRotate(self):
 
