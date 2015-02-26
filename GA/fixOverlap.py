@@ -24,11 +24,8 @@ def fixOverlap(coords):
 					coords[i] += diff
 					coords[i+1] += diff
 					coords[i+2] += diff
-					overlaped=True
 					break
-				else:
-					overlaped = False
-			if overlaped == True:
-				break	
+		else:
+			overlaped = False
 
 	return coords
