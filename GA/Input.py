@@ -9,8 +9,6 @@ Jack Davis
 
 import sys
 
-from subprocess import check_output
-
 def masses(eleNames):
 
 	eleMasses = []
