@@ -28,17 +28,17 @@ for (( i=0; i<=$natoms; i++)); do
 
   if [ $i -eq 0 ]; then
     eleNums="[$j]"
-    eleNames="[$eleB]"
+    eleNames="['$eleB']"
     mutType='"move"'
     cross='"weighted"'
   elif [ $j -eq 0 ]; then
     eleNums="[$i]"
-    eleNames="[$eleA]"
+    eleNames="['$eleA']"
     mutType='"move"'
     cross='"weighted"'
   else
     eleNums="[$i,$j]"
-    eleNames="[$eleA,$eleB]"
+    eleNames="['$eleA','$eleB']"
     mutType='"homotop"'
     cross='"bimetallic"'
   fi
