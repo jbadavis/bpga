@@ -22,12 +22,20 @@ from CoM import CoM
 
 from Explode import checkClus
 
+# Surface GA
+from SurfOpt import SurfOpt 
+from surfacePOSCAR import surfacePOSCAR 
+
+# Testing
+import sys
+
 class minPool:
 
 	def __init__(self,natoms,r_ij
 		,eleNums,eleNames
 		,eleMasses,n,stride
-		,subString):
+		,subString
+		,surface,surfGA):
 		
 		self.natoms = natoms
 		self.r_ij = r_ij
@@ -37,6 +45,16 @@ class minPool:
 		self.n = n
 		self.stride = stride
 		self.subString = subString
+
+		'''
+		Surface Object.
+		'''
+
+		self.surface = surface
+		self.surfGA = surfGA
+
+		''' --- ''' 
+
 
 		ran.seed()
 
@@ -99,11 +117,46 @@ class minPool:
 		stride=self.stride
 		
 		initialXYZ = self.poolList[strucNum-1:strucNum+stride-1]
+
+		''' 
+		Surface GA 
+
+		If true place on surface. 
+		 '''
+
+		if self.surfGA:
+
+			initialXYZ = CoM(initialXYZ[2:],self.eleNames,self.eleMasses)
+
+			SurfaceStruc = SurfOpt(initialXYZ,self.surface,self.eleNames)
+
+			initialXYZ = SurfaceStruc.placeClus()
 		
-		with open(str(self.xyzNum)+".xyz","w") as xyzFile:
-			for line in initialXYZ:
-				xyzFile.write(line)
+			''' --- ''' 
+
+			self.vaspIN = surfacePOSCAR(self.xyzNum,initialXYZ
+										,self.surface)
+
+			output = DFTout(self.xyzNum,self.natoms,self.surfGA)
+
+			print output.getCoords()
+
+		else: 
+
+			''' 
+			Write XYZ file for normal
+			non-surface calculation.
+			'''
+
+			with open(str(self.xyzNum)+".xyz","w") as xyzFile:
+				for line in initialXYZ:
+					xyzFile.write(line)
 	
+			self.vaspIN = DFTin(self.xyzNum,self.eleNames
+							,self.eleMasses,self.eleNums)
+
+		sys.exit()
+
 	def minimise(self):
 
 		'''
@@ -111,12 +164,9 @@ class minPool:
 		DFT calculation.
 		'''
 
-		self.vaspIN = DFTin(self.xyzNum,self.eleNames
-						,self.eleMasses,self.eleNums)
-
 		if self.doDFT() == 0:
 
-			output = DFTout(self.xyzNum,self.natoms)
+			output = DFTout(self.xyzNum,self.natoms,self.surfGA)
 
 			if output.checkError():
 				self.restart()

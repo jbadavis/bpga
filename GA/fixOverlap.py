@@ -29,3 +29,4 @@ def fixOverlap(coords):
 			overlaped = False
 
 	return coords
+

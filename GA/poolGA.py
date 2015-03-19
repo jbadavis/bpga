@@ -29,7 +29,9 @@ class poolGA:
 				,eleNums,eleNames
 				,eleMasses,mutate
 				,n,cross,mutType
-				,subString):
+				,subString
+				,surface
+				,surfGA):
 		
 		self.n = n
 		self.r_ij = r_ij
@@ -41,6 +43,15 @@ class poolGA:
 		self.cross = cross
 		self.mutType = mutType
 		self.subString = subString
+
+		'''
+		Surface Object.
+		'''
+
+		self.surface = surface
+		self.surfGA = surfGA
+
+		''' --- ''' 
 
 		self.stride = natoms + 2
 
@@ -55,7 +66,8 @@ class poolGA:
 			pool = minPool(self.natoms,self.r_ij
 				,self.eleNums,self.eleNames
 				,self.eleMasses,self.n
-				,self.stride,self.subString)
+				,self.stride,self.subString
+				,self.surface,self.surfGA)
 
 			notFinished = self.checkFinished()
 
