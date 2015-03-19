@@ -20,11 +20,11 @@ class MgO():
 
         self.lat = 4.212
 
-    def getSurf(self):
-
         self.genX()
         self.genY()
         self.genZ()
+
+    def getSurf(self): 
 
         return self.xyz
 
