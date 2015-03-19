@@ -25,6 +25,8 @@ class surfacePOSCAR():
         self.vac = surface.vac
         self.lat = surface.lat
 
+        self.box = 0.
+
         self.eleNums = []
 
         self.getSurfEle()
