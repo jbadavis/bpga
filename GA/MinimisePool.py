@@ -136,7 +136,7 @@ class minPool:
 
 			self.vaspIN = surfacePOSCAR(self.xyzNum,initialXYZ
 										,self.surface)
-			
+
 		else: 
 
 			''' 
@@ -150,8 +150,6 @@ class minPool:
 	
 			self.vaspIN = DFTin(self.xyzNum,self.eleNames
 							,self.eleMasses,self.eleNums)
-
-		sys.exit()
 
 	def minimise(self):
 
