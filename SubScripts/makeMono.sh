@@ -11,7 +11,7 @@ nFinish=20
 
 base=$PWD
 
-for (( i=$nstart; i=$nfinish; i++)); do
+for (( i=$nStart; i<=$nFinish; i++)); do
   dir="Au$i"
   mkdir $dir
   cp INCAR $dir
