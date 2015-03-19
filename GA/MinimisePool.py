@@ -136,11 +136,7 @@ class minPool:
 
 			self.vaspIN = surfacePOSCAR(self.xyzNum,initialXYZ
 										,self.surface)
-
-			output = DFTout(self.xyzNum,self.natoms,self.surfGA)
-
-			print output.getCoords()
-
+			
 		else: 
 
 			''' 
