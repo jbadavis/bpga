@@ -1,12 +1,17 @@
 '''
-Pool Genetic 
-Algorithm
+Birmingham Parallel Genetic Algorithm
 
-Surface Run
+A pool genetic algorithm for the
+structural characterisation of 
+nanoalloys.
 
-Jack Davis
+Please cite - 
+A. Shayeghi et al, PCCP, 2015, 17, 2104-2112
 
-10/10/14
+Authors -
+Jack Davis and the Johnston Group
+
+20/3/15
 '''
 
 from GA.pop import ranPool
