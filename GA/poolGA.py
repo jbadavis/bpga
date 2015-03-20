@@ -82,7 +82,8 @@ class poolGA:
 					,"random",self.eleNums
 					,self.eleNames,self.eleMasses
 					,self.n,self.stride
-					,self.subString)
+					,self.subString
+					,self.surface,self.surfGA)
 
 			else:
 				self.decide()
@@ -97,13 +98,15 @@ class poolGA:
 				,self.mutType,self.eleNums
 				,self.eleNames,self.eleMasses
 				,self.n,self.stride
-				,self.subString)
+				,self.subString
+				,self.surface,self.surfGA)
 		else:
 
 			off = minOff(self.natoms,self.eleNums
 				,self.eleNames,self.eleMasses
 				,self.n,self.cross,self.stride
-				,self.subString)
+				,self.subString
+				,self.surface,self.surfGA)
 
 	def checkRunning(self):
 

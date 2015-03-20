@@ -20,12 +20,21 @@ from CoM import CoM
 
 from Explode import checkClus
 
+# Surface GA
+from SurfOpt import SurfOpt 
+from surfacePOSCAR import surfacePOSCAR 
+
+# Testing
+import sys
+
+
 class minOff: 
 
 	def __init__(self,natoms,eleNums
 				,eleNames,eleMasses
 				,n,cross,stride
-				,subString):
+				,subString
+				,surface,surfGA):
 		
 		self.natoms = natoms
 		self.eleNames = eleNames
@@ -35,6 +44,15 @@ class minOff:
 		self.cross = cross
 		self.stride = stride
 		self.subString = subString
+
+		'''
+		Surface Object.
+		'''
+
+		self.surface = surface
+		self.surfGA = surfGA
+
+		''' --- ''' 
 		
 		self.runCalc()
 
@@ -82,36 +100,6 @@ class minOff:
 
 		self.minimise()
 
-	def produceOffspring(self):
-
-		noOverlap = True
-		noExplode = True 
-
-		while noOverlap:
-
-			newClus = cross(self.clus1,self.clus2
-							,self.eleNums,self.eleNames
-							,self.natoms,self.pair)
-
-			if self.cross == "random":
-				self.offspring = newClus.CutSpliceRandom()
-			elif self.cross == "weighted":
-				self.offspring = newClus.CutSpliceWeighted()
-			elif self.cross == "bimetallic":
-				self.offspring = newClus.CutSplice()
-
-			check = checkClus(self.natoms,self.offspring)
-			noExplode = check.exploded()
-			noOverlap = check.overlap()
-
-			self.findPair()
-
-		with open(str(self.xyzNum)+".xyz","w") as xyzFile:
-			xyzFile.write(str(self.natoms)+"\n")
-			xyzFile.write("Crossover"+"\n")
-			for line in self.offspring:
-				xyzFile.write(line)
-
 	def findPair(self):
 
 		'''
@@ -136,15 +124,70 @@ class minOff:
 
 		self.poolPos = [c1,c2]
 
+
+	def produceOffspring(self):
+
+		'''
+		Produces XYZ after 
+		crossover. 
+
+		- Overlap needs to changing! 
+
+		'''
+
+		noOverlap = True
+		noExplode = True 
+
+		while noOverlap:
+
+			newClus = cross(self.clus1,self.clus2
+							,self.eleNums,self.eleNames
+							,self.natoms,self.pair)
+
+			if self.cross == "random":
+				self.offspring = newClus.CutSpliceRandom()
+			elif self.cross == "weighted":
+				self.offspring = newClus.CutSpliceWeighted()
+			elif self.cross == "bimetallic":
+				self.offspring = newClus.CutSplice()
+
+			check = checkClus(self.natoms,self.offspring)
+			noExplode = check.exploded()
+			noOverlap = check.overlap()
+
+			self.findPair()
+
+		if self.surfGA:
+
+			initialXYZ = CoM(initialXYZ[2:],self.eleNames,self.eleMasses)
+
+			SurfaceStruc = SurfOpt(initialXYZ,self.surface,self.eleNames)
+
+			initialXYZ = SurfaceStruc.placeClus()
+		
+			''' --- ''' 
+
+			self.vaspIN = surfacePOSCAR(self.xyzNum,initialXYZ
+										,self.surface)
+
+		else:
+
+			with open(str(self.xyzNum)+".xyz","w") as xyzFile:
+				xyzFile.write(str(self.natoms)+"\n")
+				xyzFile.write("Crossover"+"\n")
+				for line in self.offspring:
+					xyzFile.write(line)
+
+			self.vaspIN = DFTin(self.xyzNum,self.eleNames
+							,self.eleMasses,self.eleNums)
+
+
 	def minimise(self):
 
 		'''
 		Start 
 		DFT calculation.
 		'''
-
-		self.vaspIN = DFTin(self.xyzNum,self.eleNames
-						,self.eleMasses,self.eleNums)
 
 		if self.doDFT() == 0:
 

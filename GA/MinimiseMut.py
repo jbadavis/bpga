@@ -10,6 +10,7 @@ import sys
 
 import os
 import random as ran
+import numpy as np
 
 import Database as db
 
@@ -22,12 +23,22 @@ from CoM import CoM
 from fixOverlap import fixOverlap
 from Explode import checkClus
 
+from Crossover import crossover
+
+# Surface GA
+from SurfOpt import SurfOpt 
+from surfacePOSCAR import surfacePOSCAR 
+
+# Testing
+import sys
+
 class minMut: 
 
 	def __init__(self,natoms,r_ij
 				,mutType,eleNums,eleNames
 				,eleMasses,n,stride
-				,subString):
+				,subString
+				,surface,surfGA):
 
 		self.natoms = natoms
 		self.r_ij = r_ij
@@ -39,6 +50,15 @@ class minMut:
 		self.stride = stride
 		self.subString = subString
 
+		'''
+		Surface Object.
+		'''
+
+		self.surface = surface
+		self.surfGA = surfGA
+
+		''' --- ''' 
+
 		ran.seed()
 
 		self.runCalc()
@@ -49,7 +69,14 @@ class minMut:
 
 		self.xyzNum = db.findLastDir() + 1
 
-		if self.mutType == "random":
+		'''
+		Mutation for surface GA followed
+		by gasphase operations. 
+		'''
+
+		if self.mutType == "surface" or self.surfGA:
+			self.surfMutate()
+		elif self.mutType == "random":
 			self.randomMutate()
 		elif self.mutType == "move":
 			self.moveMutate()
@@ -176,14 +203,45 @@ class minMut:
 				xyzLine = ele+" "+x+" "+y+" "+z+"\n"
 				xyzFile.write(xyzLine)
 
-	def moveRotate(self):
+	def surfMutate(self):
 
 		'''
-		Rotate half 
-		a cluster.
+		Rotate the cluster 
+		on a surface.
 		'''
 
-		pass
+		ranStruc=ran.randrange(0,self.n)
+		ranPoolPos=ranStruc*self.stride
+
+		poolList = db.readPool()
+
+		clus=poolList[ranPoolPos:ranPoolPos+self.stride]
+		clus=clus[2:]
+
+		theta = ran.uniform(0,np.pi*2)
+		phi = ran.uniform(0,np.pi)
+
+		rot11 = np.cos(phi)
+		rot12 = 0.0
+		rot13 = -np.sin(phi)
+		rot21 = np.sin(theta)*np.sin(phi)
+		rot22 = np.cos(theta)
+		rot23 = np.sin(theta)*np.cos(phi)
+		rot31 = np.cos(theta)*np.sin(phi)
+		rot32 = -np.sin(theta)
+		rot33 = np.cos(theta)*np.cos(phi)
+
+		for i in range(len(clus)):
+			ele, x, y, z = clus[i].split()
+			x, y, z = float(x), float(y), float(z)
+			rotX = str(rot11*x + rot12*y + rot13*z)
+			rotY = str(rot21*x + rot22*y + rot23*z)
+			rotZ = str(rot31*x + rot32*y + rot33*z)
+			# New line after rotation. 
+			newLine = ele+" " +rotX+" "+rotY+" "+rotZ+"\n"
+			clus[i] = newLine
+
+		self.initialXYZ = clus
 
 	def writeXYZ(self,coords):	
 
@@ -210,8 +268,34 @@ class minMut:
 		DFT calculation.
 		'''
 
-		self.vaspIN = DFTin(self.xyzNum,self.eleNames
-						,self.eleMasses,self.eleNums)
+		if self.surfGA:
+
+			'''
+			Surface.
+			'''
+
+			self.initialXYZ = CoM(self.initialXYZ,self.eleNames,self.eleMasses)
+
+			SurfaceStruc = SurfOpt(self.initialXYZ,self.surface,self.eleNames)
+
+			self.initialXYZ = SurfaceStruc.placeClus()
+		
+			''' --- ''' 
+
+			self.vaspIN = surfacePOSCAR(self.xyzNum,self.initialXYZ,self.surface)
+
+		else: 
+
+			''' 
+			Gasphase.
+
+			XYZ file is already written
+			- Should be changed! 
+
+			'''
+	
+			self.vaspIN = DFTin(self.xyzNum,self.eleNames
+							,self.eleMasses,self.eleNums)
 
 		if self.doDFT() == 0:
 

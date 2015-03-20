@@ -32,10 +32,10 @@ import sys
 class minPool:
 
 	def __init__(self,natoms,r_ij
-		,eleNums,eleNames
-		,eleMasses,n,stride
-		,subString
-		,surface,surfGA):
+				,eleNums,eleNames
+				,eleMasses,n,stride
+				,subString
+				,surface,surfGA):
 		
 		self.natoms = natoms
 		self.r_ij = r_ij
@@ -160,7 +160,7 @@ class minPool:
 
 		if self.doDFT() == 0:
 
-			output = DFTout(self.xyzNum,self.natoms,self.surfGA)
+			output = DFTout(self.xyzNum,self.natoms)
 
 			if output.checkError():
 				self.restart()

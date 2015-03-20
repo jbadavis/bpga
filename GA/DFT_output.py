@@ -16,17 +16,10 @@ class vasp_output:
 	VASP OUTCAR file
 	'''
 	
-	def __init__(self,calcNum,natoms,surfGA):
+	def __init__(self,calcNum,natoms):
 
 		self.calcNum = calcNum
 		self.natoms = int(natoms)
-
-		'''
-		If surface calc
-		return correct coords.
-		'''
-
-		self.surfGA = surfGA
 
 	def checkError(self):
 
@@ -67,13 +60,7 @@ class vasp_output:
 		main program
 		'''
 
-		if self.surfGA:
-
-			return self.gasCoords()
-
-		else:
-
-			return self.gasCoords()
+		return self.gasCoords()
 
 	def surfCoords(self):
 
