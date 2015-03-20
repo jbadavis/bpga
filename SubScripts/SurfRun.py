@@ -13,25 +13,10 @@ from GA.pop import ranPool
 from GA.poolGA import poolGA
 import GA.Input as In
 
-from GA.MgO import MgO
-
-''' Surface GA '''
-
-surfGA = True
-
-'''
-Define surface object.
-'''
-
-surface = MgO(x=4
-			,y=4
-			,z=2
-			,vac=6)
-
-''' --- ''' 
+from GA.MgO import MgO 
 
 npool = 10
-mutType = "move"
+mutType = "move" # move, random, homotop or surface. 
 cross = "weighted"
 mutate = 2
 r_ij = 3.0
@@ -42,7 +27,19 @@ natoms = sum(eleNums)
 
 subString = "aprun -n 24 vasp5.gamma > output.dat"
 
-# In.checkFiles()
+'''--- Surface GA ---'''
+
+surfGA = True
+
+'''
+Define surface object.
+'''
+
+surface = MgO(x=4,y=4,z=2,vac=6)
+
+''' ---------------- '''
+
+In.checkFiles()
 
 '''
 If a pool.dat doesn't
