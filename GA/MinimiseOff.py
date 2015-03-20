@@ -1,9 +1,20 @@
-''' 
-Minimiser
+'''
+Birmingham Parallel Genetic Algorithm
 
-Jack Davis
+A pool genetic algorithm for the
+structural characterisation of 
+nanoalloys.
 
-20/10/14
+Please cite - 
+A. Shayeghi et al, PCCP, 2015, 17, 2104-2112
+
+Authors -
+Jack Davis and the Johnston Group
+
+20/3/15
+
+--- Offspring Minimiser ---
+
 '''
 
 import os
@@ -159,15 +170,15 @@ class minOff:
 
 		if self.surfGA:
 
-			initialXYZ = CoM(initialXYZ[2:],self.eleNames,self.eleMasses)
+			self.offspring = CoM(self.offspring,self.eleNames,self.eleMasses)
 
-			SurfaceStruc = SurfOpt(initialXYZ,self.surface,self.eleNames)
+			SurfaceStruc = SurfOpt(self.offspring,self.surface,self.eleNames)
 
-			initialXYZ = SurfaceStruc.placeClus()
+			self.offspring = SurfaceStruc.placeClus()
 		
 			''' --- ''' 
 
-			self.vaspIN = surfacePOSCAR(self.xyzNum,initialXYZ
+			self.vaspIN = surfacePOSCAR(self.xyzNum,self.offspring
 										,self.surface)
 
 		else:
