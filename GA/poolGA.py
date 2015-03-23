@@ -12,6 +12,10 @@ Authors -
 Jack Davis and the Johnston Group
 
 13/2/15
+
+
+--- Main PoolGA Class ---  
+
 '''
 
 import os
