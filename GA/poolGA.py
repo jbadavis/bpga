@@ -94,9 +94,11 @@ class poolGA:
 
 	def decide(self):
 
-		choice = randrange(0,self.n)
+		mutateRate = self.mutate * self.n
 
-		if choice < self.mutate:
+		choice = uniform(0,self.n)
+
+		if choice < mutateRate:
 
 			off = minMut(self.natoms,self.r_ij
 				,self.mutType,self.eleNums
