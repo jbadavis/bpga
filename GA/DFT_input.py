@@ -56,10 +56,12 @@ class vasp_input:
 
 		for line in self.coords:
 			ele, x, y, z = line.split()
-			size.append(x)
-			size.append(y)
-			size.append(z)
-		self.box = abs(float(max(size))) + 10.0
+			size.append(abs(float(x)))
+			size.append(abs(float(y)))
+			size.append(abs(float(z)))
+		self.box = max(size) + 10.0
+
+		print self.box
 
 	def write_poscar(self):
 
