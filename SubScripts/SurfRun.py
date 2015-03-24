@@ -12,6 +12,9 @@ Authors -
 Jack Davis and the Johnston Group
 
 20/3/15
+
+--- BPGA Input file ---
+
 '''
 
 from GA.pop import ranPool
@@ -23,7 +26,7 @@ from GA.MgO import MgO
 npool = 10
 mutType = "move" # move, random, homotop or surface. 
 cross = "weighted"
-mutate = 2
+mutate = 0.2
 r_ij = 3.0
 eleNums = [4]
 eleNames = ["Au"]
