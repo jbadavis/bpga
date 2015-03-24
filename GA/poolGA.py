@@ -19,7 +19,7 @@ Jack Davis and the Johnston Group
 '''
 
 import os
-from random import randrange as randrange
+from random import randrange, uniform
 
 from MinimisePool import minPool
 from MinimiseOff import minOff
