@@ -1,12 +1,21 @@
-''' 
-Minimise Mutant
-
-Jack Davis
-
-20/10/14
 '''
+Birmingham Parallel Genetic Algorithm
 
-import sys
+A pool genetic algorithm for the
+structural characterisation of 
+nanoalloys.
+
+Please cite - 
+A. Shayeghi et al, PCCP, 2015, 17, 2104-2112
+
+Authors -
+Jack Davis and the Johnston Group
+
+20/3/15
+
+--- Mutant Minimiser ---
+
+'''
 
 import os
 import random as ran
