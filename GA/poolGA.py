@@ -63,8 +63,8 @@ class poolGA:
 
 	def runJobs(self):
 
-		notFinished = True
-
+		notFinished = self.checkFinished()
+		
 		while notFinished:
 
 			pool = minPool(self.natoms,self.r_ij

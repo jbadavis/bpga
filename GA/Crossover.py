@@ -11,28 +11,45 @@ import numpy as np
 import random as ran
 
 from checkPool import checkPool
+from CoM import CoM 
+
+import sys
 
 class crossover:
 
 	def __init__(self,clus1
-				,clus2,eleNums
-				,eleNames,natoms
+				,clus2
+				,eleNums
+				,eleNames
+				,natoms
 				,pair):
 
 		ran.seed()
-		
-		self.clus1 = clus1
-		self.clus2 = clus2
+
+		'''Convert list format '''
+		clus1 = self.convert(clus1)
+		clus2 = self.convert(clus2)
+
 		self.pair = [clus1,clus2]
+
 		self.eleNames = eleNames
 		self.eleNums = eleNums
 		self.natoms = natoms 
 		self.pairPos = pair
-		self.offspring = []
 
-		self.CheckComp()
-		# self.fitness()
+		''' Rotate and sort pair of clusters'''
 		self.prepare()
+
+	def convert(self,clus):
+
+		newClus=[]
+
+		for line in clus:
+			ele,x,y,z = line.split()
+			atom = [ele,float(x),float(y),float(z)]	
+			newClus.append(atom)
+
+		return newClus
 
 	def fitness(self):
 		
@@ -73,6 +90,8 @@ class crossover:
 		about random axis.
 		'''
 
+		rotClus=[]
+
 		theta = ran.uniform(0,np.pi*2)
 		phi = ran.uniform(0,np.pi)
 
@@ -86,17 +105,15 @@ class crossover:
 		rot32 = -np.sin(theta)
 		rot33 = np.cos(theta)*np.cos(phi)
 
-		for i in range(len(clus)):
-			ele, x, y, z = clus[i].split()
-			x, y, z = float(x), float(y), float(z)
+		for atom in clus:
+			ele, x, y, z = atom
 			rotX = rot11*x + rot12*y + rot13*z
 			rotY = rot21*x + rot22*y + rot23*z
 			rotZ = rot31*x + rot32*y + rot33*z
-			newLine = ele + " " + str(rotX) + " " \
-			+ str(rotY) + " " + str(rotZ) + "\n"
-			clus[i] = newLine
+			rotAtom = [ele,rotX,rotY,rotZ]
+			rotClus.append(rotAtom)
 
-		return clus
+		return rotClus
 
 	def sortZ(self,clus):
 
@@ -108,52 +125,67 @@ class crossover:
 		zList = []
 		sortedClus = []
 
-		for line in clus:
-			ele,x,y,z = line.split()
-			zList.append(float(z))
-			sortedZlist = sorted(zList)
+		for atom in clus:
+			ele,x,y,z = atom
+			zList.append(z)
 
-		sortedZlist = [str(i) for i in sortedZlist]
+		zList.sort()
 
-		for sortZ in sortedZlist:
-			for line in clus: 
-				ele,x,y,z = line.split()
-				if sortZ == z:
-					sortedClus.append(line)
+		for sortedZ in zList:
+			for atom in clus: 
+				ele,x,y,z = atom
+				if z == sortedZ:
+					sortedClus.append(atom)
 
 		return sortedClus
 
 	def CutSpliceRandom(self):	
 
-		# Monometallic
+		'''
+		Monometallic random 
+		crossover.
+		'''
+
+		offspring=[]
+
+		clus1 = self.pair[0]
+		clus2 = self.pair[1]
+
 		start = ran.randrange(self.natoms)
 
 		for i in range(start):
-			self.offspring.append(self.clus1[i])
+			offspring.append(clus1[i])
 
 		for j in range(start,self.natoms):
-			self.offspring.append(self.clus2[j])
+			offspring.append(clus2[j])
 
-		return self.offspring
+		return offspring
 
 	def CutSpliceWeighted(self):
 
+		'''
+		Monometallic weighted crossover.
+		'''
+
 		self.fitness()
 
-		# Monometallic
+		offspring=[]
+
 		fit1 = self.fitPair[0]
 		fit2 = self.fitPair[1]
 
-		start = self.natoms*(fit1/(fit1+fit2))
-		start = int(start)
+		clus1 = self.pair[0]
+		clus2 = self.pair[1]
+
+		start = int(self.natoms*(fit1/(fit1+fit2)))
 
 		for i in range(start):
-			self.offspring.append(self.clus1[i])
+			offspring.append(clus1[i])
 
 		for j in range(start,self.natoms):
-			self.offspring.append(self.clus2[j])
+			offspring.append(clus2[j])
 
-		return self.offspring
+		return offspring
 
 	# def BiCutSpliceWeighted(self):
 
@@ -175,86 +207,90 @@ class crossover:
 
 	def CutSplice(self):	
 
-		# Monometallic
-		if len(self.eleNum) == 1:
-			if self.eleNum[0] % 2 == 0:
-				c1_na = int(self.eleNum[0]) / 2
-				c2_na = int(self.eleNum[0]) / 2
-			elif self.eleNum[0] % 2 == 1:
-				c1_na = int(self.eleNum[0]) / 2
-				c2_na = int(self.eleNum[0]) / 2 + 1
+		# if len(self.eleNum) == 1:
+		# 	if self.eleNum[0] % 2 == 0:
+		# 		c1_na = int(self.eleNum[0]) / 2
+		# 		c2_na = int(self.eleNum[0]) / 2
+		# 	elif self.eleNum[0] % 2 == 1:
+		# 		c1_na = int(self.eleNum[0]) / 2
+		# 		c2_na = int(self.eleNum[0]) / 2 + 1
 
+		# 	start = 0 
+		# 	counter = 0
+		# 	for j in range(c1_na):
+		# 		for line in self.clus1[start:]:
+		# 			counter += 1
+		# 			ele,x,y,z = line.split()
+		# 			if ele == self.eleName[0]:
+		# 				self.offspring.append(line)
+		# 				start = counter
+		# 				break
+
+		# 	start = 0 
+		# 	counter = 0
+		# 	for j in range(c2_na):
+		# 		for line in self.clus2[start:]:
+		# 			counter += 1
+		# 			ele,x,y,z = line.split()
+		# 			if ele == self.eleName[0]:
+		# 				self.offspring.append(line)
+		# 				start = counter
+		# 				break
+
+		''' Bimetallic Crossover. '''
+
+		offspring = []
+
+		clus1 = self.pair[0]
+		clus2 = self.pair[1]
+
+		if self.eleNums[0] % 2 == 0 and self.eleNums[1] % 2 == 0:
+			c1_na = int(self.eleNums[0]) / 2
+			c1_nb = int(self.eleNums[1]) / 2
+			c2_na = int(self.eleNums[0]) / 2
+			c2_nb = int(self.eleNums[1]) / 2
+		elif self.eleNums[0] % 2 == 0 and self.eleNums[1] % 2 == 1:
+			c1_na = int(self.eleNums[0]) / 2
+			c1_nb = int(self.eleNums[1]) / 2
+			c2_na = int(self.eleNums[0]) / 2
+			c2_nb = int(self.eleNums[1]) / 2 + 1
+		elif self.eleNums[0] % 2 == 1 and self.eleNums[1] % 2 == 0:
+			c1_na = int(self.eleNums[0]) / 2
+			c1_nb = int(self.eleNums[1]) / 2
+			c2_na = int(self.eleNums[0]) / 2 + 1
+			c2_nb = int(self.eleNums[1]) / 2
+		elif self.eleNums[0] % 2 == 1 and self.eleNums[1] % 2 == 1:
+			c1_na = int(self.eleNums[0]) / 2
+			c1_nb = int(self.eleNums[1]) / 2
+			c2_na = int(self.eleNums[0]) / 2 + 1
+			c2_nb = int(self.eleNums[1]) / 2 + 1
+
+		c1_nab = [c1_na,c1_nb]
+		c2_nab = [c2_na,c2_nb]
+	
+		for i in range(2):
 			start = 0 
 			counter = 0
-			for j in range(c1_na):
-				for line in self.clus1[start:]:
+			for j in range(c1_nab[i]):
+				for atom in clus1[start:]:
 					counter += 1
-					ele,x,y,z = line.split()
-					if ele == self.eleName[0]:
-						self.offspring.append(line)
+					ele,x,y,z = atom
+					if ele == self.eleNames[i]:
+						offspring.append(atom)
 						start = counter
 						break
 
+		for i in range(2):
 			start = 0 
 			counter = 0
-			for j in range(c2_na):
-				for line in self.clus2[start:]:
+			for j in range(c2_nab[i]):
+				for atom in clus2[start:]:
 					counter += 1
-					ele,x,y,z = line.split()
-					if ele == self.eleName[0]:
-						self.offspring.append(line)
+					ele,x,y,z = atom
+					if ele == self.eleNames[i]:
+						offspring.append(atom)
 						start = counter
 						break
-
-		# Bimetallic
-		elif len(self.eleNum) == 2: 
-			if self.eleNum[0] % 2 == 0 and self.eleNum[1] % 2 == 0:
-				c1_na = int(self.eleNum[0]) / 2
-				c1_nb = int(self.eleNum[1]) / 2
-				c2_na = int(self.eleNum[0]) / 2
-				c2_nb = int(self.eleNum[1]) / 2
-			elif self.eleNum[0] % 2 == 0 and self.eleNum[1] % 2 == 1:
-				c1_na = int(self.eleNum[0]) / 2
-				c1_nb = int(self.eleNum[1]) / 2
-				c2_na = int(self.eleNum[0]) / 2
-				c2_nb = int(self.eleNum[1]) / 2 + 1
-			elif self.eleNum[0] % 2 == 1 and self.eleNum[1] % 2 == 0:
-				c1_na = int(self.eleNum[0]) / 2
-				c1_nb = int(self.eleNum[1]) / 2
-				c2_na = int(self.eleNum[0]) / 2 + 1
-				c2_nb = int(self.eleNum[1]) / 2
-			elif self.eleNum[0] % 2 == 1 and self.eleNum[1] % 2 == 1:
-				c1_na = int(self.eleNum[0]) / 2
-				c1_nb = int(self.eleNum[1]) / 2
-				c2_na = int(self.eleNum[0]) / 2 + 1
-				c2_nb = int(self.eleNum[1]) / 2 + 1
-
-			c1_nab = [c1_na,c1_nb]
-			c2_nab = [c2_na,c2_nb]
-		
-			for i in range(2):
-				start = 0 
-				counter = 0
-				for j in range(c1_nab[i]):
-					for line in self.clus1[start:]:
-						counter += 1
-						ele,x,y,z = line.split()
-						if ele == self.eleName[i]:
-							self.offspring.append(line)
-							start = counter
-							break
-
-			for i in range(2):
-				start = 0 
-				counter = 0
-				for j in range(c2_nab[i]):
-					for line in self.clus2[start:]:
-						counter += 1
-						ele,x,y,z = line.split()
-						if ele == self.eleName[i]:
-							self.offspring.append(line)
-							start = counter
-							break
 
 		'''
 		Sort offspring
@@ -263,32 +299,32 @@ class crossover:
 
 		sortOffspring = []
 
-		for element in self.eleName:
-			for line in self.offspring:
-				ele,x,y,z = line.split()
+		for element in self.eleNames:
+			for atom in offspring:
+				ele,x,y,z = atom
 				if ele == element:
-					sortOffspring.append(line)
+					sortOffspring.append(atom)
 
-		self.offspring = sortOffspring
+		offspring = sortOffspring
 
-		return self.offspring
-						
-	def CheckComp(self):
+		return offspring
+					
+	# def CheckComp(self):
 
-		self.eleName = []
-		self.eleNum = []
+	# 	self.eleName = []
+	# 	self.eleNum = []
 
-		# Element types
-		for i in range(len(self.clus1)):
-			ele,x,y,z = self.clus1[i].split()
-			if ele not in self.eleName:
-				self.eleName.append(ele)
+	# 	# Element types
+	# 	for i in range(len(self.clus1)):
+	# 		ele,x,y,z = self.clus1[i].split()
+	# 		if ele not in self.eleName:
+	# 			self.eleName.append(ele)
 
-		# Element numbers
-		for element in self.eleName: 
-			counter = 0
-			for line in self.clus1: 
-				ele,x,y,z = line.split()
-				if element == ele:
-					counter += 1
-			self.eleNum.append(int(counter))
+	# 	# Element numbers
+	# 	for element in self.eleName: 
+	# 		counter = 0
+	# 		for line in self.clus1: 
+	# 			ele,x,y,z = line.split()
+	# 			if element == ele:
+	# 				counter += 1
+	# 		self.eleNum.append(int(counter))

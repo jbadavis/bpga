@@ -123,8 +123,18 @@ class minMut:
 
 		coords=[]
 
-		for i in range(self.natoms*3):
-			coords.append(ran.uniform(0,1)*self.r_ij*scale) 
+		for i in range(len(self.eleNames)):
+			for j in range(self.eleNums[i]):
+
+				ele = self.eleNames[i]
+
+				x = ran.uniform(0,1)*self.r_ij*scale
+				y = ran.uniform(0,1)*self.r_ij*scale
+				z = ran.uniform(0,1)*self.r_ij*scale
+
+				atom = [ele,x,y,z]
+
+				coords.append(atom)
 
 		self.writeXYZ(coords)
 
@@ -160,9 +170,8 @@ class minMut:
 
 		for line in clus:
 			ele,x,y,z = line.split()
-			coords.append(float(x))
-			coords.append(float(y))
-			coords.append(float(z))
+			atom = [ele,float(x),float(y),float(z)]
+			coords.append(atom)
 
 		self.writeXYZ(coords)	
 
@@ -254,21 +263,15 @@ class minMut:
 
 	def writeXYZ(self,coords):	
 
-		coordsFix = fixOverlap(coords)
-		coordsFix = [coordsFix[i:i + 3] for i in range(0, len(coordsFix), 3)]
+		coords = fixOverlap(coords)
 
 		with open(str(self.xyzNum)+".xyz","w") as xyzFile:
-			c = 0
 			xyzFile.write(str(self.natoms)+"\n")
 			xyzFile.write("Mutant\n")
-			for i in range(len(self.eleNames)):
-				for j in range(self.eleNums[i]):
-					xyz = coordsFix[c]
-					xyz = [str(k) for k in xyz]
-					xyzLine = xyz[0]+" "+xyz[1]+" "+xyz[2]+"\n"
-					xyzlineEle = self.eleNames[i] + " " + xyzLine
-					xyzFile.write(xyzlineEle)
-					c += 1	
+			for atom in coords:
+				ele,x,y,z = atom
+				xyzLine = ele+" "+str(x)+" "+str(y)+" "+str(z)+"\n"
+				xyzFile.write(xyzLine)
 
 	def minimise(self):
 

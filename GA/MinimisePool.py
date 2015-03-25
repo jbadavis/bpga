@@ -63,8 +63,6 @@ class minPool:
 	def findStruc(self):
 
 		self.strucNum = 0
-
-		# time.sleep(ran.uniform(0.0,2.0))
 			
 		db.lock()
 

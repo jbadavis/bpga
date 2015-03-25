@@ -46,13 +46,9 @@ class ranPool:
         database.
         '''
 
-        coords=[]
+        # coords=[]
 
         scale = self.natoms**(1./3.)
-
-        for i in range(self.nstrucs):
-            for j in range(self.natoms*3):
-                coords.append(ran.uniform(0,1)*self.r_ij*scale) 
 
         '''
         Generate list of
@@ -70,24 +66,29 @@ class ranPool:
         '''
 
         with open("pool.dat","w") as poolFile:
+
             for i in range(self.nstrucs):
+
+                coords = []
+
+                for j in range(self.natoms):
+                    x = ran.uniform(0,1)*self.r_ij*scale
+                    y = ran.uniform(0,1)*self.r_ij*scale
+                    z = ran.uniform(0,1)*self.r_ij*scale
+                    atom = [eleList[j],x,y,z]
+                    coords.append(atom)
+
+                coords = fixOverlap(coords)
+
 
                 poolFile.write(str(self.natoms)+"\n")
                 poolFile.write("NotMinimised\n")
 
-                start = i * self.natoms*3
-                finish = start + self.natoms*3
-                clus = coords[start:finish]
-                
-                clus = fixOverlap(clus)
-                clus = [str(i) for i in clus]
+                for j in range(0,len(coords)):
 
-                for j in range(0,len(clus),3):
+                    ele,x,y,z = coords[j]
 
-                    ele = eleList[j/3]
-                    x = str(clus[j])
-                    y = str(clus[j+1])
-                    z = str(clus[j+2])
+                    line = ele+" "+str(x)+" "+str(y)+" "+str(z)+"\n"
 
-                    poolFile.write(ele+" "+x+" "+" "+y+" "+z+"\n")
+                    poolFile.write(line)
                     
