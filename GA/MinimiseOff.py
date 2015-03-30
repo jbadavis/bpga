@@ -30,6 +30,7 @@ from checkPool import checkPool as checkPool
 from CoM import CoM 
 
 from Explode import checkClus
+from fixOverlap import fixOverlap
 
 # Surface GA
 from SurfOpt import SurfOpt 
@@ -146,27 +147,18 @@ class minOff:
 
 		'''
 
-		noOverlap = True
-		noExplode = True 
+		newClus = cross(self.clus1,self.clus2
+						,self.eleNums,self.eleNames
+						,self.natoms,self.pair)
 
-		while noOverlap:
+		if self.cross == "random":
+			self.offspring = newClus.CutSpliceRandom()
+		elif self.cross == "weighted":
+			self.offspring = newClus.CutSpliceWeighted()
+		elif self.cross == "bimetallic":
+			self.offspring = newClus.CutSplice()
 
-			newClus = cross(self.clus1,self.clus2
-							,self.eleNums,self.eleNames
-							,self.natoms,self.pair)
-
-			if self.cross == "random":
-				self.offspring = newClus.CutSpliceRandom()
-			elif self.cross == "weighted":
-				self.offspring = newClus.CutSpliceWeighted()
-			elif self.cross == "bimetallic":
-				self.offspring = newClus.CutSplice()
-
-			check = checkClus(self.natoms,self.offspring)
-			noExplode = check.exploded()
-			noOverlap = check.overlap()
-
-			self.findPair()
+		self.offspring = fixOverlap(self.offspring)
 
 		if self.surfGA:
 
@@ -186,8 +178,10 @@ class minOff:
 			with open(str(self.xyzNum)+".xyz","w") as xyzFile:
 				xyzFile.write(str(self.natoms)+"\n")
 				xyzFile.write("Crossover"+"\n")
-				for line in self.offspring:
-					xyzFile.write(line)
+				for atom in self.offspring:
+					ele,x,y,z = atom 
+					xyzLine = ele+" "+str(x)+" "+str(y)+" "+str(z)+"\n"
+					xyzFile.write(xyzLine)
 
 			self.vaspIN = DFTin(self.xyzNum,self.eleNames
 							,self.eleMasses,self.eleNums)
@@ -236,22 +230,6 @@ class minOff:
 		os.chdir(base)
 
 		return exitcode
-
-	# def runDFT(self):
-
-	# 	run = DFTsub(self.hpc,self.xyzNum,self.mpitasks)
-	# 	self.vaspOUT = DFTout(self.xyzNum,self.natoms)
-
-	# 	check = checkClus(self.natoms,self.vaspOUT.final_coords)
-
-	# 	if self.vaspOUT.error:
-	# 		print "*- Error in VASP Calculation -*"
-	# 		self.restart()
-	# 	elif check.exploded():
-	# 		print "*- Cluster Exploded! -*"
-	# 		self.restart()
-	# 	else:
-	# 		self.updatePool()
 
 	def updatePool(self):
 
