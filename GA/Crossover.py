@@ -17,7 +17,8 @@ import sys
 
 class crossover:
 
-	def __init__(self,clus1
+	def __init__(self
+				,clus1
 				,clus2
 				,eleNums
 				,eleNames
@@ -187,55 +188,7 @@ class crossover:
 
 		return offspring
 
-	# def BiCutSpliceWeighted(self):
-
-	# 	self.fitness()
-
-	# 	fit1 = self.fitPair[0]
-	# 	fit2 = self.fitPair[1]
-
-	# 	cut = self.natoms*(fit1/(fit1+fit2))
-	# 	cut = int(cut)
-
-	# 	for i in range(cut):
-	# 		self.offspring.append(self.clus1[i])
-
-	# 	for j in range(cut,self.natoms):
-	# 		self.offspring.append(self.clus2[j])
-
-	# 	print self.offspring
-
-	def CutSplice(self):	
-
-		# if len(self.eleNum) == 1:
-		# 	if self.eleNum[0] % 2 == 0:
-		# 		c1_na = int(self.eleNum[0]) / 2
-		# 		c2_na = int(self.eleNum[0]) / 2
-		# 	elif self.eleNum[0] % 2 == 1:
-		# 		c1_na = int(self.eleNum[0]) / 2
-		# 		c2_na = int(self.eleNum[0]) / 2 + 1
-
-		# 	start = 0 
-		# 	counter = 0
-		# 	for j in range(c1_na):
-		# 		for line in self.clus1[start:]:
-		# 			counter += 1
-		# 			ele,x,y,z = line.split()
-		# 			if ele == self.eleName[0]:
-		# 				self.offspring.append(line)
-		# 				start = counter
-		# 				break
-
-		# 	start = 0 
-		# 	counter = 0
-		# 	for j in range(c2_na):
-		# 		for line in self.clus2[start:]:
-		# 			counter += 1
-		# 			ele,x,y,z = line.split()
-		# 			if ele == self.eleName[0]:
-		# 				self.offspring.append(line)
-		# 				start = counter
-		# 				break
+	def CutSpliceBimetallic(self):	
 
 		''' Bimetallic Crossover. '''
 
@@ -308,23 +261,3 @@ class crossover:
 		offspring = sortOffspring
 
 		return offspring
-					
-	# def CheckComp(self):
-
-	# 	self.eleName = []
-	# 	self.eleNum = []
-
-	# 	# Element types
-	# 	for i in range(len(self.clus1)):
-	# 		ele,x,y,z = self.clus1[i].split()
-	# 		if ele not in self.eleName:
-	# 			self.eleName.append(ele)
-
-	# 	# Element numbers
-	# 	for element in self.eleName: 
-	# 		counter = 0
-	# 		for line in self.clus1: 
-	# 			ele,x,y,z = line.split()
-	# 			if element == ele:
-	# 				counter += 1
-	# 		self.eleNum.append(int(counter))

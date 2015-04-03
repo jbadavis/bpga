@@ -156,7 +156,7 @@ class minOff:
 		elif self.cross == "weighted":
 			self.offspring = newClus.CutSpliceWeighted()
 		elif self.cross == "bimetallic":
-			self.offspring = newClus.CutSplice()
+			self.offspring = newClus.CutSpliceBimetallic()
 
 		self.offspring = fixOverlap(self.offspring)
 
