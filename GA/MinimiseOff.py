@@ -52,7 +52,7 @@ class minOff:
 		self.eleNames = eleNames
 		self.eleMasses = eleMasses
 		self.eleNums = eleNums
-		self.n = n
+		self.nPool = n
 		self.cross = cross
 		self.stride = stride
 		self.subString = subString
@@ -122,7 +122,7 @@ class minOff:
 		'''
 
 		# Select random pair 
-		selectPair = select(self.n)
+		selectPair = select(self.nPool)
 		self.pair = selectPair.pair
 
 		#Postions of pair in poollist
@@ -142,9 +142,6 @@ class minOff:
 		'''
 		Produces XYZ after 
 		crossover. 
-
-		- Overlap needs to changing! 
-
 		'''
 
 		newClus = cross(self.clus1,self.clus2
@@ -245,4 +242,3 @@ class minOff:
 				self.eleNames,self.eleMasses
 				,self.finalEnergy,self.finalCoords
 				,self.stride,self.vaspIN.box)
-
