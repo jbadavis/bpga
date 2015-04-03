@@ -46,8 +46,6 @@ class ranPool:
         database.
         '''
 
-        # coords=[]
-
         scale = self.natoms**(1./3.)
 
         '''
