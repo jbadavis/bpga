@@ -16,13 +16,15 @@ from Explode import checkClus
 
 class ranPool:
 
-    def __init__(self,n,r_ij
+    def __init__(self
+                ,nPool
+                ,r_ij
                 ,eleNums
                 ,eleNames):
 
         ran.seed()
 
-        self.nstrucs = n
+        self.nPool = nPool
         self.r_ij = r_ij
         self.natoms = 0
         self.eleNums = eleNums
@@ -65,7 +67,7 @@ class ranPool:
 
         with open("pool.dat","w") as poolFile:
 
-            for i in range(self.nstrucs):
+            for i in range(self.nPool):
 
                 coords = []
 

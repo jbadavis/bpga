@@ -27,17 +27,19 @@ from MinimiseMut import minMut
 from Select import tournamentSelect as select
 from checkPool import checkPool as checkPool
 
+import sys
+
 class poolGA:
 
 	def __init__(self,natoms,r_ij
 				,eleNums,eleNames
 				,eleMasses,mutate
-				,n,cross,mutType
+				,nPool,cross,mutType
 				,subString
 				,surface
 				,surfGA):
 		
-		self.n = n
+		self.nPool = nPool
 		self.r_ij = r_ij
 		self.mutate = mutate
 		self.natoms = natoms
@@ -68,24 +70,32 @@ class poolGA:
 		while notFinished:
 
 			pool = minPool(self.natoms,self.r_ij
-				,self.eleNums,self.eleNames
-				,self.eleMasses,self.n
-				,self.stride,self.subString
-				,self.surface,self.surfGA)
+					,self.eleNums,self.eleNames
+					,self.eleMasses,self.nPool
+					,self.stride,self.subString
+					,self.surface,self.surfGA)
 
 			notFinished = self.checkFinished()
 
-		for i in range(self.n,self.n+1000):
+		sys.exit()
+
+		for i in range(self.nPool,self.nPool+1000):
 
 			check = checkPool()
 			converged = check.Convergence()
 
 			if self.checkRunning():
+
+				''' 
+				If no new strucs are available
+				and the some are still running
+				allow the pool to grow.
+				'''
 				
 				off = minMut(self.natoms,self.r_ij
 					,"random",self.eleNums
 					,self.eleNames,self.eleMasses
-					,self.n,self.stride
+					,self.nPool,self.stride
 					,self.subString
 					,self.surface,self.surfGA)
 
@@ -94,23 +104,23 @@ class poolGA:
 
 	def decide(self):
 
-		mutateRate = self.mutate * self.n
+		mutateRate = self.mutate * self.nPool
 
-		choice = uniform(0,self.n)
+		choice = uniform(0,self.nPool)
 
 		if choice < mutateRate:
 
 			off = minMut(self.natoms,self.r_ij
 				,self.mutType,self.eleNums
 				,self.eleNames,self.eleMasses
-				,self.n,self.stride
+				,self.nPool,self.stride
 				,self.subString
 				,self.surface,self.surfGA)
 		else:
 
 			off = minOff(self.natoms,self.eleNums
 				,self.eleNames,self.eleMasses
-				,self.n,self.cross,self.stride
+				,self.nPool,self.cross,self.stride
 				,self.subString
 				,self.surface,self.surfGA)
 
