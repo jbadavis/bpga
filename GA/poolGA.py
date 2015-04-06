@@ -77,8 +77,6 @@ class poolGA:
 
 			notFinished = self.checkFinished()
 
-		sys.exit()
-
 		for i in range(self.nPool,self.nPool+1000):
 
 			check = checkPool()
