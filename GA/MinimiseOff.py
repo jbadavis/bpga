@@ -44,7 +44,7 @@ class minOff:
 
 	def __init__(self,natoms,eleNums
 				,eleNames,eleMasses
-				,n,cross,stride
+				,nPool,cross,stride
 				,subString
 				,surface,surfGA):
 		
@@ -52,7 +52,7 @@ class minOff:
 		self.eleNames = eleNames
 		self.eleMasses = eleMasses
 		self.eleNums = eleNums
-		self.nPool = n
+		self.nPool = nPool
 		self.cross = cross
 		self.stride = stride
 		self.subString = subString
