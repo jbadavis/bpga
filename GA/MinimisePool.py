@@ -19,6 +19,7 @@ from Select import tournamentSelect as select
 from Crossover import crossover as cross 
 from checkPool import checkPool as checkPool
 from CoM import CoM 
+from fixOverlap import fixOverlap
 
 from Explode import checkClus
 
@@ -216,19 +217,41 @@ class minPool:
 
 		'''
 		Generate new random geometry
-		for restart.
+		and update pool for restart.
 		'''
 
-		ranCoords=[]
+		coords=[]
+
 		scale=self.natoms**(1./3.)
 
-		for i in range(self.natoms*3):
-			ranCoords.append(ran.uniform(0,1)*self.r_ij*scale) 
+		for i in range(len(self.eleNames)):
+			for j in range(self.eleNums[i]):
 
-		finalEnergy = 0.0
+				ele = self.eleNames[i]
+
+				x = ran.uniform(0,1)*self.r_ij*scale
+				y = ran.uniform(0,1)*self.r_ij*scale
+				z = ran.uniform(0,1)*self.r_ij*scale
+
+				atom = [ele,x,y,z]
+
+				coords.append(atom)
+
+		coords = fixOverlap(coords)
+
+		''' 
+		Remove element name 
+		after fix.
+		'''
+
+		for i in range(len(coords)):
+
+			coords[i].pop(0)
+
+		finalEnergy = 0.
 
 		db.updatePool("Restart"
 			,self.strucNum,self.eleNums
 			,self.eleNames,self.eleMasses
-			,finalEnergy,ranCoords
+			,finalEnergy,coords
 			,self.stride,self.vaspIN.box)
