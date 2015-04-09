@@ -13,9 +13,9 @@ from CoM import CoM
 global fd
 
 def updatePool(upType,strucNum
-	,eleNums,eleNames,eleMasses
-	,finalEn,finalCoords
-	,stride,box):
+		,eleNums,eleNames,eleMasses
+		,finalEn,finalCoords
+		,stride,box):
 
 	'''
 	After completion take
@@ -29,7 +29,8 @@ def updatePool(upType,strucNum
 	poolList = readPool()
 
 	coordsEle=addEle(upType,finalCoords
-		,eleNums,eleNames,eleMasses,box)
+					,eleNums,eleNames
+					,eleMasses,box)
 
 	poolList[strucNum+1:strucNum+stride-1]=coordsEle
 
@@ -55,6 +56,11 @@ def addEle(upType,coords
 
 	eleList=[]
 	coordsEle=[]
+
+	'''
+	For VASP output in
+	centre of bounding box.
+	'''
 
 	if "Finish" in upType:
 		coords = [float(i) - box/2 for i in coords]
