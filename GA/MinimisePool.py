@@ -56,7 +56,6 @@ class minPool:
 
 		''' --- ''' 
 
-
 		ran.seed()
 
 		self.findStruc()
@@ -244,9 +243,24 @@ class minPool:
 		after fix.
 		'''
 
+		tempCoords=[]
+
+		'''
+		Remove elements and change 
+		formating for update pool function. 
+		'''
+
 		for i in range(len(coords)):
 
 			coords[i].pop(0)
+
+			x,y,z = coords[i]
+
+			tempCoords.append(x)
+			tempCoords.append(y)
+			tempCoords.append(z)
+
+		coords = tempCoords
 
 		finalEnergy = 0.
 
