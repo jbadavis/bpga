@@ -1,6 +1,6 @@
 # README #
 
-Birmingham Parallel Genetic Algorithm (BPGA).
+# Birmingham Parallel Genetic Algorithm (BPGA).
 
 ### Installation ###
 
