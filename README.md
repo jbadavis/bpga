@@ -1,5 +1,4 @@
 # README #
-
 # Birmingham Parallel Genetic Algorithm (BPGA).
 
 ### Installation ###
@@ -9,7 +8,7 @@ Open your ~/.bashrc file and add the following line -
 ```
 #!shell
 
-export PYTHONPATH=$PYTHONPATH:~/parallelbcga
+export PYTHONPATH=$PYTHONPATH:~/bpga
 ```
 
 ### Serial Jobs ###
