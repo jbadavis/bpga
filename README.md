@@ -1,6 +1,6 @@
 # README #
 
-Birmingham Parallel Pool GA (PPGA).
+Birmingham Parallel Genetic Algorithm (BPGA).
 
 ### Installation ###
 
