@@ -1,27 +1,51 @@
 '''
-Pool Genetic 
-Algorithm
+Birmingham Parallel Genetic Algorithm
 
-Jack Davis
+A pool genetic algorithm for the
+structural characterisation of 
+nanoalloys.
 
-10/10/14
+Please cite - 
+A. Shayeghi et al, PCCP, 2015, 17, 2104-2112
+
+Authors -
+Jack Davis and the Johnston Group
+
+20/3/15
+
+--- BPGA Input file ---
+
 '''
 
 from GA.pop import ranPool
 from GA.poolGA import poolGA
 import GA.Input as In
 
+from GA.MgO import MgO 
+
 npool = 10
-mutType = "move"
-cross = "weighted"
-mutate = 2
+mutType = "homotop" # move, random, homotop or surface. 
+cross = "bimetallic" # random, weighted or bimetallic 
+mutate = 0.1
 r_ij = 3.0
-eleNums = [4,4]
-eleNames = ["Pt","Rh"]
+eleNums = [2,2]
+eleNames = ["Au","Ir"]
 eleMasses = In.masses(eleNames)
 natoms = sum(eleNums)
 
 subString = "aprun -n 24 vasp5.gamma > output.dat"
+
+'''--- Surface GA ---'''
+
+surfGA = False
+
+'''
+Define surface object.
+'''
+
+surface = MgO(x=4,y=4,z=2,vac=6)
+
+''' ---------------- '''
 
 In.checkFiles()
 
@@ -41,4 +65,5 @@ then producing offspring.
 
 StartCalc = poolGA(natoms,r_ij,eleNums
     ,eleNames,eleMasses,mutate,npool
-    ,cross,mutType,subString)
+    ,cross,mutType,subString
+    ,surface,surfGA)
