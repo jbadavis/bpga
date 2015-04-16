@@ -14,6 +14,8 @@ def fixOverlap(coords):
 
 	while overlaped:
 
+		overlaped = False
+
 		for i in range(len(coords)):
 			for j in range(len(coords)):
 
@@ -23,15 +25,15 @@ def fixOverlap(coords):
 
 				r=(np.sqrt((x**2)+(y**2)+(z**2)))
 
-				if r < .9 and r != 0:
+				if float("{0:.1f}".format(r)) < .9 and r != 0:
 					
 					diff = .9 - r
 					coords[i][1] += diff
 					coords[i][2] += diff
 					coords[i][3] += diff
-					break
 
-		else:
-			overlaped = False
+					overlaped = True
+
+					break
 
 	return coords
