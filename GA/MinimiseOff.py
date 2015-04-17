@@ -149,7 +149,10 @@ class minOff:
 						,self.natoms,self.pair)
 
 		if self.cross == "random":
-			self.offspring = newClus.CutSpliceRandom()
+			if len(self.eleNames) >= 2:
+				self.offspring = newClus.RandomBimetallic()
+			else:
+				self.offspring = newClus.CutSpliceRandom()
 		elif self.cross == "weighted":
 			self.offspring = newClus.CutSpliceWeighted()
 		elif self.cross == "bimetallic":

@@ -188,6 +188,50 @@ class crossover:
 
 		return offspring
 
+	def RandomBimetallic(self):
+
+		compositionWrong = True
+
+		while compositionWrong:
+
+			offspring = []
+
+			self.fitness()
+
+			fit1 = self.fitPair[0]
+			fit2 = self.fitPair[1]
+
+			clus1 = self.pair[0]
+			clus2 = self.pair[1]
+
+			# start = int(self.natoms*(fit1/(fit1+fit2)))
+			start = ran.randrange(1,self.natoms)
+
+			print start
+
+			for i in range(start):
+				offspring.append(clus1[i])
+
+			for j in range(start,self.natoms):
+				offspring.append(clus2[j]) 
+
+			CheckEle = []
+
+			for ele in self.eleNames:
+				eleCount = 0
+				for atom in offspring:
+					if atom[0] == ele:
+						eleCount += 1
+				CheckEle.append(eleCount)
+
+			print CheckEle, self.eleNums
+
+			if CheckEle == self.eleNums:
+
+				compositionWrong = False
+
+		sys.exit()
+
 	def CutSpliceBimetallic(self):	
 
 		''' Bimetallic Crossover. '''
