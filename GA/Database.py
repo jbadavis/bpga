@@ -1,9 +1,28 @@
 '''
-Database operations.
+Birmingham Parallel Genetic Algorithm
 
-Jack Davis
+A pool genetic algorithm for the
+structural characterisation of 
+nanoalloys.
 
-5/11/2014
+Please cite - 
+A. Shayeghi et al, PCCP, 2015, 17, 2104-2112
+
+Authors -
+Jack Davis and the Johnston Group
+
+20/3/15
+
+--- Database Functions ---
+
+1. updatePool - Add final geometry to pool.dat
+2. addEle - Add elements to final geometry from VASP.
+3. findLastDir - Search for last calculation number. 
+4. readPool - Read pool.dat into list. 
+5. writePool - Write updated pool to pool.dat
+6. lock - lock pool.dat
+7. unlock - unload pool.dat
+
 '''
 
 import os, time, errno, sys

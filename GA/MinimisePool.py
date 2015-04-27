@@ -1,9 +1,20 @@
 '''
-Minimise Pool
+Birmingham Parallel Genetic Algorithm
 
-Jack Davis
+A pool genetic algorithm for the
+structural characterisation of 
+nanoalloys.
 
-20/10/14
+Please cite - 
+A. Shayeghi et al, PCCP, 2015, 17, 2104-2112
+
+Authors -
+Jack Davis and the Johnston Group
+
+20/3/15
+
+--- Pool Minimiser Class ---
+
 '''
 
 import os
@@ -20,15 +31,10 @@ from Crossover import crossover as cross
 from checkPool import checkPool as checkPool
 from CoM import CoM 
 from fixOverlap import fixOverlap
-
 from Explode import checkClus
 
-# Surface GA
 from SurfOpt import SurfOpt 
 from surfacePOSCAR import surfacePOSCAR 
-
-# Testing
-import sys
 
 class minPool:
 
@@ -147,10 +153,6 @@ class minPool:
 			'''
 			Write POSCAR.
 			'''
-
-			# with open(str(self.xyzNum)+".xyz","w") as xyzFile:
-			# 	for line in initialXYZ:
-			# 		xyzFile.write(line)
 	
 			self.vaspIN = DFTin(self.xyzNum,clus,self.eleNames
 							,self.eleMasses,self.eleNums)

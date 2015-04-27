@@ -13,7 +13,7 @@ Jack Davis and the Johnston Group
 
 20/3/15
 
---- Mutant Minimiser ---
+--- Mutant Minimiser Class ---
 
 '''
 

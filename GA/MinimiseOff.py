@@ -13,7 +13,7 @@ Jack Davis and the Johnston Group
 
 20/3/15
 
---- Offspring Minimiser ---
+--- Offspring Minimiser Class ---
 
 '''
 
@@ -27,17 +27,11 @@ from DFT_output import vasp_output as DFTout
 from Crossover import crossover as cross 
 from checkPool import checkPool as checkPool
 from CoM import CoM 
-
 from Explode import checkClus
 from fixOverlap import fixOverlap
 
-# Surface GA
 from SurfOpt import SurfOpt 
 from surfacePOSCAR import surfacePOSCAR 
-
-# Testing
-import sys
-
 
 class minOff: 
 
