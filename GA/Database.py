@@ -6,7 +6,7 @@ Jack Davis
 5/11/2014
 '''
 
-import os, time, errno
+import os, time, errno, sys
 
 from CoM import CoM 
 
@@ -54,6 +54,7 @@ def addEle(upType,coords
 	from centre of box
 	'''
 
+	clus=[]
 	eleList=[]
 	coordsEle=[]
 
@@ -65,21 +66,38 @@ def addEle(upType,coords
 	if "Finish" in upType:
 		coords = [float(i) - box/2 for i in coords]
 
-	coords = [str(i) for i in coords]
+	'''
+	Add elements to list
+	of coordinates. 
+	'''
 
 	for i in range(len(eleNames)):
 		for j in range(eleNum[i]):
 			eleList.append(eleNames[i])
 
+	'''
+	Convert to clus format
+	for CoM conversion. 
+	'''
+
 	for i in range(0,len(coords),3):
-		xyz=coords[i]+" "+coords[i+1]+" "+coords[i+2]+"\n"
-		xyzLine=eleList[i/3]+" "+xyz
-		coordsEle.append(xyzLine)
+		atom = [eleList[i/3],coords[i],coords[i+1],coords[i+2]]
+		clus.append(atom)
 
-	coordsEle = CoM(coordsEle,eleNames,eleMasses)
+	clus = CoM(clus,eleNames,eleMasses)
 
-	return coordsEle
+	'''
+	Convert to list of 
+	strings for pool update.
+	'''
 
+	for i in range(len(clus)):
+		ele,x,y,z = clus[i]
+		newLine = ele+" "+str(x)+" "+str(y)+" "+str(z)+"\n"
+		print newLine
+		clus[i] = newLine
+
+	return clus
 
 def findLastDir():
 
