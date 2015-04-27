@@ -65,8 +65,8 @@ class checkClus:
 	def exploded(self):
 
 		'''
-		Check if atoms 
-		overlapping.
+		Return true if cluster has 
+		exploded
 		'''
 
 		start = 0
@@ -81,25 +81,5 @@ class checkClus:
 					tooLong += 1
 			if tooLong == self.natoms-1:
 				return True
-
-		return False
-
-	def overlap(self):
-
-		'''
-		Check if cluster 
-		is exploded.
-		'''
-
-		start = 0
-
-		for i in range(self.natoms):
-			finish = start + self.natoms 
-			bonds = self.r[start:finish]
-			start += self.natoms
-			tooLong = 0
-			for bond in bonds:
-				if float(bond) < .9 and float(bond) != 0.:
-					return True
 
 		return False
