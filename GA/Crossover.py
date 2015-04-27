@@ -1,15 +1,28 @@
 '''
-Daven and Ho 
-Crossover class
+Birmingham Parallel Genetic Algorithm
 
-Jack Davis
+A pool genetic algorithm for the
+structural characterisation of 
+nanoalloys.
 
-14/10/14
+Please cite - 
+A. Shayeghi et al, PCCP, 2015, 17, 2104-2112
+
+Authors -
+Jack Davis and the Johnston Group
+
+20/3/15
+
+--- Cut and Splice Class ---
+
 '''
 
 import numpy as np
 import random as ran
 
+import Database as db
+
+from Select import tournamentSelect as select
 from checkPool import checkPool
 from CoM import CoM 
 
@@ -17,29 +30,57 @@ import sys
 
 class crossover:
 
-	def __init__(self
-				,clus1
-				,clus2
-				,eleNums
-				,eleNames
-				,natoms
-				,pair):
+	def __init__(self,crossType,nPool
+				,stride,eleNums
+				,eleNames,natoms):
 
-		ran.seed()
+		self.crossType = crossType
 
-		'''Convert list format '''
-		clus1 = self.convert(clus1)
-		clus2 = self.convert(clus2)
-
-		self.pair = [clus1,clus2]
-
+		self.nPool = nPool
+		self.stride = stride
 		self.eleNames = eleNames
 		self.eleNums = eleNums
 		self.natoms = natoms 
-		self.pairPos = pair
 
-		''' Rotate and sort pair of clusters'''
+		'''
+		During initialisation the 
+		clusters are selected and 
+		then rotated and sorted. 
+		'''
+		self.findPair()
 		self.prepare()
+
+	def findPair(self):
+
+		'''
+		From tournamentSelect the
+		exact positions of the 
+		random clusters is found in 
+		the pool.
+		'''
+
+		# Select random pair 
+		selectPair = select(self.nPool)
+		self.pairPos = selectPair.pair
+
+		#Postions of pair in poollist
+		c1 = self.pairPos[0] * self.stride
+		c2 = self.pairPos[1] * self.stride
+
+		poolList = db.readPool()
+
+		self.clus1 = poolList[c1+2:c1+self.stride]
+		self.clus2 = poolList[c2+2:c2+self.stride]
+
+		self.pair = [self.clus1,self.clus2]
+
+		'''
+		Convert pair to 
+		new format.
+		'''
+
+		for i in range(len(self.pair)):
+			self.pair[i] = self.convert(self.pair[i])
 
 	def convert(self,clus):
 
@@ -51,26 +92,6 @@ class crossover:
 			newClus.append(atom)
 
 		return newClus
-
-	def fitness(self):
-		
-		energies=[]
-		fitness=[]
-		self.fitPair=[]
-
-		getEn = checkPool()
-		energies = getEn.energies
-
-		energies = sorted(energies)
-		minEn = energies[0]
-		rangeEn = energies[len(energies)-1] - energies[0]
-
-		for energy in energies:
-			fit=0.5*(1-np.tanh(2.*((energy-minEn)/rangeEn)-1.))
-			fitness.append(fit)
-
-		self.fitPair.append(fitness[self.pairPos[0]])
-		self.fitPair.append(fitness[self.pairPos[1]])
 
 	def prepare(self):
 
@@ -106,41 +127,79 @@ class crossover:
 		rot32 = -np.sin(theta)
 		rot33 = np.cos(theta)*np.cos(phi)
 
-		for atom in clus:
-			ele, x, y, z = atom
+		for i in range(len(clus)):
+			ele, x, y, z = clus[i]
 			rotX = rot11*x + rot12*y + rot13*z
 			rotY = rot21*x + rot22*y + rot23*z
 			rotZ = rot31*x + rot32*y + rot33*z
 			rotAtom = [ele,rotX,rotY,rotZ]
-			rotClus.append(rotAtom)
+			clus[i] = rotAtom
 
-		return rotClus
+		return clus
 
 	def sortZ(self,clus):
 
 		'''
-		Sort cluster by
-		z-axis.
+		Bubble sort by z.
 		'''
 
-		zList = []
-		sortedClus = []
+		swapped = True
 
-		for atom in clus:
-			ele,x,y,z = atom
-			zList.append(z)
+		while swapped:
+			swapped=False
+			for i in range(len(clus)-1):
+				if clus[i][3] > clus[i+1][3]:
+					temp = clus[i]
+					clus[i] = clus[i+1]
+					clus[i+1] = temp
+					swapped = True
 
-		zList.sort()
+		return clus
 
-		for sortedZ in zList:
-			for atom in clus: 
-				ele,x,y,z = atom
-				if z == sortedZ:
-					sortedClus.append(atom)
+	def fitness(self):
+		
+		energies=[]
+		fitness=[]
+		self.fitPair=[]
 
-		return sortedClus
+		getEn = checkPool()
+		energies = getEn.energies
 
-	def CutSpliceRandom(self):	
+		energies = sorted(energies)
+		minEn = energies[0]
+		rangeEn = energies[len(energies)-1] - energies[0]
+
+		for energy in energies:
+			fit=0.5*(1-np.tanh(2.*((energy-minEn)/rangeEn)-1.))
+			fitness.append(fit)
+
+		self.fitPair.append(fitness[self.pairPos[0]])
+		self.fitPair.append(fitness[self.pairPos[1]])
+
+	def mate(self):
+
+		'''
+		Return offspring based 
+		on crosstype.
+		'''
+
+		if len(self.eleNames) == 1:
+
+			if self.crossType == "random":
+				return self.monoRandom()
+			elif self.crossType == "weighted":
+				return self.monoWeighted()
+
+		elif len(self.eleNames) == 2:
+
+			if self.crossType == "random":
+				return self.biRandom()
+			elif self.crossType == "weighted":
+				return self.biWeighted()
+			elif self.crossType == "Bimetallic":
+				return self.CutSpliceBimetallic()
+
+	def monoRandom(self):	
 
 		'''
 		Monometallic random 
@@ -162,7 +221,7 @@ class crossover:
 
 		return offspring
 
-	def CutSpliceWeighted(self):
+	def monoWeighted(self):
 
 		'''
 		Monometallic weighted crossover.
@@ -188,7 +247,7 @@ class crossover:
 
 		return offspring
 
-	def RandomBimetallic(self):
+	def biRandom(self):
 
 		compositionWrong = True
 
@@ -230,7 +289,77 @@ class crossover:
 
 				compositionWrong = False
 
-		sys.exit()
+	def biWeighted(self):
+
+		offspring = []
+
+		self.fitness()
+
+		fit1 = self.fitPair[0]
+		fit2 = self.fitPair[1]
+
+		plane = int(self.natoms*(fit1/(fit1+fit2)))
+
+		'''
+		Take initial cut from 
+		the first cluster. 
+		'''
+
+		for i in range(plane):
+
+			offspring.append(self.pair[0][i])
+
+		'''
+		Count the number of Elements 
+		A and B needed from second cut. 
+		'''
+
+		checkEleNums = []
+
+		for element in self.eleNames:
+			eleCount = 0
+			for atom in offspring:
+				if atom[0] == element:
+					eleCount += 1 
+			checkEleNums.append(eleCount)
+
+		'''
+		Take second cut based on the 
+		number of elements already in 
+		offspring. 
+		'''
+
+		diffA = self.eleNums[0] - checkEleNums[0]
+		diffB = self.eleNums[1] - checkEleNums[1]
+
+		eleDiff = [diffA, diffB]
+
+		'''
+		If there are too many of one 
+		element in offspring remove 
+		the difference.
+		'''
+
+		for i in range(len(eleDiff)):
+			if eleDiff[i] < 0:
+				for j in range(abs(eleDiff[i])):
+					for atom in offspring:
+						if atom[0] == self.eleNames[i]:
+							offspring.remove(atom)
+							break
+
+
+		for i in range(len(self.eleNames)):
+			for j in range(eleDiff[i]):
+
+				for atom in self.pair[1]:
+					if atom[0] == self.eleNames[i] and atom not in offspring:
+
+						offspring.append(atom)
+
+						break
+
+		return offspring
 
 	def CutSpliceBimetallic(self):	
 
@@ -305,3 +434,5 @@ class crossover:
 		offspring = sortOffspring
 
 		return offspring
+
+
