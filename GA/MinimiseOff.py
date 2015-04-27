@@ -24,7 +24,6 @@ import Database as db
 from DFT_input import vasp_input as DFTin
 from DFT_output import vasp_output as DFTout
 
-from Select import tournamentSelect as select
 from Crossover import crossover as cross 
 from checkPool import checkPool as checkPool
 from CoM import CoM 
@@ -85,15 +84,68 @@ class minOff:
 
 		os.system("mkdir " + str(self.xyzNum))
 
-		self.findPair()
+		# self.findPair()
 		self.produceOffspring()
-
-		self.vaspIN = DFTin(self.xyzNum,self.eleNames
-						,self.eleMasses,self.eleNums)
 
 		db.unlock()
 
 		self.minimise()
+
+	def produceOffspring(self):
+
+		'''
+		Produces XYZ after 
+		crossover. 
+		'''
+
+		newClus = cross(self.cross,self.nPool,self.stride
+						,self.eleNums,self.eleNames,self.natoms)
+
+		self.offspring = newClus.mate()
+
+		self.offspring = fixOverlap(self.offspring)
+
+		# if self.cross == "random":
+
+		# 	if len(self.eleNames) >= 2:
+		# 		self.offspring = newClus.randomBimetallic()
+		# 	else:
+		# 		self.offspring = newClus.CutSpliceRandom()
+
+		# elif self.cross == "weighted":
+
+		# 	if len(self.eleNames) >= 2:
+		# 		self.offspring = newClus.weightedBimetallic()
+		# 	else:
+		# 		self.offspring = newClus.CutSpliceWeighted()
+
+		# elif self.cross == "bimetallic":
+
+		# 	self.offspring = newClus.CutSpliceBimetallic()
+
+		if self.surfGA:
+
+			self.offspring = CoM(self.offspring,self.eleNames,self.eleMasses)
+
+			SurfaceStruc = SurfOpt(self.offspring,self.surface,self.eleNames)
+
+			self.offspring = SurfaceStruc.placeClus()
+
+			self.vaspIN = surfacePOSCAR(self.xyzNum,self.offspring
+										,self.surface)
+
+		else:
+
+			# with open(str(self.xyzNum)+".xyz","w") as xyzFile:
+			# 	xyzFile.write(str(self.natoms)+"\n")
+			# 	xyzFile.write("Crossover"+"\n")
+			# 	for atom in self.offspring:
+			# 		ele,x,y,z = atom 
+			# 		xyzLine = ele+" "+str(x)+" "+str(y)+" "+str(z)+"\n"
+			# 		xyzFile.write(xyzLine)
+
+			self.vaspIN = DFTin(self.xyzNum,self.offspring,self.eleNames
+								,self.eleMasses,self.eleNums)
 
 	def restart(self):
 
@@ -105,87 +157,12 @@ class minOff:
 
 		db.lock()
 
-		self.findPair()
+		# self.findPair()
 		self.produceOffspring()
 
 		db.unlock()
 
 		self.minimise()
-
-	def findPair(self):
-
-		'''
-		From tournamentSelect the
-		exact positions of the 
-		random clusters is found in 
-		the pool.
-		'''
-
-		# Select random pair 
-		selectPair = select(self.nPool)
-		self.pair = selectPair.pair
-
-		#Postions of pair in poollist
-		c1 = self.pair[0] * self.stride
-		c2 = self.pair[1] * self.stride
-
-		poolList = db.readPool()
-
-		self.clus1 = poolList[c1+2:c1+self.stride]
-		self.clus2 = poolList[c2+2:c2+self.stride]
-
-		self.poolPos = [c1,c2]
-
-
-	def produceOffspring(self):
-
-		'''
-		Produces XYZ after 
-		crossover. 
-		'''
-
-		newClus = cross(self.clus1,self.clus2
-						,self.eleNums,self.eleNames
-						,self.natoms,self.pair)
-
-		if self.cross == "random":
-			if len(self.eleNames) >= 2:
-				self.offspring = newClus.RandomBimetallic()
-			else:
-				self.offspring = newClus.CutSpliceRandom()
-		elif self.cross == "weighted":
-			self.offspring = newClus.CutSpliceWeighted()
-		elif self.cross == "bimetallic":
-			self.offspring = newClus.CutSpliceBimetallic()
-
-		self.offspring = fixOverlap(self.offspring)
-
-		if self.surfGA:
-
-			self.offspring = CoM(self.offspring,self.eleNames,self.eleMasses)
-
-			SurfaceStruc = SurfOpt(self.offspring,self.surface,self.eleNames)
-
-			self.offspring = SurfaceStruc.placeClus()
-		
-			''' --- ''' 
-
-			self.vaspIN = surfacePOSCAR(self.xyzNum,self.offspring
-										,self.surface)
-
-		else:
-
-			with open(str(self.xyzNum)+".xyz","w") as xyzFile:
-				xyzFile.write(str(self.natoms)+"\n")
-				xyzFile.write("Crossover"+"\n")
-				for atom in self.offspring:
-					ele,x,y,z = atom 
-					xyzLine = ele+" "+str(x)+" "+str(y)+" "+str(z)+"\n"
-					xyzFile.write(xyzLine)
-
-			self.vaspIN = DFTin(self.xyzNum,self.eleNames
-							,self.eleMasses,self.eleNums)
-
 
 	def minimise(self):
 
@@ -245,3 +222,27 @@ class minOff:
 				self.eleNames,self.eleMasses
 				,self.finalEnergy,self.finalCoords
 				,self.stride,self.vaspIN.box)
+
+	# def findPair(self):
+
+	# 	'''
+	# 	From tournamentSelect the
+	# 	exact positions of the 
+	# 	random clusters is found in 
+	# 	the pool.
+	# 	'''
+
+	# 	# Select random pair 
+	# 	selectPair = select(self.nPool)
+	# 	self.pair = selectPair.pair
+
+	# 	#Postions of pair in poollist
+	# 	c1 = self.pair[0] * self.stride
+	# 	c2 = self.pair[1] * self.stride
+
+	# 	poolList = db.readPool()
+
+	# 	self.clus1 = poolList[c1+2:c1+self.stride]
+	# 	self.clus2 = poolList[c2+2:c2+self.stride]
+
+	# 	self.poolPos = [c1,c2]

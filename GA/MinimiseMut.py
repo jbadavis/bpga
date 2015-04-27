@@ -59,6 +59,8 @@ class minMut:
 		self.stride = stride
 		self.subString = subString
 
+		self.mutant = []
+
 		'''
 		Surface Object.
 		'''
@@ -77,10 +79,11 @@ class minMut:
 		db.lock()
 
 		self.xyzNum = db.findLastDir() + 1
+		os.system("mkdir " + str(self.xyzNum))
 
 		'''
-		Mutation for surface GA followed
-		by gasphase operations. 
+		Mutation methods add to 
+		mutant attribute. 
 		'''
 
 		if self.mutType == "surface" or self.surfGA:
@@ -91,10 +94,12 @@ class minMut:
 			self.moveMutate()
 		elif self.mutType == "homotop":
 			self.homotopSwap()
-
-		os.system("mkdir " + str(self.xyzNum))
 							
 		db.unlock()
+
+		'''
+		Minimise Mutant.
+		'''
 
 		self.minimise()
 
@@ -121,8 +126,6 @@ class minMut:
 
 		scale = self.natoms**(1./3.)
 
-		coords=[]
-
 		for i in range(len(self.eleNames)):
 			for j in range(self.eleNums[i]):
 
@@ -134,9 +137,7 @@ class minMut:
 
 				atom = [ele,x,y,z]
 
-				coords.append(atom)
-
-		self.writeXYZ(coords)
+				self.mutant.append(atom)
 
 	def moveMutate(self):
 
@@ -151,29 +152,37 @@ class minMut:
 		coords=[]
 
 		ranStruc=ran.randrange(0,self.n)
-		ranAtom=ran.randrange(0,self.natoms)
 		ranPoolPos=ranStruc*self.stride
+
+		'''
+		Number of atoms displace
+		'''
+		nMove = int(round(self.natoms*0.2))
+
+		'''
+		Get random cluster from pool.
+		'''
 
 		poolList = db.readPool()
 
 		clus=poolList[ranPoolPos:ranPoolPos+self.stride]
 		clus=clus[2:]
 
-		for i in ran.sample(range(0,self.natoms),2):
+		for i in ran.sample(range(0,self.natoms),nMove):
 			ranCoods=clus[i]
 			ele,x,y,z=ranCoods.split()
-			ranX=float(x)+ran.uniform(-1.,1.)
-			ranY=float(y)+ran.uniform(-1.,1.)
-			ranZ=float(z)+ran.uniform(-1.,1.)
-			ranLine=ele+" "+str(ranX)+" "+str(ranY)+" "+str(ranZ)+"\n"
-			clus[ranAtom]=ranLine
+
+			x=float(x)+ran.uniform(-1.,1.)
+			y=float(y)+ran.uniform(-1.,1.)
+			z=float(z)+ran.uniform(-1.,1.)
+
+			ranLine=ele+" "+str(x)+" "+str(y)+" "+str(z)+"\n"
+			clus[i]=ranLine
 
 		for line in clus:
 			ele,x,y,z = line.split()
 			atom = [ele,float(x),float(y),float(z)]
-			coords.append(atom)
-
-		self.writeXYZ(coords)	
+			self.mutant.append(atom)
 
 	def homotopSwap(self):
 
@@ -190,36 +199,32 @@ class minMut:
 		clus = poolList[ranPoolPos:ranPoolPos+self.stride]
 		clus = clus[2:]
 
-		'''
-		Make list of atoms.
-		'''
-
-		eleList = []
-
-		for line in clus:
-			ele,x,y,z = line.split()
-			eleList.append(ele)
+		for i in range(len(clus)):
+			ele,x,y,z = clus[i].split()
+			atom = [ele,float(x),float(y),float(z)]
+			clus[i] = atom
 
 		'''
-		Shuffle the elements
-		making sure they don't 
-		stay the same.
+		Choose pair of different elements to swap.
 		'''
 
-	 	ran.shuffle(eleList)
+		elementsMatch = True
 
-	 	'''
-	 	Print XYZ
-	 	'''
+		while elementsMatch:
+			elementsMatch = False	
+			pair = ran.sample(range(0,self.natoms),2)
+			if clus[pair[0]][0] == clus[pair[1]][0]:
+				elementsMatch = True 
 
-	 	with open(str(self.xyzNum)+".xyz","w") as xyzFile:
-			xyzFile.write(str(self.natoms)+"\n")
-			xyzFile.write("Mutant\n")
-			for i in range(len(clus)):
-				ele,x,y,z = clus[i].split()
-				ele = eleList[i]
-				xyzLine = ele+" "+x+" "+y+" "+z+"\n"
-				xyzFile.write(xyzLine)
+		'''
+		Swap element types of pair.
+		'''
+
+		temp = clus[pair[0]][0]
+		clus[pair[0]][0] = clus[pair[1]][0]
+		clus[pair[1]][0] = temp
+
+		self.mutant = clus
 
 	def surfMutate(self):
 
@@ -261,18 +266,6 @@ class minMut:
 
 		self.initialXYZ = clus
 
-	def writeXYZ(self,coords):	
-
-		coords = fixOverlap(coords)
-
-		with open(str(self.xyzNum)+".xyz","w") as xyzFile:
-			xyzFile.write(str(self.natoms)+"\n")
-			xyzFile.write("Mutant\n")
-			for atom in coords:
-				ele,x,y,z = atom
-				xyzLine = ele+" "+str(x)+" "+str(y)+" "+str(z)+"\n"
-				xyzFile.write(xyzLine)
-
 	def minimise(self):
 
 		'''
@@ -306,8 +299,8 @@ class minMut:
 
 			'''
 	
-			self.vaspIN = DFTin(self.xyzNum,self.eleNames
-							,self.eleMasses,self.eleNums)
+			self.vaspIN = DFTin(self.xyzNum,self.mutant,self.eleNames
+								,self.eleMasses,self.eleNums)
 
 		if self.doDFT() == 0:
 

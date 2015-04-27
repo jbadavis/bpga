@@ -18,31 +18,32 @@ class vasp_input:
 	in directories from .xyz's
 	'''
 
-	def __init__(self,i,eleNames
-		,eleMasses,eleNums):
+	def __init__(self,calcNum
+				,clus,eleNames
+				,eleMasses,eleNums):
 
-		self.i = i
+		self.calcNum = str(calcNum)
+		self.clus = clus
 		self.eleNames = eleNames
 		self.eleMasses = eleMasses
 		self.eleNums = eleNums
 
-		self.read_xyz() 
+		# self.read_xyz() 
 		self.cell_size()
 		self.write_poscar()
 
-	def read_xyz(self):
+	# def read_xyz(self):
 
-		'''
-		Reads previously created .xyz
-		into class coord list.
-		'''
+	# 	'''
+	# 	Reads previously created .xyz
+	# 	into class coord list.
+	# 	'''
 
-		with open(str(self.i) + ".xyz") as xyz:
-			self.natoms = xyz.readline()
-			comment = xyz.readline()
-			self.coords = xyz.readlines()
+	# 	with open(str(self.i) + ".xyz") as xyz:
+	# 		self.natoms = xyz.readline()
+	# 		comment = xyz.readline()
+	# 		self.coords = xyz.readlines()
 
-		self.coords = CoM(self.coords,self.eleNames,self.eleMasses)
 
 	def cell_size(self):
 
@@ -52,16 +53,16 @@ class vasp_input:
 		value in the coord list
 		'''
 
+		self.clus = CoM(self.clus,self.eleNames,self.eleMasses)
+
 		size = []
 
-		for line in self.coords:
-			ele, x, y, z = line.split()
+		for atom in self.clus:
+			ele,x,y,z = atom
 			size.append(abs(float(x)))
 			size.append(abs(float(y)))
 			size.append(abs(float(z)))
 		self.box = max(size) + 10.0
-
-		print self.box
 
 	def write_poscar(self):
 
@@ -73,10 +74,8 @@ class vasp_input:
 
 		self.eleNums = [str(i) for i in self.eleNums]
 
-		#sp.call(["mkdir", str(self.i)])
-
-		with open(str(self.i)+"/POSCAR","w") as poscar:
-			poscar.write(str(self.i) + '\n')
+		with open(self.calcNum+"/POSCAR","w") as poscar:
+			poscar.write(str(self.calcNum) + '\n')
 			poscar.write(str(self.box) + '\n')
 			poscar.write("1.0 0.0 0.0\n")
 			poscar.write("0.0 1.0 0.0\n")
@@ -85,14 +84,14 @@ class vasp_input:
 			poscar.write(" ".join(self.eleNums) + '\n')
 			poscar.write("Direct\n")
 			for element in self.eleNames:
-				for line in self.coords:
-					ele, x, y, z = line.split()
+				for atom in self.clus:
+					ele,x,y,z = atom
 					if ele == element:
-						x = str( (float(x) + (self.box/2) ) / self.box )
-						y = str( (float(y) + (self.box/2) ) / self.box )
-						z = str( (float(z) + (self.box/2) ) / self.box )
+						x = str( ( x + (self.box/2) ) / self.box )
+						y = str( ( y + (self.box/2) ) / self.box )
+						z = str( ( z + (self.box/2) ) / self.box )
 						out_string = x + "  " + y + "  " + z + '\n'
 						poscar.write(out_string) 
-			sp.call(["cp", "INCAR" ,str(self.i)])
-			sp.call(["cp", "KPOINTS" ,str(self.i)])
-			sp.call(["cp", "POTCAR" ,str(self.i)])
+			sp.call(["cp", "INCAR" ,str(self.calcNum)])
+			sp.call(["cp", "KPOINTS" ,str(self.calcNum)])
+			sp.call(["cp", "POTCAR" ,str(self.calcNum)])

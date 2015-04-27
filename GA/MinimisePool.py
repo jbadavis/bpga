@@ -111,10 +111,17 @@ class minPool:
 		and write .xyz.
 		'''
 
+		clus = []
+
 		strucNum=self.strucNum
 		stride=self.stride
 		
-		initialXYZ = self.poolList[strucNum-1:strucNum+stride-1]
+		initialXYZ = self.poolList[strucNum+1:strucNum+stride-1]
+
+		for line in initialXYZ:
+			ele,x,y,z = line.split()
+			atom = [ele,float(x),float(y),float(z)]
+			clus.append(atom)
 
 		''' 
 		Surface GA 
@@ -137,17 +144,17 @@ class minPool:
 
 		else: 
 
-			''' 
-			Write XYZ file for normal
-			non-surface calculation.
+			'''
+			Write POSCAR.
 			'''
 
-			with open(str(self.xyzNum)+".xyz","w") as xyzFile:
-				for line in initialXYZ:
-					xyzFile.write(line)
+			# with open(str(self.xyzNum)+".xyz","w") as xyzFile:
+			# 	for line in initialXYZ:
+			# 		xyzFile.write(line)
 	
-			self.vaspIN = DFTin(self.xyzNum,self.eleNames
+			self.vaspIN = DFTin(self.xyzNum,clus,self.eleNames
 							,self.eleMasses,self.eleNums)
+
 
 	def minimise(self):
 
