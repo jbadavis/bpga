@@ -1,5 +1,5 @@
 '''
-Minimiser
+Centre of Mass function.
 
 Jack Davis
 
@@ -16,24 +16,23 @@ def CoM(clus,eleNames,eleMasses):
 	totmass = 0
 
 	for i in range(len(eleNames)):
-		for line in clus:
-			ele,x,y,z = line.split()
+		for atom in clus:
+			ele,x,y,z = atom
 			if ele == eleNames[i]:
 				totmass += eleMasses[i]
-				cx += eleMasses[i] * float(x)
-				cy += eleMasses[i] * float(y)
-				cz += eleMasses[i] * float(z)
+				cx += eleMasses[i] * x
+				cy += eleMasses[i] * y
+				cz += eleMasses[i] * z
 
 	cx *= (1/totmass)
 	cy *= (1/totmass)
 	cz *= (1/totmass)
 
- 	for line in clus:
-		ele,x,y,z = line.split()
-		x = float(x) - cx
-		y = float(y) - cy
-		z = float(z) - cz
-		xyz = ele+" "+str(x)+" "+str(y)+" "+" "+str(z)+"\n"
-		CoMCoords.append(xyz)
+ 	for i in range(len(clus)):
+		ele,x,y,z = clus[i]
+		x -= cx
+		y -= cy
+		z -= cz
+		clus[i] = [ele,x,y,z]
 
-	return CoMCoords
+	return clus
