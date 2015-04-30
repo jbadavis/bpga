@@ -1,0 +1,20 @@
+ ISTART = 0
+ NCORE  = 24
+ ISPIN = 2
+
+Electronic Relaxation
+ ENCUT  = 400
+
+Ionic relaxation
+ IBRION = 2
+Number of relax steps
+ NSW = 1000
+ POTIM = 0.1
+
+Smearing
+ ISMEAR =  1
+ SIGMA  =  0.01
+
+ LWAVE  = .FALSE.
+ LCHARG = .FALSE.
+ LVTOT  = .FALSE.
