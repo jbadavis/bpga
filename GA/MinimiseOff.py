@@ -99,44 +99,15 @@ class minOff:
 
 		self.offspring = fixOverlap(self.offspring)
 
-		# if self.cross == "random":
-
-		# 	if len(self.eleNames) >= 2:
-		# 		self.offspring = newClus.randomBimetallic()
-		# 	else:
-		# 		self.offspring = newClus.CutSpliceRandom()
-
-		# elif self.cross == "weighted":
-
-		# 	if len(self.eleNames) >= 2:
-		# 		self.offspring = newClus.weightedBimetallic()
-		# 	else:
-		# 		self.offspring = newClus.CutSpliceWeighted()
-
-		# elif self.cross == "bimetallic":
-
-		# 	self.offspring = newClus.CutSpliceBimetallic()
-
 		if self.surfGA:
 
-			self.offspring = CoM(self.offspring,self.eleNames,self.eleMasses)
+			SurfaceStruc = SurfOpt(self.offspring,self.surface,self.eleNames,self.eleMasses)
 
-			SurfaceStruc = SurfOpt(self.offspring,self.surface,self.eleNames)
+			SurfClus = SurfaceStruc.placeClus()
 
-			self.offspring = SurfaceStruc.placeClus()
-
-			self.vaspIN = surfacePOSCAR(self.xyzNum,self.offspring
-										,self.surface)
+			self.vaspIN = surfacePOSCAR(self.xyzNum,SurfClus,self.surface)
 
 		else:
-
-			# with open(str(self.xyzNum)+".xyz","w") as xyzFile:
-			# 	xyzFile.write(str(self.natoms)+"\n")
-			# 	xyzFile.write("Crossover"+"\n")
-			# 	for atom in self.offspring:
-			# 		ele,x,y,z = atom 
-			# 		xyzLine = ele+" "+str(x)+" "+str(y)+" "+str(z)+"\n"
-			# 		xyzFile.write(xyzLine)
 
 			self.vaspIN = DFTin(self.xyzNum,self.offspring,self.eleNames
 								,self.eleMasses,self.eleNums)
@@ -151,7 +122,6 @@ class minOff:
 
 		db.lock()
 
-		# self.findPair()
 		self.produceOffspring()
 
 		db.unlock()
@@ -196,7 +166,7 @@ class minOff:
 
 		with open(base+"/exitcodes.dat","a") as exit:
 			exit.write(str(self.xyzNum))
-			exit.write(" Exitcode = "+str(exitcode)+"\n")
+			exit.write(" Exitcode = "+str(exitcode)+" Offspring\n")
 			
 		os.chdir(base)
 
@@ -216,27 +186,3 @@ class minOff:
 				self.eleNames,self.eleMasses
 				,self.finalEnergy,self.finalCoords
 				,self.stride,self.vaspIN.box)
-
-	# def findPair(self):
-
-	# 	'''
-	# 	From tournamentSelect the
-	# 	exact positions of the 
-	# 	random clusters is found in 
-	# 	the pool.
-	# 	'''
-
-	# 	# Select random pair 
-	# 	selectPair = select(self.nPool)
-	# 	self.pair = selectPair.pair
-
-	# 	#Postions of pair in poollist
-	# 	c1 = self.pair[0] * self.stride
-	# 	c2 = self.pair[1] * self.stride
-
-	# 	poolList = db.readPool()
-
-	# 	self.clus1 = poolList[c1+2:c1+self.stride]
-	# 	self.clus2 = poolList[c2+2:c2+self.stride]
-
-	# 	self.poolPos = [c1,c2]

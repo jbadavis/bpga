@@ -264,7 +264,7 @@ class minMut:
 			newLine = ele+" " +rotX+" "+rotY+" "+rotZ+"\n"
 			clus[i] = newLine
 
-		self.initialXYZ = clus
+		self.surfMut = clus
 
 	def minimise(self):
 
@@ -275,19 +275,11 @@ class minMut:
 
 		if self.surfGA:
 
-			'''
-			Surface.
-			'''
+			SurfaceStruc = SurfOpt(self.surfMut,self.surface,self.eleNames,self.eleMasses)
 
-			self.initialXYZ = CoM(self.initialXYZ,self.eleNames,self.eleMasses)
+			SurfClus = SurfaceStruc.placeClus()
 
-			SurfaceStruc = SurfOpt(self.initialXYZ,self.surface,self.eleNames)
-
-			self.initialXYZ = SurfaceStruc.placeClus()
-		
-			''' --- ''' 
-
-			self.vaspIN = surfacePOSCAR(self.xyzNum,self.initialXYZ,self.surface)
+			self.vaspIN = surfacePOSCAR(self.xyzNum,SurfClus,self.surface)
 
 		else: 
 
@@ -333,7 +325,7 @@ class minMut:
 
 		with open(base+"/exitcodes.dat","a") as exit:
 			exit.write(str(self.xyzNum))
-			exit.write(" Exitcode = "+str(exitcode)+"\n")
+			exit.write(" Exitcode = "+str(exitcode)+" Mutant\n")
 			
 		os.chdir(base)
 

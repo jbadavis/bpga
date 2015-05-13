@@ -36,6 +36,8 @@ from Explode import checkClus
 from SurfOpt import SurfOpt 
 from surfacePOSCAR import surfacePOSCAR 
 
+import sys
+
 class minPool:
 
 	def __init__(self,natoms,r_ij
@@ -137,16 +139,11 @@ class minPool:
 
 		if self.surfGA:
 
-			initialXYZ = CoM(initialXYZ[2:],self.eleNames,self.eleMasses)
+			SurfaceStruc = SurfOpt(initialXYZ,self.surface,self.eleNames,self.eleMasses)
 
-			SurfaceStruc = SurfOpt(initialXYZ,self.surface,self.eleNames)
+			SurfClus = SurfaceStruc.placeClus()
 
-			initialXYZ = SurfaceStruc.placeClus()
-		
-			''' --- ''' 
-
-			self.vaspIN = surfacePOSCAR(self.xyzNum,initialXYZ
-										,self.surface)
+			self.vaspIN = surfacePOSCAR(self.xyzNum,SurfClus,self.surface)
 
 		else: 
 
