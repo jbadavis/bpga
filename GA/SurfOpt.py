@@ -9,17 +9,21 @@ Jack Davis
 import sys
 import numpy as np
 
-from CoM import CoM 
+from CoM import CoM
 
 class SurfOpt:
 
 	def __init__(self
 				,clus
 				,surface
-				,eleNames):
+				,eleNames
+				,eleMasses):
 		
-		self.clus = clus
+
 		self.eleNames = eleNames
+		self.eleMasses = eleMasses
+
+		self.clus = self.reFormat(clus)
 
 		self.surfaceXYZ = surface.getSurf() 
 		self.lat = surface.lat
@@ -32,27 +36,27 @@ class SurfOpt:
 
 		self.height = 1.
 
-		self.plainClus = []
-
-		self.RemoveXYZstuff()
-
-	def RemoveXYZstuff(self):
+	def reFormat(self,clus):
 
 		'''
-		This needs to standardised 
-		across the program.
+		XYZ string format changed 
+		to atom formant.
 		'''
 
-		for line in self.clus:
+		for i in range(len(clus)):
 
-			ele,x,y,z = line.split()
-			newLine = [ele,float(x),float(y),float(z)]
+			ele,x,y,z = clus[i].split()
+			atom = [ele,float(x),float(y),float(z)]
 
-			self.plainClus.append(newLine)
+			clus[i] = atom
+
+		clus = CoM(clus,self.eleNames,self.eleMasses)
+
+		return clus
 
 	def placeClus(self):
 
-		self.surfClus = self.plainClus + self.surfaceXYZ
+		self.surfClus = self.clus + self.surfaceXYZ
 
 		self.getBonds()
 
@@ -121,29 +125,3 @@ class SurfOpt:
 				self.fixedSurfClus.append(atom)
 
 		return self.fixedSurfClus
-
-	# def makeXYZfile(self):
-
-	# 	''' 
-	# 	Convert list into XYZ file
-	# 	'''
-
-	# 	xyzFile = []
-
-	# 	natoms = str(len(self.fixedSurfClus))
-
-	# 	xyzFile.append(natoms+"\n\n")
-
-	# 	for line in self.fixedSurfClus:
-
-	# 		ele, x, y, z = line 
-
-	# 		x = str(x)
-	# 		y = str(y)
-	# 		z = str(z)
-
-	# 		newLine = ele+" "+x+" "+y+" "+z+"\n"
-
-	# 		xyzFile.append(newLine)
-
-	# 	return xyzFile
