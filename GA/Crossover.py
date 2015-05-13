@@ -196,6 +196,7 @@ class crossover:
 				return self.biRandom()
 			elif self.crossType == "weighted":
 				return self.biWeighted()
+			# Old method.
 			elif self.crossType == "Bimetallic":
 				return self.CutSpliceBimetallic()
 
@@ -265,8 +266,6 @@ class crossover:
 
 			# start = int(self.natoms*(fit1/(fit1+fit2)))
 			start = ran.randrange(1,self.natoms)
-
-			print start
 
 			for i in range(start):
 				offspring.append(clus1[i])
