@@ -33,6 +33,8 @@ eleNames = ["Au","Ir"]
 eleMasses = In.masses(eleNames)
 natoms = sum(eleNums)
 
+boxAdd = 10.0
+
 subString = "aprun -n 24 vasp5.gamma > output.dat"
 
 '''--- Surface GA ---'''
@@ -65,5 +67,5 @@ then producing offspring.
 
 StartCalc = poolGA(natoms,r_ij,eleNums
     ,eleNames,eleMasses,mutate,npool
-    ,cross,mutType,subString
+    ,cross,mutType,subString,boxAdd
     ,surface,surfGA)

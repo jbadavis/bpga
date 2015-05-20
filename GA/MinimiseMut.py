@@ -46,7 +46,7 @@ class minMut:
 	def __init__(self,natoms,r_ij
 				,mutType,eleNums,eleNames
 				,eleMasses,n,stride
-				,subString
+				,subString,boxAdd
 				,surface,surfGA):
 
 		self.natoms = natoms
@@ -58,6 +58,7 @@ class minMut:
 		self.n = n
 		self.stride = stride
 		self.subString = subString
+		self.boxAdd = self.boxAdd
 
 		self.mutant = []
 
@@ -292,7 +293,7 @@ class minMut:
 			'''
 	
 			self.vaspIN = DFTin(self.xyzNum,self.mutant,self.eleNames
-								,self.eleMasses,self.eleNums)
+								,self.eleMasses,self.eleNums,self.boxAdd)
 
 		if self.doDFT() == 0:
 

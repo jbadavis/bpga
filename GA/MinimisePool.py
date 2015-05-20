@@ -43,7 +43,7 @@ class minPool:
 	def __init__(self,natoms,r_ij
 				,eleNums,eleNames
 				,eleMasses,n,stride
-				,subString
+				,subString,boxAdd
 				,surface,surfGA):
 		
 		self.natoms = natoms
@@ -54,6 +54,7 @@ class minPool:
 		self.n = n
 		self.stride = stride
 		self.subString = subString
+		self.boxAdd = boxAdd
 
 		'''
 		Surface Object.
@@ -152,7 +153,8 @@ class minPool:
 			'''
 	
 			self.vaspIN = DFTin(self.xyzNum,clus,self.eleNames
-							,self.eleMasses,self.eleNums)
+							,self.eleMasses,self.eleNums
+							,self.boxAdd)
 
 
 	def minimise(self):

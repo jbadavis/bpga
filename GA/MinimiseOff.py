@@ -38,7 +38,7 @@ class minOff:
 	def __init__(self,natoms,eleNums
 				,eleNames,eleMasses
 				,nPool,cross,stride
-				,subString
+				,subString,boxAdd
 				,surface,surfGA):
 		
 		self.natoms = natoms
@@ -49,6 +49,7 @@ class minOff:
 		self.cross = cross
 		self.stride = stride
 		self.subString = subString
+		self.boxAdd = boxAdd
 
 		'''
 		Surface Object.
@@ -110,7 +111,7 @@ class minOff:
 		else:
 
 			self.vaspIN = DFTin(self.xyzNum,self.offspring,self.eleNames
-								,self.eleMasses,self.eleNums)
+								,self.eleMasses,self.eleNums,self.boxAdd)
 
 	def restart(self):
 

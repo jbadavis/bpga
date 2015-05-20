@@ -36,6 +36,7 @@ class poolGA:
 				,eleMasses,mutate
 				,nPool,cross,mutType
 				,subString
+				,boxAdd
 				,surface
 				,surfGA):
 		
@@ -49,6 +50,7 @@ class poolGA:
 		self.cross = cross
 		self.mutType = mutType
 		self.subString = subString
+		self.boxAdd = boxAdd
 
 		'''
 		Surface Object.
@@ -73,6 +75,7 @@ class poolGA:
 					,self.eleNums,self.eleNames
 					,self.eleMasses,self.nPool
 					,self.stride,self.subString
+					,self.boxAdd
 					,self.surface,self.surfGA)
 
 			notFinished = self.checkFinished()
@@ -94,7 +97,7 @@ class poolGA:
 					,"random",self.eleNums
 					,self.eleNames,self.eleMasses
 					,self.nPool,self.stride
-					,self.subString
+					,self.subString,self.boxAdd
 					,self.surface,self.surfGA)
 
 			else:
@@ -112,14 +115,14 @@ class poolGA:
 				,self.mutType,self.eleNums
 				,self.eleNames,self.eleMasses
 				,self.nPool,self.stride
-				,self.subString
+				,self.subString,self.boxAdd
 				,self.surface,self.surfGA)
 		else:
 
 			off = minOff(self.natoms,self.eleNums
 				,self.eleNames,self.eleMasses
 				,self.nPool,self.cross,self.stride
-				,self.subString
+				,self.subString,self.boxAdd
 				,self.surface,self.surfGA)
 
 	def checkRunning(self):

@@ -20,30 +20,18 @@ class vasp_input:
 
 	def __init__(self,calcNum
 				,clus,eleNames
-				,eleMasses,eleNums):
+				,eleMasses,eleNums
+				,boxAdd):
 
 		self.calcNum = str(calcNum)
 		self.clus = clus
 		self.eleNames = eleNames
 		self.eleMasses = eleMasses
 		self.eleNums = eleNums
+		self.boxAdd = boxAdd
 
-		# self.read_xyz() 
 		self.cell_size()
 		self.write_poscar()
-
-	# def read_xyz(self):
-
-	# 	'''
-	# 	Reads previously created .xyz
-	# 	into class coord list.
-	# 	'''
-
-	# 	with open(str(self.i) + ".xyz") as xyz:
-	# 		self.natoms = xyz.readline()
-	# 		comment = xyz.readline()
-	# 		self.coords = xyz.readlines()
-
 
 	def cell_size(self):
 
@@ -62,7 +50,7 @@ class vasp_input:
 			size.append(abs(float(x)))
 			size.append(abs(float(y)))
 			size.append(abs(float(z)))
-		self.box = max(size) + 10.0
+		self.box = max(size) + self.boxAdd
 
 	def write_poscar(self):
 
