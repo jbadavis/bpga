@@ -282,8 +282,6 @@ class crossover:
 						eleCount += 1
 				CheckEle.append(eleCount)
 
-			print CheckEle, self.eleNums
-
 			if CheckEle == self.eleNums:
 
 				compositionWrong = False

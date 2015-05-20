@@ -113,7 +113,6 @@ def addEle(upType,coords
 	for i in range(len(clus)):
 		ele,x,y,z = clus[i]
 		newLine = ele+" "+str(x)+" "+str(y)+" "+str(z)+"\n"
-		print newLine
 		clus[i] = newLine
 
 	return clus

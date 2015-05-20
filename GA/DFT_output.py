@@ -27,7 +27,6 @@ class vasp_output:
 
 		with open(str(self.calcNum) + "/OUTCAR","r") as outcar:
 			for line in outcar:
-				print line 
 				if errorStr in line:
 					error = True
 				else:
