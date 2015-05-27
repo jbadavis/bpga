@@ -112,12 +112,18 @@ class minMut:
 		new directory.
 		'''
 
+		self.mutant = []
+
 		db.lock()
 
-		if self.mutType == "random":
+		if self.mutType == "surface" or self.surfGA:
+			self.surfMutate()
+		elif self.mutType == "random":
 			self.randomMutate()
 		elif self.mutType == "move":
 			self.moveMutate()
+		elif self.mutType == "homotop":
+			self.homotopSwap()
 
 		db.unlock()
 
