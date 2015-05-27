@@ -58,7 +58,7 @@ class minMut:
 		self.n = n
 		self.stride = stride
 		self.subString = subString
-		self.boxAdd = self.boxAdd
+		self.boxAdd = boxAdd
 
 		self.mutant = []
 
