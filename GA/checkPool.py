@@ -27,8 +27,10 @@ class checkPool:
 				if "Finished Energy" in line:
 					energyList = line.split()
 					self.energies.append(float(energyList[3]))
+				elif "Running" in line:
+					self.energies.append(-1000000)
 					
-	def checkEnergy(self,newEnergy):
+ 	def checkEnergy(self,newEnergy):
 
 		HighestEnergy = max(self.energies)
 		self.lowestIndex = self.energies.index(HighestEnergy)
