@@ -1,9 +1,20 @@
 '''
-Surface GA Class
+Birmingham Parallel Genetic Algorithm
 
-Jack Davis
+A pool genetic algorithm for the
+structural characterisation of 
+nanoalloys.
 
-18/3/15
+Please cite - 
+A. Shayeghi et al, PCCP, 2015, 17, 2104-2112
+
+Authors -
+Jack Davis and the Johnston Group
+
+8/6/15
+
+--- Surface Optimiser Class ---
+
 '''
 
 import sys
@@ -23,9 +34,10 @@ class SurfOpt:
 		self.eleNames = eleNames
 		self.eleMasses = eleMasses
 
-		self.clus = self.reFormat(clus)
+		self.clus = CoM(clus,self.eleNames,self.eleMasses)
 
 		self.surfaceXYZ = surface.getSurf() 
+
 		self.lat = surface.lat
 
 		''' Surface layers in x,y and z '''
@@ -34,25 +46,7 @@ class SurfOpt:
 		self.y = surface.y
 		self.z = surface.z
 
-		self.height = 1.
-
-	def reFormat(self,clus):
-
-		'''
-		XYZ string format changed 
-		to atom formant.
-		'''
-
-		for i in range(len(clus)):
-
-			ele,x,y,z = clus[i].split()
-			atom = [ele,float(x),float(y),float(z)]
-
-			clus[i] = atom
-
-		clus = CoM(clus,self.eleNames,self.eleMasses)
-
-		return clus
+		self.height = surface.clusHeight
 
 	def placeClus(self):
 

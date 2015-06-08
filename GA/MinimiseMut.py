@@ -243,6 +243,8 @@ class minMut:
 		ranStruc=ran.randrange(0,self.n)
 		ranPoolPos=ranStruc*self.stride
 
+		print ranStruc
+
 		poolList = db.readPool()
 
 		clus=poolList[ranPoolPos:ranPoolPos+self.stride]
@@ -264,12 +266,11 @@ class minMut:
 		for i in range(len(clus)):
 			ele, x, y, z = clus[i].split()
 			x, y, z = float(x), float(y), float(z)
-			rotX = str(rot11*x + rot12*y + rot13*z)
-			rotY = str(rot21*x + rot22*y + rot23*z)
-			rotZ = str(rot31*x + rot32*y + rot33*z)
-			# New line after rotation. 
-			newLine = ele+" " +rotX+" "+rotY+" "+rotZ+"\n"
-			clus[i] = newLine
+			rotX = rot11*x + rot12*y + rot13*z
+			rotY = rot21*x + rot22*y + rot23*z
+			rotZ = rot31*x + rot32*y + rot33*z
+			atom = [ele,rotX,rotY,rotZ]
+			clus[i] = atom
 
 		self.surfMut = clus
 

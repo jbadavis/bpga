@@ -125,12 +125,12 @@ class minPool:
 		strucNum=self.strucNum
 		stride=self.stride
 		
-		initialXYZ = self.poolList[strucNum+1:strucNum+stride-1]
+		clus = self.poolList[strucNum+1:strucNum+stride-1]
 
-		for line in initialXYZ:
-			ele,x,y,z = line.split()
+		for i in range(len(clus)):
+			ele,x,y,z = clus[i].split()
 			atom = [ele,float(x),float(y),float(z)]
-			clus.append(atom)
+			clus[i] = atom
 
 		''' 
 		Surface GA 
@@ -140,11 +140,11 @@ class minPool:
 
 		if self.surfGA:
 
-			SurfaceStruc = SurfOpt(initialXYZ,self.surface,self.eleNames,self.eleMasses)
+			SurfaceStruc = SurfOpt(clus,self.surface,self.eleNames,self.eleMasses)
 
-			SurfClus = SurfaceStruc.placeClus()
+			surfClus = SurfaceStruc.placeClus()
 
-			self.vaspIN = surfacePOSCAR(self.xyzNum,SurfClus,self.surface)
+			self.vaspIN = surfacePOSCAR(self.xyzNum,surfClus,self.surface)
 
 		else: 
 
