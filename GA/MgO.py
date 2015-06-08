@@ -1,14 +1,25 @@
 '''
-Generate MgO surface.
+Birmingham Parallel Genetic Algorithm
 
-Jack Davis
+A pool genetic algorithm for the
+structural characterisation of 
+nanoalloys.
 
-16/1/15
+Please cite - 
+A. Shayeghi et al, PCCP, 2015, 17, 2104-2112
+
+Authors -
+Jack Davis and the Johnston Group
+
+8/6/15
+
+--- MgO Generator Class ---
+
 '''
 
 class MgO():
 
-    def __init__(self,x,y,z,vac):
+    def __init__(self,x,y,z,vac,clusHeight):
 
         self.xyz = []
 
@@ -17,6 +28,7 @@ class MgO():
         self.z = z
 
         self.vac = vac
+        self.clusHeight = clusHeight
 
         self.lat = 4.212
 
