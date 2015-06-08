@@ -24,7 +24,7 @@ import GA.Input as In
 from GA.MgO import MgO 
 
 npool = 10
-mutType = "move" # move, random, homotop or surface. 
+mutType = "move" 
 cross = "weighted"
 mutate = 0.2
 r_ij = 3.0
@@ -45,7 +45,7 @@ surfGA = True
 Define surface object.
 '''
 
-surface = MgO(x=4,y=4,z=2,vac=6)
+surface = MgO(x=4,y=4,z=2,vac=6,clusHeight=1.)
 
 ''' ---------------- '''
 
