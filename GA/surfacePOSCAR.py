@@ -56,8 +56,6 @@ class surfacePOSCAR():
 
     def printPOSCAR(self):
 
-        self.printXYZ()
-
         xLat = str(self.x*(self.lat/2))
         yLat = str(self.y*(self.lat/2))
         zLat = str(self.z*(self.lat/2)+(self.vac * (self.lat/2)))
@@ -102,17 +100,17 @@ class surfacePOSCAR():
             os.system("cp INCAR "+self.calcNum)
             os.system("cp KPOINTS "+self.calcNum)
 
-    def printXYZ(self):
+    # def printXYZ(self):
 
-        '''
-        For testing
-        '''
+    #     '''
+    #     For testing
+    #     '''
 
-        with open("XYZ","a") as xyzfile:
+    #     with open("XYZ","a") as xyzfile:
 
-            xyzfile.write(str(len(self.xyz))+"\n\n")
+    #         xyzfile.write(str(len(self.xyz))+"\n\n")
 
-            for i in self.xyz:
-                ele,x,y,z = i 
-                line = ele+" "+str(x)+" "+str(y)+" "+str(z)+"\n"
-                xyzfile.write(line)
+    #         for i in self.xyz:
+    #             ele,x,y,z = i 
+    #             line = ele+" "+str(x)+" "+str(y)+" "+str(z)+"\n"
+    #             xyzfile.write(line)
