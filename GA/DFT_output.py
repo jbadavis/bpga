@@ -1,11 +1,20 @@
-#!/usr/bin/env python
-
 '''
-DFT output class.
+Birmingham Parallel Genetic Algorithm
 
-Jack Davis
+A pool genetic algorithm for the
+structural characterisation of 
+nanoalloys.
 
-17/9/2014
+Please cite - 
+A. Shayeghi et al, PCCP, 2015, 17, 2104-2112
+
+Authors -
+Jack Davis and the Johnston Group
+
+17/9/14
+
+--- VASP Output Class ---
+
 '''
 
 class vasp_output:

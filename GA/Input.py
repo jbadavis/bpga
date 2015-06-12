@@ -1,10 +1,20 @@
 '''
-Input for 
-PoolGA
+Birmingham Parallel Genetic Algorithm
 
-Jack Davis
+A pool genetic algorithm for the
+structural characterisation of 
+nanoalloys.
 
-4/11/14
+Please cite - 
+A. Shayeghi et al, PCCP, 2015, 17, 2104-2112
+
+Authors -
+Jack Davis and the Johnston Group
+
+11/11/14
+
+--- Input Class ---
+
 '''
 
 import sys
