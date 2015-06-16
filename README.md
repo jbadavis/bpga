@@ -39,24 +39,20 @@ An example calculation for the BlueBEAR HPC can be found in:
 #!shell
 
 ~/bpga/Examples/Au2Ir2 
+```
 
 ### Crossover 
 
-Available crossover methods - 
+Available crossover methods:
 
 ```
 #!shell
 
 cross = "random"
 cross = "weighted"
-cross = "bimetallic" 
 ```
 
 "random" chooses a random cutting plane whereas for "weighted" this is determined by the fitness.
-
-Random also works for bimetallics.
-
-Currently bimetallic crossover takes 50% from each cluster.
 
 ### Mutation 
 
