@@ -3,7 +3,7 @@
 
 ### Installation ###
 
-To download the BPGA you need Git installed on your computer. If Git is installed use the following command: 
+To download the BPGA you need Git installed on your computer. If Git is installed use the following command to download the BPGA: 
 
 ```
 #!shell
