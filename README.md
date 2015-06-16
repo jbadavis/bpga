@@ -21,7 +21,7 @@ export PYTHONPATH=$PYTHONPATH:~/bpga
 
 ### Serial Jobs ###
 
-Create a new directory and add the following files - 
+Calculations must be run in separate directories, each of which must contain the following files:
 
 ```
 #!shell
@@ -30,16 +30,15 @@ INCAR
 KPOINTS
 POTCAR 
 Run.py
-Sub.sh
+sub.sh
 ```
 
-Ensure your submission script contains the following line - 
+An example calculation for the BlueBEAR HPC can be found in:
 
 ```
 #!shell
 
-python Run.py
-```
+~/bpga/Examples/Au2Ir2 
 
 ### Crossover 
 
