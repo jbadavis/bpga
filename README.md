@@ -3,7 +3,15 @@
 
 ### Installation ###
 
-Open your ~/.bashrc file and add the following line - 
+To download the BPGA you need Git installed on your computer. If Git is installed use the following command: 
+
+```
+#!shell
+
+git clone https://bitbucket.org/JBADavis/bpga.git
+```
+
+then add the following line to your ~/.bashrc file:
 
 ```
 #!shell
