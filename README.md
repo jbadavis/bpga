@@ -56,7 +56,7 @@ cross = "weighted"
 
 ### Mutation 
 
-Available mutation methods - 
+Available mutation methods: 
 
 ```
 #!shell
