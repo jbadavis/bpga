@@ -144,7 +144,7 @@ class minPool:
 
 			surfClus = SurfaceStruc.placeClus()
 
-			self.vaspIN = surfacePOSCAR(self.xyzNum,surfClus,self.surface)
+			self.vaspIN = surfacePOSCAR(self.xyzNum,self.eleNames,surfClus,self.surface)
 
 		else: 
 

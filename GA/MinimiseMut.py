@@ -287,7 +287,7 @@ class minMut:
 
 			SurfClus = SurfaceStruc.placeClus()
 
-			self.vaspIN = surfacePOSCAR(self.xyzNum,SurfClus,self.surface)
+			self.vaspIN = surfacePOSCAR(self.xyzNum,self.eleNames,SurfClus,self.surface)
 
 		else: 
 
