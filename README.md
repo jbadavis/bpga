@@ -3,7 +3,15 @@
 
 ### Installation ###
 
-Open your ~/.bashrc file and add the following line - 
+To download the BPGA you need Git installed on your computer. If Git is installed use the following command to download the BPGA: 
+
+```
+#!shell
+
+git clone https://bitbucket.org/JBADavis/bpga.git
+```
+
+then add the following line to your ~/.bashrc file:
 
 ```
 #!shell
@@ -13,7 +21,7 @@ export PYTHONPATH=$PYTHONPATH:~/bpga
 
 ### Serial Jobs ###
 
-Create a new directory and add the following files - 
+Calculations must be run in separate directories, each of which must contain the following files:
 
 ```
 #!shell
@@ -22,38 +30,33 @@ INCAR
 KPOINTS
 POTCAR 
 Run.py
-Sub.sh
+sub.sh
 ```
 
-Ensure your submission script contains the following line - 
+An example calculation for the BlueBEAR HPC can be found in:
 
 ```
 #!shell
 
-python Run.py
+~/bpga/Examples/Au2Ir2 
 ```
 
 ### Crossover 
 
-Available crossover methods - 
+Available crossover methods:
 
 ```
 #!shell
 
 cross = "random"
 cross = "weighted"
-cross = "bimetallic" 
 ```
 
 "random" chooses a random cutting plane whereas for "weighted" this is determined by the fitness.
 
-Random also works for bimetallics.
-
-Currently bimetallic crossover takes 50% from each cluster.
-
 ### Mutation 
 
-Available mutation methods - 
+Available mutation methods: 
 
 ```
 #!shell
