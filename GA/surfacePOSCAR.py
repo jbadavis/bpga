@@ -17,44 +17,41 @@ Jack Davis and the Johnston Group
 
 '''
 
-import os
+import os, sys
 
 class surfacePOSCAR():
 
     def __init__(self
                 ,calcNum
+                ,eleNames
                 ,slabClusXYZ
                 ,surface):
 
         self.calcNum = str(calcNum)
+        self.eleNames = eleNames
+
+        self.eleNames.append("O")
+        self.eleNames.append("Mg")
 
         self.xyz = slabClusXYZ
-
         self.x = surface.x
         self.y = surface.y
         self.z = surface.z
         self.vac = surface.vac
         self.lat = surface.lat
-
         self.box = 0.
-
         self.eleNums = []
 
-        self.getSurfEle()
         self.getEleNums()
 
         self.printPOSCAR()
 
-    def getSurfEle(self):
-
-        self.eleNames=[]
-
-        for i in self.xyz:
-            ele,x,y,z = i
-            if ele not in self.eleNames:
-                self.eleNames.append(ele)
-
     def getEleNums(self):
+
+        '''
+        Create a new, different eleNums 
+        list containing cluster and slab.
+        '''
 
         for element in self.eleNames:
             eleCount = 0
@@ -90,11 +87,26 @@ class surfacePOSCAR():
             for eleNum in self.eleNums:
                 poscar.write(str(eleNum)+" ")
 
-            # Selective dynamics.
-            poscar.write("\nS\n")
+            '''
+            Selective dynamics so that 
+            the cluster relaxes and the 
+            surface remains fixed.
+            '''
 
-            # Cartesian Coordinates.
+            poscar.write("\nS\n")
+            
+            '''
+            Use cartesian coordinates.
+            '''
+
             poscar.write("C\n")
+
+            '''
+            Write coordinates in order of 
+            element names. If the coordinates 
+            belong to a cluster all the geometry 
+            to relax. 
+            '''
 
             for element in self.eleNames:
                 for i in self.xyz:
@@ -103,25 +115,10 @@ class surfacePOSCAR():
                         if ele == "Mg" or ele == "O":
                             line = str(x)+" "+str(y)+" "+str(z)+" F F F\n"
                         else:
-                            line = str(x)+" "+str(y)+" "+str(z)+" T T T\n"                            
+                            line = str(x)+" "+str(y)+" "+str(z)+" T T T\n"
                         poscar.write(line)
-
-            os.system("mv POSCAR "+self.calcNum)
-            os.system("cp POTCAR "+self.calcNum)
-            os.system("cp INCAR "+self.calcNum)
-            os.system("cp KPOINTS "+self.calcNum)
-
-    # def printXYZ(self):
-
-    #     '''
-    #     For testing
-    #     '''
-
-    #     with open("XYZ","a") as xyzfile:
-
-    #         xyzfile.write(str(len(self.xyz))+"\n\n")
-
-    #         for i in self.xyz:
-    #             ele,x,y,z = i 
-    #             line = ele+" "+str(x)+" "+str(y)+" "+str(z)+"\n"
-    #             xyzfile.write(line)
+                        
+        os.system("mv POSCAR "+self.calcNum)
+        os.system("cp POTCAR "+self.calcNum)
+        os.system("cp INCAR "+self.calcNum)
+        os.system("cp KPOINTS "+self.calcNum)
