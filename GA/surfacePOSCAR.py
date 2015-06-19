@@ -29,9 +29,9 @@ class surfacePOSCAR():
 
         self.calcNum = str(calcNum)
         self.eleNames = eleNames
+        self.eleNamesSurf = []
 
-        self.eleNames.append("O")
-        self.eleNames.append("Mg")
+        self.addMgO()
 
         self.xyz = slabClusXYZ
         self.x = surface.x
@@ -46,6 +46,14 @@ class surfacePOSCAR():
 
         self.printPOSCAR()
 
+    def addMgO(self):
+
+        for element in self.eleNames:
+            self.eleNamesSurf.append(element)
+
+        self.eleNamesSurf.append("O")
+        self.eleNamesSurf.append("Mg")
+
     def getEleNums(self):
 
         '''
@@ -53,7 +61,7 @@ class surfacePOSCAR():
         list containing cluster and slab.
         '''
 
-        for element in self.eleNames:
+        for element in self.eleNamesSurf:
             eleCount = 0
             for i in self.xyz:
                 ele,x,y,z = i
@@ -79,7 +87,7 @@ class surfacePOSCAR():
 
             ''' Write elements '''
 
-            for element in self.eleNames:
+            for element in self.eleNamesSurf:
                 poscar.write(element+" ")
 
             poscar.write("\n")
@@ -108,7 +116,7 @@ class surfacePOSCAR():
             to relax. 
             '''
 
-            for element in self.eleNames:
+            for element in self.eleNamesSurf:
                 for i in self.xyz:
                     ele,x,y,z = i
                     if ele == element:
