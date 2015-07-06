@@ -53,33 +53,51 @@ class crossover:
 	def findPair(self):
 
 		'''
-		Using the roulette method select the
-		exact positions of the 
-		random clusters from the pool
+		Get pair of clusters using 
+		roulette wheel selection. 
 		'''
 
 		self.pairPos = select(self.nPool).roulette()
 
-		#Postions of pair in poollist
+		'''
+		Calculate the position of the
+		clusters in the pool.dat list 
+		based on the stride length.
+		'''
+
 		c1 = self.pairPos[0] * self.stride
 		c2 = self.pairPos[1] * self.stride
 
+		'''
+		Read pool.dat.
+		'''
+
 		poolList = db.readPool()
 
-		self.clus1 = poolList[c1+2:c1+self.stride]
-		self.clus2 = poolList[c2+2:c2+self.stride]
+		'''
+		Write coordinates to two
+		clus lists in correct format
+		using convert method.
+		'''
+
+		self.clus1 = self.convert(poolList[c1+2:c1+self.stride])
+		self.clus2 = self.convert(poolList[c2+2:c2+self.stride])
+
+		'''
+		Add two clus lists into a 
+		single pair list.
+		'''
 
 		self.pair = [self.clus1,self.clus2]
 
-		'''
-		Convert pair to 
-		new format.
-		'''
-
-		for i in range(len(self.pair)):
-			self.pair[i] = self.convert(self.pair[i])
-
 	def convert(self,clus):
+
+		'''
+		Correct format should be 
+
+		[[ele,X,Y,Z],...]
+
+		'''
 
 		newClus=[]
 
@@ -93,9 +111,13 @@ class crossover:
 	def prepare(self):
 
 		'''
-		Using the pair list rotate
-		and the sort the cluster by
-		the z coordinate.
+		According to Deavan and Ho 
+		cut and splice method, for each
+		cluster:
+
+		1 - Rotate 
+		2 - Sort by Z 
+
 		'''
 
 		for i in range(len(self.pair)):
@@ -105,8 +127,7 @@ class crossover:
 	def rotate(self,clus):
 
 		'''
-		Rotate cluster 
-		about random axis.
+		Rotate cluster about a random axis.
 		'''
 
 		rotClus=[]
@@ -137,7 +158,7 @@ class crossover:
 	def sortZ(self,clus):
 
 		'''
-		Bubble sort by z.
+		Bubble sort by clus by Z.
 		'''
 
 		swapped = True
@@ -154,6 +175,12 @@ class crossover:
 		return clus
 
 	def getFitnessPair(self):
+
+		'''
+		For weighted crossover use 
+		the fitness from the select object
+		and get fitness of each clus in pair. 
+		'''
 		
 		self.fitPair=[]
 
@@ -165,11 +192,14 @@ class crossover:
 	def mate(self):
 
 		'''
-		Return offspring based 
-		on crosstype.
+		Return offspring basedon crosstype.
 		'''
 
 		if len(self.eleNames) == 1:
+
+			'''
+			Monometalic
+			'''
 
 			if self.crossType == "random":
 				return self.monoRandom()
@@ -178,19 +208,23 @@ class crossover:
 
 		elif len(self.eleNames) == 2:
 
+			'''
+			Bimetallic
+			'''
+
 			if self.crossType == "random":
 				return self.biRandom()
 			elif self.crossType == "weighted":
 				return self.biWeighted()
-			# Old method.
-			elif self.crossType == "Bimetallic":
-				return self.CutSpliceBimetallic()
+
+			# *** Remove *** 
+			# elif self.crossType == "Bimetallic":
+			# 	return self.CutSpliceBimetallic()
 
 	def monoRandom(self):	
 
 		'''
-		Monometallic random 
-		crossover.
+		Monometallic Random Crossover
 		'''
 
 		offspring=[]
@@ -211,7 +245,7 @@ class crossover:
 	def monoWeighted(self):
 
 		'''
-		Monometallic weighted crossover.
+		Monometallic Weighted Crossover.
 		'''
 
 		self.getFitnessPair()
@@ -344,78 +378,78 @@ class crossover:
 
 		return offspring
 
-	def CutSpliceBimetallic(self):	
+	# def CutSpliceBimetallic(self):	
 
-		''' Bimetallic Crossover. '''
+	# 	''' Bimetallic Crossover. '''
 
-		offspring = []
+	# 	offspring = []
 
-		clus1 = self.pair[0]
-		clus2 = self.pair[1]
+	# 	clus1 = self.pair[0]
+	# 	clus2 = self.pair[1]
 
-		if self.eleNums[0] % 2 == 0 and self.eleNums[1] % 2 == 0:
-			c1_na = int(self.eleNums[0]) / 2
-			c1_nb = int(self.eleNums[1]) / 2
-			c2_na = int(self.eleNums[0]) / 2
-			c2_nb = int(self.eleNums[1]) / 2
-		elif self.eleNums[0] % 2 == 0 and self.eleNums[1] % 2 == 1:
-			c1_na = int(self.eleNums[0]) / 2
-			c1_nb = int(self.eleNums[1]) / 2
-			c2_na = int(self.eleNums[0]) / 2
-			c2_nb = int(self.eleNums[1]) / 2 + 1
-		elif self.eleNums[0] % 2 == 1 and self.eleNums[1] % 2 == 0:
-			c1_na = int(self.eleNums[0]) / 2
-			c1_nb = int(self.eleNums[1]) / 2
-			c2_na = int(self.eleNums[0]) / 2 + 1
-			c2_nb = int(self.eleNums[1]) / 2
-		elif self.eleNums[0] % 2 == 1 and self.eleNums[1] % 2 == 1:
-			c1_na = int(self.eleNums[0]) / 2
-			c1_nb = int(self.eleNums[1]) / 2
-			c2_na = int(self.eleNums[0]) / 2 + 1
-			c2_nb = int(self.eleNums[1]) / 2 + 1
+	# 	if self.eleNums[0] % 2 == 0 and self.eleNums[1] % 2 == 0:
+	# 		c1_na = int(self.eleNums[0]) / 2
+	# 		c1_nb = int(self.eleNums[1]) / 2
+	# 		c2_na = int(self.eleNums[0]) / 2
+	# 		c2_nb = int(self.eleNums[1]) / 2
+	# 	elif self.eleNums[0] % 2 == 0 and self.eleNums[1] % 2 == 1:
+	# 		c1_na = int(self.eleNums[0]) / 2
+	# 		c1_nb = int(self.eleNums[1]) / 2
+	# 		c2_na = int(self.eleNums[0]) / 2
+	# 		c2_nb = int(self.eleNums[1]) / 2 + 1
+	# 	elif self.eleNums[0] % 2 == 1 and self.eleNums[1] % 2 == 0:
+	# 		c1_na = int(self.eleNums[0]) / 2
+	# 		c1_nb = int(self.eleNums[1]) / 2
+	# 		c2_na = int(self.eleNums[0]) / 2 + 1
+	# 		c2_nb = int(self.eleNums[1]) / 2
+	# 	elif self.eleNums[0] % 2 == 1 and self.eleNums[1] % 2 == 1:
+	# 		c1_na = int(self.eleNums[0]) / 2
+	# 		c1_nb = int(self.eleNums[1]) / 2
+	# 		c2_na = int(self.eleNums[0]) / 2 + 1
+	# 		c2_nb = int(self.eleNums[1]) / 2 + 1
 
-		c1_nab = [c1_na,c1_nb]
-		c2_nab = [c2_na,c2_nb]
+	# 	c1_nab = [c1_na,c1_nb]
+	# 	c2_nab = [c2_na,c2_nb]
 	
-		for i in range(2):
-			start = 0 
-			counter = 0
-			for j in range(c1_nab[i]):
-				for atom in clus1[start:]:
-					counter += 1
-					ele,x,y,z = atom
-					if ele == self.eleNames[i]:
-						offspring.append(atom)
-						start = counter
-						break
+	# 	for i in range(2):
+	# 		start = 0 
+	# 		counter = 0
+	# 		for j in range(c1_nab[i]):
+	# 			for atom in clus1[start:]:
+	# 				counter += 1
+	# 				ele,x,y,z = atom
+	# 				if ele == self.eleNames[i]:
+	# 					offspring.append(atom)
+	# 					start = counter
+	# 					break
 
-		for i in range(2):
-			start = 0 
-			counter = 0
-			for j in range(c2_nab[i]):
-				for atom in clus2[start:]:
-					counter += 1
-					ele,x,y,z = atom
-					if ele == self.eleNames[i]:
-						offspring.append(atom)
-						start = counter
-						break
+	# 	for i in range(2):
+	# 		start = 0 
+	# 		counter = 0
+	# 		for j in range(c2_nab[i]):
+	# 			for atom in clus2[start:]:
+	# 				counter += 1
+	# 				ele,x,y,z = atom
+	# 				if ele == self.eleNames[i]:
+	# 					offspring.append(atom)
+	# 					start = counter
+	# 					break
 
-		'''
-		Sort offspring
-		by element.
-		'''
+	# 	'''
+	# 	Sort offspring
+	# 	by element.
+	# 	'''
 
-		sortOffspring = []
+	# 	sortOffspring = []
 
-		for element in self.eleNames:
-			for atom in offspring:
-				ele,x,y,z = atom
-				if ele == element:
-					sortOffspring.append(atom)
+	# 	for element in self.eleNames:
+	# 		for atom in offspring:
+	# 			ele,x,y,z = atom
+	# 			if ele == element:
+	# 				sortOffspring.append(atom)
 
-		offspring = sortOffspring
+	# 	offspring = sortOffspring
 
-		return offspring
+	# 	return offspring
 
 
