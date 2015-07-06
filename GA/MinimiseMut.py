@@ -87,7 +87,7 @@ class minMut:
 		mutant attribute. 
 		'''
 
-		if self.mutType == "surface" or self.surfGA:
+		if self.mutType == "surface": #or self.surfGA:
 			self.surfMutate()
 		elif self.mutType == "random":
 			self.randomMutate()
@@ -116,7 +116,7 @@ class minMut:
 
 		db.lock()
 
-		if self.mutType == "surface" or self.surfGA:
+		if self.mutType == "surface": # or self.surfGA:
 			self.surfMutate()
 		elif self.mutType == "random":
 			self.randomMutate()
@@ -272,7 +272,7 @@ class minMut:
 			atom = [ele,rotX,rotY,rotZ]
 			clus[i] = atom
 
-		self.surfMut = clus
+		self.mutant = clus
 
 	def minimise(self):
 
@@ -283,11 +283,13 @@ class minMut:
 
 		if self.surfGA:
 
-			SurfaceStruc = SurfOpt(self.surfMut,self.surface,self.eleNames,self.eleMasses)
+			SurfaceStruc = SurfOpt(self.mutant,self.surface,self.eleNames,self.eleMasses)
 
 			SurfClus = SurfaceStruc.placeClus()
 
 			self.vaspIN = surfacePOSCAR(self.xyzNum,self.eleNames,SurfClus,self.surface)
+
+			sys.exit()
 
 		else: 
 
