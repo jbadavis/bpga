@@ -53,15 +53,12 @@ class crossover:
 	def findPair(self):
 
 		'''
-		From tournamentSelect the
+		Using the roulette method select the
 		exact positions of the 
-		random clusters is found in 
-		the pool.
+		random clusters from the pool
 		'''
 
-		# Select random pair 
-		selectPair = select(self.nPool)
-		self.pairPos = selectPair.pair
+		self.pairPos = select(self.nPool).roulette()
 
 		#Postions of pair in poollist
 		c1 = self.pairPos[0] * self.stride
@@ -156,22 +153,11 @@ class crossover:
 
 		return clus
 
-	def fitness(self):
+	def getFitnessPair(self):
 		
-		energies=[]
-		fitness=[]
 		self.fitPair=[]
 
-		getEn = checkPool()
-		energies = getEn.energies
-
-		energies = sorted(energies)
-		minEn = energies[0]
-		rangeEn = energies[len(energies)-1] - energies[0]
-
-		for energy in energies:
-			fit=0.5*(1-np.tanh(2.*((energy-minEn)/rangeEn)-1.))
-			fitness.append(fit)
+		fitness = select(self.nPool).fitness
 
 		self.fitPair.append(fitness[self.pairPos[0]])
 		self.fitPair.append(fitness[self.pairPos[1]])
@@ -228,7 +214,7 @@ class crossover:
 		Monometallic weighted crossover.
 		'''
 
-		self.fitness()
+		self.getFitnessPair()
 
 		offspring=[]
 
@@ -256,7 +242,7 @@ class crossover:
 
 			offspring = []
 
-			self.fitness()
+			self.getFitnessPair()
 
 			fit1 = self.fitPair[0]
 			fit2 = self.fitPair[1]
@@ -290,7 +276,7 @@ class crossover:
 
 		offspring = []
 
-		self.fitness()
+		self.getFitnessPair()
 
 		fit1 = self.fitPair[0]
 		fit2 = self.fitPair[1]

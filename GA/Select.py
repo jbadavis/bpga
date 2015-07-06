@@ -13,65 +13,81 @@ Jack Davis and the Johnston Group
 
 10/10/14
 
---- Selection Class ---
+--- Roulette Wheel Selection Class ---
 
 '''
 
 import random as ran
+import numpy as np
 
 from checkPool import checkPool
 
 class tournamentSelect:
 
-	def __init__(self,n):
+	def __init__(self,nPool):
 
 		ran.seed()
 
-		self.n = n
-		self.energies = []
-		self.getEnergies()
-		self.selectClusters(n)
+		self.nPool = nPool
+		self.getFitness()
 
-	def getEnergies(self):
+		# self.getEnergies()
+		# self.selectClusters(n)
 
-		'''
-		Get final energies
-		from pool.dat after
-		convergence.
-		'''
+	def getFitness(self):
 
-		getEn = checkPool()
-		self.energies = getEn.energies
+		self.fitness = []
+		self.energies = sorted(checkPool().energies)
 
-	def selectClusters(self,n):
+		energyRange = self.energies[len(self.energies)-1] - self.energies[0]
 
-		'''
-		Selects random 
-		pair from pool
-		for crossover.
-		'''
+		for energy in self.energies:
+			fit = 0.5*(1-np.tanh(2.*((energy-self.energies[0])/energyRange)-1.))
+			self.fitness.append(fit)
 
-		clust1 = self.tournament()
-		clust2 = self.tournament()
+	def roulette(self):
 
-		while clust2 == clust1:
-			clust2 = self.tournament()
+		self.pair = []
 
-		self.pair = [clust1,clust2]
+		while len(self.pair) < 2:
 
-	def tournament(self):
+			ranPos = ran.randrange(0,self.nPool)
+			ranFit = ran.uniform(0,1)
 
-		'''
-		Randomly select 
-		tournament.
-		'''
+			if ranFit < self.fitness[ranPos] and ranPos not in self.pair:
+				self.pair.append(ranPos)
 
-		size=3 
-		tournEn=[]
+		return self.pair
 
-		tourn = ran.sample(range(0,self.n),size)
+	# def selectClusters(self,n):
 
-		for i in tourn:
-			tournEn.append(self.energies[i])
+	# 	'''
+	# 	Selects random 
+	# 	pair from pool
+	# 	for crossover.
+	# 	'''
 
-		return self.energies.index(min(tournEn))
+	# 	clust1 = self.tournament()
+	# 	clust2 = self.tournament()
+
+	# 	while clust2 == clust1:
+	# 		clust2 = self.tournament()
+
+	# 	self.pair = [clust1,clust2]
+
+	# def tournament(self):
+
+	# 	'''
+	# 	Randomly select 
+	# 	tournament.
+	# 	'''
+
+	# 	size = 4
+	# 	tournEn = []
+
+	# 	tourn = ran.sample(range(0,self.nPool),size)
+
+	# 	for i in tourn:
+	# 		tournEn.append(self.energies[i])
+
+	# 	return self.energies.index(min(tournEn))

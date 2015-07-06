@@ -97,7 +97,6 @@ class minOff:
 						,self.eleNums,self.eleNames,self.natoms)
 
 		self.offspring = newClus.mate()
-
 		self.offspring = fixOverlap(self.offspring)
 
 		if self.surfGA:
