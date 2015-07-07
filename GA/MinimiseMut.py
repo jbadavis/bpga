@@ -87,7 +87,7 @@ class minMut:
 		mutant attribute. 
 		'''
 
-		if self.mutType == "surface": #or self.surfGA:
+		if self.mutType == "rotate": #or self.surfGA:
 			self.surfMutate()
 		elif self.mutType == "random":
 			self.randomMutate()
@@ -116,7 +116,7 @@ class minMut:
 
 		db.lock()
 
-		if self.mutType == "surface": # or self.surfGA:
+		if self.mutType == "rotate": # or self.surfGA:
 			self.surfMutate()
 		elif self.mutType == "random":
 			self.randomMutate()
@@ -145,6 +145,8 @@ class minMut:
 				atom = [ele,x,y,z]
 
 				self.mutant.append(atom)
+
+		fixOverlap(self.mutant)
 
 	def moveMutate(self):
 
@@ -243,8 +245,6 @@ class minMut:
 		ranStruc=ran.randrange(0,self.n)
 		ranPoolPos=ranStruc*self.stride
 
-		print ranStruc
-
 		poolList = db.readPool()
 
 		clus=poolList[ranPoolPos:ranPoolPos+self.stride]
@@ -288,8 +288,6 @@ class minMut:
 			SurfClus = SurfaceStruc.placeClus()
 
 			self.vaspIN = surfacePOSCAR(self.xyzNum,self.eleNames,SurfClus,self.surface)
-
-			sys.exit()
 
 		else: 
 
