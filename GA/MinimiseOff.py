@@ -33,6 +33,8 @@ from fixOverlap import fixOverlap
 from SurfOpt import SurfOpt 
 from surfacePOSCAR import surfacePOSCAR 
 
+import sys
+
 class minOff: 
 
 	def __init__(self,natoms,eleNums
@@ -79,7 +81,6 @@ class minOff:
 
 		os.system("mkdir " + str(self.xyzNum))
 
-		# self.findPair()
 		self.produceOffspring()
 
 		db.unlock()
