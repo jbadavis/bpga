@@ -25,14 +25,12 @@ import Database as db
 
 from DFT_input import vasp_input as DFTin
 from DFT_output import vasp_output as DFTout
-
 from checkPool import checkPool as checkPool
 from CoM import CoM 
-
 from fixOverlap import fixOverlap
 from Explode import checkClus
-
 from Crossover import crossover
+from Select import select
 
 # Surface GA
 from SurfOpt import SurfOpt 
@@ -45,7 +43,7 @@ class minMut:
 
 	def __init__(self,natoms,r_ij
 				,mutType,eleNums,eleNames
-				,eleMasses,n,stride
+				,eleMasses,nPool,stride
 				,subString,boxAdd
 				,surface,surfGA):
 
@@ -55,7 +53,7 @@ class minMut:
 		self.eleNums = eleNums
 		self.eleNames = eleNames
 		self.eleMasses = eleMasses
-		self.n = n
+		self.nPool = nPool
 		self.stride = stride
 		self.subString = subString
 		self.boxAdd = boxAdd
@@ -87,14 +85,14 @@ class minMut:
 		mutant attribute. 
 		'''
 
-		if self.mutType == "rotate": #or self.surfGA:
-			self.surfMutate()
+		if self.mutType == "rotate": 
+			self.rotateMutate()
 		elif self.mutType == "random":
 			self.randomMutate()
 		elif self.mutType == "move":
 			self.moveMutate()
 		elif self.mutType == "homotop":
-			self.homotopSwap()
+			self.homotopMutate()
 							
 		db.unlock()
 
@@ -116,14 +114,14 @@ class minMut:
 
 		db.lock()
 
-		if self.mutType == "rotate": # or self.surfGA:
-			self.surfMutate()
+		if self.mutType == "rotate": 
+			self.rotateMutate()
 		elif self.mutType == "random":
 			self.randomMutate()
 		elif self.mutType == "move":
 			self.moveMutate()
 		elif self.mutType == "homotop":
-			self.homotopSwap()
+			self.homotopMutate()
 
 		db.unlock()
 
@@ -160,7 +158,7 @@ class minMut:
 
 		coords=[]
 
-		ranStruc=ran.randrange(0,self.n)
+		ranStruc=ran.randrange(0,self.nPool)
 		ranPoolPos=ranStruc*self.stride
 
 		'''
@@ -193,7 +191,7 @@ class minMut:
 			atom = [ele,float(x),float(y),float(z)]
 			self.mutant.append(atom)
 
-	def homotopSwap(self):
+	def homotopMutate(self):
 
 		'''
 		Select cluster 
@@ -202,7 +200,7 @@ class minMut:
 
 		poolList = db.readPool()
 
-		ranStruc=ran.randrange(0,self.n)
+		ranStruc=ran.randrange(0,self.nPool)
 		ranPoolPos=ranStruc*self.stride
 
 		clus = poolList[ranPoolPos:ranPoolPos+self.stride]
@@ -235,20 +233,44 @@ class minMut:
 
 		self.mutant = clus
 
-	def surfMutate(self):
+	def rotateMutate(self):
 
 		'''
-		Rotate the cluster 
-		on a surface.
+		Two modes for rotate mutation
+
+		1 - If surfaceGA rotate entire cluster.
+		2 - If gas-phase rotate 20 percent. 
+
+		Low energy structure selected
+		using first cluster in list 
+		from roulette selection.
 		'''
 
-		ranStruc=ran.randrange(0,self.n)
+		ranStruc = select(self.nPool).roulette()[0]
+		# ranStruc=ran.randrange(0,self.nPool)
 		ranPoolPos=ranStruc*self.stride
+
+
+		print ranStruc
 
 		poolList = db.readPool()
 
 		clus=poolList[ranPoolPos:ranPoolPos+self.stride]
 		clus=clus[2:]
+
+		'''
+		Decide how many atoms 
+		to rotate. 
+		'''
+
+		if self.surfGA:
+			rotateNum = len(clus)
+		else: 
+			rotateNum = len(clus) * .2
+
+		'''
+		Random rotation axis.
+		'''
 
 		theta = ran.uniform(0,np.pi*2)
 		phi = ran.uniform(0,np.pi)
@@ -263,7 +285,7 @@ class minMut:
 		rot32 = -np.sin(theta)
 		rot33 = np.cos(theta)*np.cos(phi)
 
-		for i in range(len(clus)):
+		for i in range(rotateNum):
 			ele, x, y, z = clus[i].split()
 			x, y, z = float(x), float(y), float(z)
 			rotX = rot11*x + rot12*y + rot13*z
@@ -273,6 +295,8 @@ class minMut:
 			clus[i] = atom
 
 		self.mutant = clus
+
+		sys.exit()
 
 	def minimise(self):
 

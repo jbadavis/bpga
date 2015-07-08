@@ -22,7 +22,7 @@ import numpy as np
 
 from checkPool import checkPool
 
-class tournamentSelect:
+class select:
 
 	def __init__(self,nPool):
 

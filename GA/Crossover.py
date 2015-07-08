@@ -22,7 +22,7 @@ import random as ran
 
 import Database as db
 
-from Select import tournamentSelect as select
+from Select import select
 from checkPool import checkPool
 from CoM import CoM 
 
@@ -117,7 +117,6 @@ class crossover:
 
 		1 - Rotate 
 		2 - Sort by Z 
-
 		'''
 
 		for i in range(len(self.pair)):
@@ -125,10 +124,6 @@ class crossover:
 			self.pair[i] = self.sortZ(self.pair[i])
 
 	def rotate(self,clus):
-
-		'''
-		Rotate cluster about a random axis.
-		'''
 
 		rotClus=[]
 
@@ -152,7 +147,7 @@ class crossover:
 			rotZ = rot31*x + rot32*y + rot33*z
 			rotAtom = [ele,rotX,rotY,rotZ]
 			clus[i] = rotAtom
-
+			
 		return clus
 
 	def sortZ(self,clus):
@@ -284,7 +279,6 @@ class crossover:
 			clus1 = self.pair[0]
 			clus2 = self.pair[1]
 
-			# start = int(self.natoms*(fit1/(fit1+fit2)))
 			start = ran.randrange(1,self.natoms)
 
 			for i in range(start):
@@ -303,7 +297,6 @@ class crossover:
 				CheckEle.append(eleCount)
 
 			if CheckEle == self.eleNums:
-
 				compositionWrong = False
 
 	def biWeighted(self):
@@ -317,6 +310,11 @@ class crossover:
 
 		plane = int(self.natoms*(fit1/(fit1+fit2)))
 
+		# for i in range(len(self.pair)):
+		# 	print "Cluster " + str(i+1) 
+		# 	for atom in self.pair[i]:
+		# 		print atom
+
 		'''
 		Take initial cut from 
 		the first cluster. 
@@ -325,6 +323,8 @@ class crossover:
 		for i in range(plane):
 
 			offspring.append(self.pair[0][i])
+
+		# print plane
 
 		'''
 		Count the number of Elements 
@@ -377,6 +377,9 @@ class crossover:
 						break
 
 		return offspring
+
+		# for line in offspring:
+		# 	print line
 
 	# def CutSpliceBimetallic(self):	
 

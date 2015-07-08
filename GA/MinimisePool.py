@@ -26,7 +26,6 @@ import Database as db
 from DFT_input import vasp_input as DFTin
 from DFT_output import vasp_output as DFTout
 
-from Select import tournamentSelect as select
 from Crossover import crossover as cross 
 from checkPool import checkPool as checkPool
 from CoM import CoM 
