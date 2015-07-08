@@ -24,7 +24,6 @@ from random import randrange, uniform
 from MinimisePool import minPool
 from MinimiseOff import minOff
 from MinimiseMut import minMut
-from Select import tournamentSelect as select
 from checkPool import checkPool as checkPool
 
 import sys
@@ -101,6 +100,13 @@ class poolGA:
 					,self.surface,self.surfGA)
 
 			else:
+
+				'''
+				Else if pool is fully 
+				minimimised begin mutation 
+				and crossover.
+				''' 
+
 				self.decide()
 
 	def decide(self):
