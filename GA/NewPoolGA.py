@@ -72,9 +72,14 @@ class poolGA:
 						,self.boxAdd
 						,self.surface,self.surfGA)
 			
+		'''
+		Set the mutation rate.
+		'''
+
+		mutateRate = self.mutate * self.nPool
+
 		for i in range(1000): 
 
-			mutateRate = self.mutate * self.nPool
 			choice = uniform(0,self.nPool)
 
 			if choice < mutateRate:
@@ -100,7 +105,6 @@ class poolGA:
 		else: 
 			with open("pool.dat","r") as pool:
 				poolList = pool.readlines()
-
 				poolSize = len(poolList) / (self.natoms + 2)
 				return poolSize 
 

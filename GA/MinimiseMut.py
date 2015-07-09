@@ -263,7 +263,7 @@ class minMut:
 		if self.surfGA:
 			rotateNum = len(clus)
 		else: 
-			rotateNum = len(clus) * .2
+			rotateNum = int(round(self.natoms*0.2))
 
 		'''
 		Random rotation axis.
