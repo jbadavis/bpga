@@ -158,24 +158,67 @@ class minRan:
 	def decide(self):
 
 		'''
-		Should cluster be added.
+		Should cluster be added to pool.dat?
 		'''
 
 		if os.path.exists("pool.dat"):
 			with open("pool.dat","r") as pool:
 				poolList = pool.readlines()
 				poolSize = (len(poolList) - (2 * self.nPool)) / self.natoms 
+				self.addToPool()
 		else:
-			with open("pool.dat","w") as pool:
-				for atom in self.finalCoords:
+			self.addToPool()
+
+
+	def addToPool(self):
+
+		'''
+		Add Final Geometry and 
+		energy to pool.dat.
+		'''
+
+		clus = []
+
+		output = DFTout(self.calcNum,self.natoms)
+		self.finalEnergy = output.getEnergy()
+		self.finalCoords = output.getCoords()
+
+		with open("pool.dat","a") as pool:
+
+			pool.write(str(self.natoms)+"\n")
+			pool.write("Energy = "+str(self.finalEnergy)+"\n")
+
+			'''
+			Change format of 
+			the coordinates.
+			'''
+
+			for i in range(0,self.natoms*3,3):
+
+				x = self.finalCoords[i]
+				y = self.finalCoords[i+1]
+				z = self.finalCoords[i+2]
+
+				clus.append([x,y,z])
+
+			'''
+			Add the element types
+			and write to pool file.
+			'''
+
+			count = 0
+
+			for i in range(len(self.eleNames)):
+				for j in range(self.eleNums[i]):
+					ele = self.eleNames[i]
+					x,y,z = clus[count]
+					atom = ele+" "+x+" "+y+" "+z+"\n"
+					
 					pool.write(atom)
 
+					count += 1
 
 		sys.exit()
-
-
-
-
 
 
 
