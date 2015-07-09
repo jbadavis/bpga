@@ -74,7 +74,7 @@ class poolGA:
 		if os.path.exists("pool.dat") == False:
 			return 0
 		else: 
-			with open("pool.dat","w") as pool:
+			with open("pool.dat","r") as pool:
 				poolList = pool.readlines()
 				poolSize = (len(poolList) - (2 * self.nPool)) / self.natoms 
 				return poolSize 
