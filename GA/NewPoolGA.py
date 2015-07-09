@@ -69,8 +69,6 @@ class poolGA:
 						,self.boxAdd
 						,self.surface,self.surfGA)
 
-			sys.exit()
-
 	def getPoolSize(self):
 
 		if os.path.exists("pool.dat") == False:
