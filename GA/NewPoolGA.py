@@ -18,8 +18,12 @@ Jack Davis and the Johnston Group
 '''
 
 import os,sys
+from random import randrange, uniform
 
 from MinimiseRan import minRan 
+from MinimiseOff import minOff
+from MinimiseMut import minMut
+from checkPool import checkPool as checkPool
 
 class poolGA:
 
