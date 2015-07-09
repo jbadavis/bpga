@@ -218,8 +218,6 @@ class minRan:
 
 					count += 1
 
-		sys.exit()
-
 
 
 
