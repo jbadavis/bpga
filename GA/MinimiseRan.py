@@ -59,7 +59,7 @@ class minRan:
 		self.surfGA = surfGA
 
 		self.calcNum = db.findLastDir() + 1 
-		os.system("mkdir "+str(self.calcNum))
+		os.system("mkdir " + str(self.calcNum))
 
 		self.genRan()
 
