@@ -79,5 +79,5 @@ class poolGA:
 			with open("pool.dat","w") as pool:
 				poolList = pool.readlines()
 				poolSize = (len(poolList) - (2 * self.nPool)) / self.natoms 
-				return poolSize
+				return poolSize 
 

@@ -40,7 +40,7 @@ class minRan:
 				,boxAdd,surface
 				,surfGA):
 
-		self.calcNum = calcNum
+		self.calcNum =  calcNum + 1 
 		self.natoms = natoms
 		self.r_ij = r_ij
 		self.eleNums = eleNums
@@ -161,14 +161,15 @@ class minRan:
 		Should cluster be added.
 		'''
 
-		if poolSize == 0:
-			with open("pool.dat","w") as pool:
-				for atom in self.finalCoords:
-					pool.write(atom)
-		elif os.path.exists("pool.dat"):
+		if os.path.exists("pool.dat"):
 			with open("pool.dat","r") as pool:
 				poolList = pool.readlines()
 				poolSize = (len(poolList) - (2 * self.nPool)) / self.natoms 
+		else:
+			with open("pool.dat","w") as pool:
+				for atom in self.finalCoords:
+					pool.write(atom)
+
 
 		sys.exit()
 
