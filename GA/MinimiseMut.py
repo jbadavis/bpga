@@ -296,8 +296,6 @@ class minMut:
 
 		self.mutant = clus
 
-		sys.exit()
-
 	def minimise(self):
 
 		'''
