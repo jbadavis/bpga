@@ -65,8 +65,7 @@ class poolGA:
 
 		while self.getPoolSize() < self.nPool:
 
-			pool = minRan(self.getPoolSize()
-						,self.natoms,self.r_ij
+			pool = minRan(self.natoms,self.r_ij
 						,self.eleNums,self.eleNames
 						,self.eleMasses,self.nPool
 						,self.stride,self.subString

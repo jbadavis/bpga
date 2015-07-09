@@ -54,7 +54,7 @@ def updatePool(upType,strucNum
 	poolList[strucNum+1:strucNum+stride-1]=coordsEle
 
 	if "Finish" in upType:
-		poolList[strucNum]="Finished Energy = "+str(finalEn)+"\n"
+		poolList[strucNum]="Energy = "+str(finalEn)+"\n"
 	elif "Restart" in upType:
 		poolList[strucNum]="Restart\n"
 
@@ -136,7 +136,14 @@ def findLastDir():
 
 	calcList = sorted(calcList)
 
-	lastCalc = calcList[len(calcList)-1]
+	'''
+	If list is empty.
+	'''
+
+	if not calcList:
+		lastCalc = 0
+	else:
+		lastCalc = calcList[len(calcList)-1]
 
 	return lastCalc
 

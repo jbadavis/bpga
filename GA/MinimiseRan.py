@@ -19,6 +19,7 @@ Jack Davis and the Johnston Group
 
 import sys, os
 import random as ran
+import Database as db
 
 from fixOverlap import fixOverlap
 from DFT_input import vasp_input as DFTin
@@ -32,7 +33,7 @@ from surfacePOSCAR import surfacePOSCAR
 
 class minRan:
 
-	def __init__(self,calcNum
+	def __init__(self
 				,natoms,r_ij
 				,eleNums,eleNames
 				,eleMasses,nPool
@@ -40,7 +41,6 @@ class minRan:
 				,boxAdd,surface
 				,surfGA):
 
-		self.calcNum =  calcNum + 1 
 		self.natoms = natoms
 		self.r_ij = r_ij
 		self.eleNums = eleNums
@@ -57,7 +57,8 @@ class minRan:
 
 		self.surface = surface
 		self.surfGA = surfGA
-		
+
+		self.calcNum = db.findLastDir() + 1 
 		os.system("mkdir "+str(self.calcNum))
 
 		self.genRan()

@@ -35,9 +35,9 @@ class checkPool:
 
 		with open("pool.dat","r") as pool:
 			for line in pool:
-				if "Finished Energy" in line:
+				if "Energy" in line:
 					energyList = line.split()
-					self.energies.append(float(energyList[3]))
+					self.energies.append(float(energyList[2]))
 				elif "Running" in line:
 					self.energies.append(-1000000)
 					
