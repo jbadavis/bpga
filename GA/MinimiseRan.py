@@ -19,8 +19,8 @@ Jack Davis and the Johnston Group
 
 import sys, os
 import random as ran
-from fixOverlap import fixOverlap
 
+from fixOverlap import fixOverlap
 from DFT_input import vasp_input as DFTin
 from DFT_output import vasp_output as DFTout
 from checkPool import checkPool as checkPool
