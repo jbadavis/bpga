@@ -165,7 +165,21 @@ class minRan:
 			with open("pool.dat","r") as pool:
 				poolList = pool.readlines()
 				poolSize = len(poolList) / (self.natoms + 2)
-				self.addToPool()
+				if poolSize < self.nPool:
+					self.addToPool()
+				else:
+					AcceptReject = checkPool()
+					Accept = AcceptReject.checkEnergy(float(self.finalEnergy))
+
+					if Accept:
+						Index = AcceptReject.lowestIndex
+						Index = (Index*self.stride)+1
+
+						db.updatePool("Finish"
+									,Index,self.eleNums
+									,self.eleNames,self.eleMasses
+									,self.finalEnergy,self.finalCoords
+									,self.stride,self.vaspIN.box)
 		else:
 			self.addToPool()
 
@@ -217,16 +231,3 @@ class minRan:
 					pool.write(atom)
 
 					count += 1
-
-
-
-
-
-
-
-
-
-
-
-
-

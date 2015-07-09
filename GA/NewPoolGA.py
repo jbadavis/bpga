@@ -68,6 +68,27 @@ class poolGA:
 						,self.stride,self.subString
 						,self.boxAdd
 						,self.surface,self.surfGA)
+			
+			for i in range(1000): 
+
+				mutateRate = self.mutate * self.nPool
+				choice = uniform(0,self.nPool)
+
+				if choice < mutateRate:
+
+					off = minMut(self.natoms,self.r_ij
+						,self.mutType,self.eleNums
+						,self.eleNames,self.eleMasses
+						,self.nPool,self.stride
+						,self.subString,self.boxAdd
+						,self.surface,self.surfGA)
+				else:
+
+					off = minOff(self.natoms,self.eleNums
+						,self.eleNames,self.eleMasses
+						,self.nPool,self.cross,self.stride
+						,self.subString,self.boxAdd
+						,self.surface,self.surfGA)
 
 	def getPoolSize(self):
 
