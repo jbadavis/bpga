@@ -59,15 +59,17 @@ class poolGA:
 
 	def run(self):
 
-		while self.getPoolSize() < self.nPool:
+		print self.getPoolSize()
 
-			pool = minRan(self.getPoolSize()
-						,self.natoms,self.r_ij
-						,self.eleNums,self.eleNames
-						,self.eleMasses,self.nPool
-						,self.stride,self.subString
-						,self.boxAdd
-						,self.surface,self.surfGA)
+		# while self.getPoolSize() < self.nPool:
+
+		# 	pool = minRan(self.getPoolSize()
+		# 				,self.natoms,self.r_ij
+		# 				,self.eleNums,self.eleNames
+		# 				,self.eleMasses,self.nPool
+		# 				,self.stride,self.subString
+		# 				,self.boxAdd
+		# 				,self.surface,self.surfGA)
 
 	def getPoolSize(self):
 
@@ -76,6 +78,7 @@ class poolGA:
 		else: 
 			with open("pool.dat","r") as pool:
 				poolList = pool.readlines()
-				poolSize = (len(poolList) - (2 * self.nPool)) / self.natoms 
+
+				poolSize = len(poolList) / (self.natoms + 2)
 				return poolSize 
 

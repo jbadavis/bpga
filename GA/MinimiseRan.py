@@ -164,7 +164,7 @@ class minRan:
 		if os.path.exists("pool.dat"):
 			with open("pool.dat","r") as pool:
 				poolList = pool.readlines()
-				poolSize = (len(poolList) - (2 * self.nPool)) / self.natoms 
+				poolSize = len(poolList) / (self.natoms + 2)
 				self.addToPool()
 		else:
 			self.addToPool()
