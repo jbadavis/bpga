@@ -13,7 +13,7 @@ Jack Davis and the Johnston Group
 
 20/3/15
 
---- Pool Minimiser Class ---
+--- Random Structure Minimiser Class ---
 
 '''
 
@@ -102,6 +102,9 @@ class minRan:
 			self.vaspIN = DFTin(self.calcNum,clus,self.eleNames
 								,self.eleMasses,self.eleNums
 								,self.boxAdd)
+
+
+		self.minimise()
 
 
 	def minimise(self):
