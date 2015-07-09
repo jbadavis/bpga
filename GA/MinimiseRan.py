@@ -116,7 +116,7 @@ class minRan:
 
 		if self.doDFT() == 0:
 
-			output = DFTout(self.xyzNum,self.natoms)
+			output = DFTout(self.calcNum,self.natoms)
 
 			if output.checkError():
 				self.genRan()
@@ -143,12 +143,12 @@ class minRan:
 		'''
 
 		base = os.environ["PWD"]
-		os.chdir(base+"/"+str(self.xyzNum))
+		os.chdir(base+"/"+str(self.calcNum))
 
 		exitcode = os.system(self.subString)
 
 		with open(base+"/exitcodes.dat","a") as exit:
-			exit.write(str(self.xyzNum))
+			exit.write(str(self.calcNum))
 			exit.write(" Exitcode = "+str(exitcode)+"\n")
 			
 		os.chdir(base)
