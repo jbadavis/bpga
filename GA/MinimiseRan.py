@@ -204,6 +204,15 @@ class minRan:
 			pool.write("Energy = "+str(self.finalEnergy)+"\n")
 
 			'''
+			Move coordinates from 
+			centre of the simulation cell.
+			'''
+
+			box = self.vaspIN.box
+
+			self.finalCoords = [float(i) - box/2 for i in self.finalCoords]
+
+			'''
 			Change format of 
 			the coordinates.
 			'''
@@ -227,7 +236,7 @@ class minRan:
 				for j in range(self.eleNums[i]):
 					ele = self.eleNames[i]
 					x,y,z = clus[count]
-					atom = ele+" "+x+" "+y+" "+z+"\n"
+					atom = ele+" "+str(x)+" "+str(y)+" "+str(z)+"\n"
 					
 					pool.write(atom)
 
