@@ -9,7 +9,7 @@ Please cite -
 A. Shayeghi et al, PCCP, 2015, 17, 2104-2112
 
 Authors -
-Jack Davis and the Johnston Group
+The Johnston Group
 
 13/2/15
 

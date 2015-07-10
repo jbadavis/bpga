@@ -9,7 +9,7 @@ Please cite -
 A. Shayeghi et al, PCCP, 2015, 17, 2104-2112
 
 Authors -
-Jack Davis and the Johnston Group
+The Johnston Group
 
 20/3/15
 
@@ -209,7 +209,6 @@ class minRan:
 			'''
 
 			box = self.vaspIN.box
-
 			self.finalCoords = [float(i) - box/2 for i in self.finalCoords]
 
 			'''
