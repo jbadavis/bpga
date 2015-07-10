@@ -9,21 +9,29 @@ Please cite -
 A. Shayeghi et al, PCCP, 2015, 17, 2104-2112
 
 Authors -
-Jack Davis and the Johnston Group
+The Johnston Group
 
-20/3/15
+10/7/15
 
---- BPGA Input file ---
+--- BPGA Example Input File ---
+
+A calculation requires the following
+VASP input files:
+
+1 - INCAR
+2 - KPOINTS
+3 - POTCAR 
+
+---
 
 '''
 
-from GA.pop import ranPool
-from GA.poolGA import poolGA
 import GA.Input as In
 
 from GA.MgO import MgO 
+from GA.NewPoolGA import poolGA
 
-npool = 10
+nPool = 10
 mutType = "homotop"
 cross = "weighted"
 mutate = 0.1
@@ -32,7 +40,6 @@ eleNums = [2,2]
 eleNames = ["Au","Ir"]
 eleMasses = In.masses(eleNames)
 natoms = sum(eleNums)
-
 boxAdd = 10.0
 
 subString = "aprun -n 24 vasp5.gamma > output.dat"
@@ -51,21 +58,7 @@ surface = MgO(x=4,y=4,z=2,vac=6,clusHeight=1.)
 
 In.checkFiles()
 
-'''
-If a pool.dat doesn't
-already exist, pop
-creates one.
-'''
-
-newPool = ranPool(npool,r_ij,eleNums,eleNames)
-
-'''
-Starts calculation by 
-minimising pool and 
-then producing offspring. 
-'''
-
 StartCalc = poolGA(natoms,r_ij,eleNums
-    ,eleNames,eleMasses,mutate,npool
-    ,cross,mutType,subString,boxAdd
-    ,surface,surfGA)
+    			,eleNames,eleMasses,mutate,nPool
+			    ,cross,mutType,subString,boxAdd
+			    ,surface,surfGA)
