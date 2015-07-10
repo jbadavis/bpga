@@ -22,8 +22,6 @@ VASP input files:
 2 - KPOINTS
 3 - POTCAR 
 
----
-
 '''
 
 import GA.Input as In
