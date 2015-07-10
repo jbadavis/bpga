@@ -63,6 +63,11 @@ class poolGA:
 
 	def run(self):
 
+		'''
+		Minimise random geometries and
+		add them to the pool.dat file.
+		'''
+
 		while self.getPoolSize() < self.nPool:
 
 			pool = minRan(self.natoms,self.r_ij
@@ -71,6 +76,14 @@ class poolGA:
 						,self.stride,self.subString
 						,self.boxAdd
 						,self.surface,self.surfGA)
+
+		sys.exit()
+
+		'''
+		Once nPool structure are in
+		pool.dat begin crossover
+		and mutation. 
+		'''
 			
 		'''
 		Set the mutation rate.
