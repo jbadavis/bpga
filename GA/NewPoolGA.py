@@ -77,8 +77,6 @@ class poolGA:
 						,self.boxAdd
 						,self.surface,self.surfGA)
 
-		sys.exit()
-
 		'''
 		Once nPool structure are in
 		pool.dat begin crossover
