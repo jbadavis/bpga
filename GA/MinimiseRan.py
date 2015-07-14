@@ -58,8 +58,12 @@ class minRan:
 		self.surface = surface
 		self.surfGA = surfGA
 
+		db.lock()
+
 		self.calcNum = db.findLastDir() + 1 
 		os.system("mkdir " + str(self.calcNum))
+
+		db.unlock()
 
 		self.genRan()
 
@@ -198,6 +202,8 @@ class minRan:
 		self.finalEnergy = output.getEnergy()
 		self.finalCoords = output.getCoords()
 
+		db.lock()
+
 		with open("pool.dat","a") as pool:
 
 			pool.write(str(self.natoms)+"\n")
@@ -238,5 +244,7 @@ class minRan:
 					atom = ele+" "+str(x)+" "+str(y)+" "+str(z)+"\n"
 					
 					pool.write(atom)
+
+		db.unlock()
 
 					count += 1
