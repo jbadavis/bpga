@@ -82,4 +82,20 @@ mutType = "rotate"
 
 #### Random
 
-A new random cluster geometry is generated and minimised. 
+A new random cluster geometry is generated and minimised.
+
+#### Move 
+
+A cluster is selected from the pool and 20% of the geometry is displaced by up to 1 angstrom. 
+
+#### homotop
+
+(Only for bimetallic clusters)
+
+A cluster is selected from the pool and two atoms have their atom types swapped. 
+
+#### Rotate
+
+(Surface global optimisation only) 
+
+A low energy cluster is selected from the pool and a random rotation is performed. 
