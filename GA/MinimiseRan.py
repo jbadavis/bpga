@@ -245,6 +245,7 @@ class minRan:
 					
 					pool.write(atom)
 
+					count += 1
+
 		db.unlock()
 
-					count += 1
