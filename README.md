@@ -30,15 +30,22 @@ INCAR
 KPOINTS
 POTCAR 
 Run.py
-sub.sh
 ```
 
-An example calculation for the BlueBEAR HPC can be found in:
+Where the Run.py file is the BPGA's input script. An example calculation directorycan be found in:
 
 ```
 #!shell
 
 ~/bpga/Examples/Au2Ir2 
+```
+
+To run a calculation on a different HPC change the subString variable in Run.py to the required command for a parallel VASP run:
+
+```
+#!python 
+
+subString = "aprun -n 24 vasp5.gamma" 
 ```
 
 ### Crossover 
