@@ -48,9 +48,13 @@ To run a calculation on a different HPC change the subString variable in Run.py 
 subString = "aprun -n 24 vasp5.gamma" 
 ```
 
+### Selection 
+
+Selection is currently only through roulette wheel selection. Tournament will be added again soon! 
+
 ### Crossover 
 
-Available crossover methods:
+Deaven and Ho 1pt crossover can be performed with either a random or weighted cutting plane:
 
 ```
 #!shell
@@ -59,11 +63,11 @@ cross = "random"
 cross = "weighted"
 ```
 
-"random" chooses a random cutting plane whereas for "weighted" this is determined by the fitness.
+The weighted plane is determined by fitness of the two clusters selected for crossover. 
 
 ### Mutation 
 
-Available mutation methods: 
+The available mutation methods available are: 
 
 ```
 #!shell
@@ -73,4 +77,4 @@ mutType = "move"
 mutType = "homotop" 
 ```
 
-"Random" generates an entirely new geometry. "Move" randomly displaces two atoms within the cluster. "homotop" is a bimetallic mutation, where the atoms types are shuffled.
+## random 
