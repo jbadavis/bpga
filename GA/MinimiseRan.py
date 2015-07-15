@@ -242,9 +242,7 @@ class minRan:
 					ele = self.eleNames[i]
 					x,y,z = clus[count]
 					atom = ele+" "+str(x)+" "+str(y)+" "+str(z)+"\n"
-					
 					pool.write(atom)
-
 					count += 1
 
 		db.unlock()
