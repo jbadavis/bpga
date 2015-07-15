@@ -40,7 +40,7 @@ for (( i=0; i<=$natoms; i++)); do
     eleNums="[$i,$j]"
     eleNames="['$eleA','$eleB']"
     mutType='"homotop"'
-    cross='"bimetallic"'
+    cross='"weighted"'
   fi
 
   sed -i "/mutType = */c\mutType = $mutType" Run.py
@@ -66,6 +66,6 @@ done
 # Change BatchSub.sh 
 #
 
-sed -i "/#PBS -l select=*/c\#PBS -l select=$nCalc" BatchSub.sh
-sed -i "/for i in */c\for i in ${dirArray[*]} ; do" BatchSub.sh
+#sed -i "/#PBS -l select=*/c\#PBS -l select=$nCalc" BatchSub.sh
+#sed -i "/for i in */c\for i in ${dirArray[*]} ; do" BatchSub.sh
 
