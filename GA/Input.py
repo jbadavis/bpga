@@ -23,15 +23,17 @@ def masses(eleNames):
 
 	eleMasses = []
 
-	eles = {'Au': 196.97,
+	eles = {
+			'Au': 196.97,
 			'Ir': 192.22,
-			'Pt': 195.8 ,
+			'Pt': 195.8,
 			'Pd': 106.42,
 			'Rh': 102.91,
 			'Ag': 107.81,
-			'Ni': 58.7
-			'Fe': 55.85
-			'Zn': 65.39}
+			'Ni': 58.7,
+			'Fe': 55.85,
+			'Zn': 65.39,
+			}
 
 	for sym in eleNames:
 		eleMasses.append(eles[sym])
