@@ -18,10 +18,10 @@ instances=4
 # names to first loop
 for i in Au2Rh2 ; do 
   # Do not change! 
+  cd $base/$i 
   for (( j=1; j<=$instances; j++)); do 
-    echo $i $j
-    #python Run.py &
-    #sleep 10
+    python Run.py &
+    sleep 10
   done
 done
 
