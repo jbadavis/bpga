@@ -28,7 +28,10 @@ def masses(eleNames):
 			'Pt': 195.8 ,
 			'Pd': 106.42,
 			'Rh': 102.91,
-			'Ag': 107.81,}
+			'Ag': 107.81,
+			'Ni': 58.7
+			'Fe': 55.85
+			'Zn': 65.39}
 
 	for sym in eleNames:
 		eleMasses.append(eles[sym])
