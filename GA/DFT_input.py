@@ -74,14 +74,24 @@ class vasp_input:
 		self.eleNums = [str(i) for i in self.eleNums]
 
 		with open(self.calcNum+"/POSCAR","w") as poscar:
-			poscar.write(str(self.calcNum) + '\n')
+
+			poscar.write(self.calcNum + '\n')
 			poscar.write(str(self.box) + '\n')
+
 			poscar.write("1.0 0.0 0.0\n")
 			poscar.write("0.0 1.0 0.0\n")
 			poscar.write("0.0 0.0 1.0\n")
+
 			poscar.write(" ".join(self.eleNames) + '\n')
 			poscar.write(" ".join(self.eleNums) + '\n')
+
+			'''
+			Coordinates are written 
+			in lattice coordinates.
+			'''
+
 			poscar.write("Direct\n")
+
 			for element in self.eleNames:
 				for atom in self.clus:
 					ele,x,y,z = atom
@@ -91,6 +101,6 @@ class vasp_input:
 						z = str( ( z + (self.box/2) ) / self.box )
 						out_string = x + "  " + y + "  " + z + '\n'
 						poscar.write(out_string) 
-			sp.call(["cp", "INCAR" ,str(self.calcNum)])
-			sp.call(["cp", "KPOINTS" ,str(self.calcNum)])
-			sp.call(["cp", "POTCAR" ,str(self.calcNum)])
+
+			os.system("cp {POTCAR,INCAR,KPOINTS} "+self.calcNum)
+

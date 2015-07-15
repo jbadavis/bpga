@@ -76,7 +76,7 @@ class surfacePOSCAR():
         yLat = str(self.y*(self.lat/2))
         zLat = str(self.z*(self.lat/2)+(self.vac * (self.lat/2)))
 
-        with open(str(self.calcNum)+"/POSCAR","w") as poscar:
+        with open(self.calcNum+"/POSCAR","w") as poscar:
 
             poscar.write("Test\n")
             poscar.write("1.0\n")
@@ -126,6 +126,4 @@ class surfacePOSCAR():
                             line = str(x)+" "+str(y)+" "+str(z)+" T T T\n"
                         poscar.write(line)
                         
-        os.system("cp POTCAR "+self.calcNum)
-        os.system("cp INCAR "+self.calcNum)
-        os.system("cp KPOINTS "+self.calcNum)
+        os.system("cp {POTCAR,INCAR,KPOINTS} "+self.calcNum)
