@@ -207,7 +207,8 @@ class minRan:
 		with open("pool.dat","a") as pool:
 
 			pool.write(str(self.natoms)+"\n")
-			pool.write("Energy = "+str(self.finalEnergy)+"\n")
+			pool.write("Energy = "+str(self.finalEnergy))
+			pool.write(" Dir = "+str(self.calcNum)+"\n")
 
 			'''
 			Move coordinates from 

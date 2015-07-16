@@ -74,12 +74,12 @@ class minOff:
 
 		db.lock()
 
-		self.xyzNum = db.findLastDir() + 1
+		self.calcNum = db.findLastDir() + 1
 
-		while os.path.exists(str(self.xyzNum)): 
-			self.xyzNum = db.findLastDir() + 1 
+		while os.path.exists(str(self.calcNum)): 
+			self.calcNum = db.findLastDir() + 1 
 
-		os.system("mkdir " + str(self.xyzNum))
+		os.system("mkdir " + str(self.calcNum))
 
 		self.produceOffspring()
 
@@ -106,11 +106,11 @@ class minOff:
 
 			SurfClus = SurfaceStruc.placeClus()
 
-			self.vaspIN = surfacePOSCAR(self.xyzNum,self.eleNames,SurfClus,self.surface)
+			self.vaspIN = surfacePOSCAR(self.calcNum,self.eleNames,SurfClus,self.surface)
 
 		else:
 
-			self.vaspIN = DFTin(self.xyzNum,self.offspring,self.eleNames
+			self.vaspIN = DFTin(self.calcNum,self.offspring,self.eleNames
 								,self.eleMasses,self.eleNums,self.boxAdd)
 
 	def restart(self):
@@ -138,7 +138,7 @@ class minOff:
 
 		if self.doDFT() == 0:
 
-			output = DFTout(self.xyzNum,self.natoms)
+			output = DFTout(self.calcNum,self.natoms)
 
 			if output.checkError():
 				self.restart()
@@ -161,12 +161,12 @@ class minOff:
 		'''
 
 		base = os.environ["PWD"]
-		os.chdir(base+"/"+str(self.xyzNum))
+		os.chdir(base+"/"+str(self.calcNum))
 
 		exitcode = os.system(self.subString)
 
 		with open(base+"/exitcodes.dat","a") as exit:
-			exit.write(str(self.xyzNum))
+			exit.write(str(self.calcNum))
 			exit.write(" Exitcode = "+str(exitcode)+" Offspring\n")
 			
 		os.chdir(base)
@@ -179,11 +179,12 @@ class minOff:
 		Accept = AcceptReject.checkEnergy(float(self.finalEnergy))
 
 		if Accept:
-			Index = AcceptReject.lowestIndex
-			Index = (Index*self.stride)+1
+			index = AcceptReject.lowestIndex
+			index = (index*self.stride)+1
 
 			db.updatePool("Finish"
-				,Index,self.eleNums,
-				self.eleNames,self.eleMasses
-				,self.finalEnergy,self.finalCoords
-				,self.stride,self.vaspIN.box)
+					,self.calcNum
+					,index,self.eleNums
+					,self.eleNames,self.eleMasses
+					,self.finalEnergy,self.finalCoords
+					,self.stride,self.vaspIN.box)

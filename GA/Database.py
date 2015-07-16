@@ -31,10 +31,12 @@ from CoM import CoM
 
 global fd
 
-def updatePool(upType,strucNum
-		,eleNums,eleNames,eleMasses
-		,finalEn,finalCoords
-		,stride,box):
+def updatePool(upType,
+			,calcNum
+			,index,eleNums
+			,eleNames,eleMasses
+			,finalEn,finalCoords
+			,stride,box):
 
 	'''
 	After completion take
@@ -51,12 +53,12 @@ def updatePool(upType,strucNum
 					,eleNums,eleNames
 					,eleMasses,box)
 
-	poolList[strucNum+1:strucNum+stride-1]=coordsEle
+	poolList[index+1:index+stride-1]=coordsEle
 
 	if "Finish" in upType:
-		poolList[strucNum]="Energy = "+str(finalEn)+"\n"
+		poolList[index]="Energy = "+str(finalEn)+"\n"
 	elif "Restart" in upType:
-		poolList[strucNum]="Restart\n"
+		poolList[index]="Restart\n"
 
 	writePool(poolList)
 
