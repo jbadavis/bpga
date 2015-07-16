@@ -56,7 +56,7 @@ def updatePool(upType
 	poolList[index+1:index+stride-1]=coordsEle
 
 	if "Finish" in upType:
-		poolList[index]="Energy = "+str(finalEn)+"\n"
+		poolList[index]="Energy = "+str(finalEn)+"   Dir = "+str(calcNum)+"\n"
 	elif "Restart" in upType:
 		poolList[index]="Restart\n"
 
@@ -65,8 +65,8 @@ def updatePool(upType
 	unlock()
 
 def addEle(upType,coords
-	,eleNum,eleNames
-	,eleMasses,box):
+		,eleNum,eleNames
+		,eleMasses,box):
 
 	'''
 	Adds element types 
