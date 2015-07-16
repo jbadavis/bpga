@@ -17,9 +17,7 @@ The Johnston Group
 
 '''
 
-import sys 
-import subprocess as sp
-
+import os 
 from CoM import CoM 
 
 class vasp_input:
