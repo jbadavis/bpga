@@ -31,7 +31,7 @@ from CoM import CoM
 
 global fd
 
-def updatePool(upType,
+def updatePool(upType
 			,calcNum
 			,index,eleNums
 			,eleNames,eleMasses
